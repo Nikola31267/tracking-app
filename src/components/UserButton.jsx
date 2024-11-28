@@ -107,7 +107,7 @@ const UserButton = () => {
         )}
       </button>
       {dropdownOpen && (
-        <div className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-lg z-10 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg z-10 overflow-hidden">
           <div className="p-3">
             {loading ? (
               <div className="animate-pulse">

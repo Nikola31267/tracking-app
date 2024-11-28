@@ -36,42 +36,36 @@ export default function Navbar() {
             width={60}
             height={60}
           />
-          TurboVerify
+          PixelTrack
         </Link>
         <nav className="hidden md:flex space-x-6">
           <Link
             href="/product"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
+            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             Features
           </Link>
           <Link
-            href="/about"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
-          >
-            About
-          </Link>
-          <Link
             href="/docs"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
+            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             Docs
           </Link>
-          {/* <Link
+          <Link
             href="/pricing"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
+            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             Pricing
-          </Link> */}
+          </Link>
           <Link
             href="/faq"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
+            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             FAQs
           </Link>
           <Link
             href="/contact"
-            className="text-muted-foreground hover:text-blue-500 transition-colors duration-300"
+            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             Contact
           </Link>
@@ -80,28 +74,28 @@ export default function Navbar() {
           <SignedIn>
             <Button
               variant="ghost"
-              className="text-blue-500 hover:bg-blue-50 hover:text-blue-700 mr-2"
+              className="text-purple-500 hover:bg-purple-50 hover:text-purple-700 mr-2"
               onClick={() => signOut()}
             >
               Sign out
             </Button>
             <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-purple-500 hover:bg-purple-600 text-white"
               asChild
             >
-              <Link href="/projects">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
           </SignedIn>
           <SignedOut>
             <Button
               variant="ghost"
-              className="text-blue-500 hover:bg-blue-50"
+              className="text-purple-500 hover:bg-purple-50"
               asChild
             >
               <Link href="/login">Log in</Link>
             </Button>
             <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-purple-500 hover:bg-purple-600 text-white"
               asChild
             >
               <Link href="/register">Sign up</Link>
@@ -137,23 +131,17 @@ export default function Navbar() {
                 Features
               </Link>
               <Link
-                href="/about"
-                className="block py-2 w-fit text-muted-foreground hover:text-primary"
-              >
-                About
-              </Link>
-              <Link
                 href="/docs"
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 Docs
               </Link>
-              {/* <Link
+              <Link
                 href="/pricing"
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 Pricing
-              </Link> */}
+              </Link>
               <Link
                 href="/faq"
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"

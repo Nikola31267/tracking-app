@@ -1,13 +1,11 @@
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 
-export default function Home() {
+export default function Pricing() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen">
-        <h1>Home</h1>
-      </div>
+      <div className="min-h-screen">Pricing</div>
       <Footer />
     </>
   );
