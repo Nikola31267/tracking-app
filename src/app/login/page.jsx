@@ -4,6 +4,7 @@ import { useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -96,7 +97,7 @@ export default function Login() {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md"
+          className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-md"
           disabled={signingIn}
         >
           {signingIn ? (
@@ -128,14 +129,9 @@ export default function Login() {
         <hr className="my-4" />
         <p className="text-md text-gray-500 flex gap-1 justify-center">
           Don&apos;t have an account?{" "}
-          <button
-            className="text-blue-500"
-            onClick={() => {
-              window.location.href = "/register";
-            }}
-          >
+          <Link href="/register" className="text-purple-500 hover:underline">
             Sign Up
-          </button>
+          </Link>
         </p>
         <hr className=" border-gray-100" />
         <p className="text-md text-gray-500 flex gap-1 justify-center">

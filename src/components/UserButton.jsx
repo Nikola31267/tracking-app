@@ -73,7 +73,7 @@ const UserButton = () => {
         type="button"
         className={`flex text-sm rounded-full md:me-0 focus:ring-1 ${
           dropdownOpen ? "bg-gray-200" : "bg-gray-200"
-        } focus:ring-blue-500`}
+        } focus:ring-purple-500`}
         id="user-menu-button"
         aria-expanded={dropdownOpen}
         onClick={toggleDropdown}
