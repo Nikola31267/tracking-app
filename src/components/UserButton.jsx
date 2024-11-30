@@ -17,7 +17,9 @@ const UserButton = () => {
     const fetchUserProfile = async () => {
       try {
         const response = await axiosInstance.get("/auth/user", {
-          headers: { "x-auth-token": localStorage.getItem("token") },
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
         });
         setUser(response.data);
       } catch (error) {

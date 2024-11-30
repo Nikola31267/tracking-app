@@ -18,6 +18,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  LabelList,
 } from "recharts";
 import {
   Card,
@@ -35,10 +36,11 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import UserButton from "@/components/UserButton";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown, MoreHorizontal, Plus, Trash } from "lucide-react";
 
 import Image from "next/image";
 import Loader from "@/components/layout/Loader";
+
 const COLORS = {
   Chrome: "#4285F4",
   Firefox: "#FF7139",
@@ -80,11 +82,14 @@ const ProjectPage = () => {
   const [error, setError] = useState(null);
   const [dailyVisits, setDailyVisits] = useState({});
   const [browserData, setBrowserData] = useState([]);
+  const [pageViewsData, setPageViewsData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("app");
+  const [openDropdownId, setOpenDropdownId] = useState(null);
   const dropdownRef = useRef(null);
+  const tableDropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -93,7 +98,7 @@ const ProjectPage = () => {
           `/dashboard/projects/${id}`,
           {
             headers: {
-              "x-auth-token": localStorage.getItem("token"),
+              "x-auth-token": localStorage.getItem("pixeltrack-auth"),
             },
           }
         );
@@ -101,7 +106,7 @@ const ProjectPage = () => {
 
         const userResponse = await axiosInstance.get(`/auth/user`, {
           headers: {
-            "x-auth-token": localStorage.getItem("token"),
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
           },
         });
         setUser(userResponse.data);
@@ -110,7 +115,7 @@ const ProjectPage = () => {
           `/dashboard/projects/${id}/visits`,
           {
             headers: {
-              "x-auth-token": localStorage.getItem("token"),
+              "x-auth-token": localStorage.getItem("pixeltrack-auth"),
             },
           }
         );
@@ -131,6 +136,14 @@ const ProjectPage = () => {
         setBrowserData(
           Object.entries(browserUsage).map(([key, value]) => ({ key, value }))
         );
+
+        const pageViews = visitsData.reduce((acc, visit) => {
+          acc[visit.page] = (acc[visit.page] || 0) + 1;
+          return acc;
+        }, {});
+        setPageViewsData(
+          Object.entries(pageViews).map(([page, views]) => ({ page, views }))
+        );
       } catch (error) {
         console.error("Error fetching project or visits:", error);
         setError("Server error");
@@ -141,7 +154,7 @@ const ProjectPage = () => {
       try {
         const response = await axiosInstance.get("/dashboard/projectsByUsers", {
           headers: {
-            "x-auth-token": localStorage.getItem("token"),
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
           },
         });
         setProjects(response.data);
@@ -161,7 +174,7 @@ const ProjectPage = () => {
         `/dashboard/projects/${id}/visits/${visitId}`,
         {
           headers: {
-            "x-auth-token": localStorage.getItem("token"),
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
           },
         }
       );
@@ -182,9 +195,20 @@ const ProjectPage = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const toggleTableDropdown = (visitId) => {
+    setOpenDropdownId((prevId) => (prevId === visitId ? null : visitId));
+  };
+
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
+    }
+
+    if (
+      tableDropdownRef.current &&
+      !tableDropdownRef.current.contains(event.target)
+    ) {
+      setOpenDropdownId(null);
     }
   };
 
@@ -210,6 +234,55 @@ const ProjectPage = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     router.push(`/projects/${id}?tab=${tab}`);
+  };
+
+  const deleteVisit = async (visitId) => {
+    try {
+      await axiosInstance.delete(
+        `/dashboard/projects/${id}/visits/${visitId}/delete`,
+        {
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
+        }
+      );
+      setVisits((prevVisits) =>
+        prevVisits.filter((visit) => visit._id !== visitId)
+      );
+
+      const updatedVisits = visits.filter((visit) => visit._id !== visitId);
+      const updatedVisitsByDay = updatedVisits.reduce((acc, visit) => {
+        const date = new Date(visit.timestamp).toLocaleDateString();
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+      }, {});
+      setDailyVisits(updatedVisitsByDay);
+
+      const updatedBrowserUsage = updatedVisits.reduce((acc, visit) => {
+        acc[visit.browser] = (acc[visit.browser] || 0) + 1;
+        return acc;
+      }, {});
+      setBrowserData(
+        Object.entries(updatedBrowserUsage).map(([key, value]) => ({
+          key,
+          value,
+        }))
+      );
+
+      const updatedPageViews = updatedVisits.reduce((acc, visit) => {
+        acc[visit.page] = (acc[visit.page] || 0) + 1;
+        return acc;
+      }, {});
+      setPageViewsData(
+        Object.entries(updatedPageViews).map(([page, views]) => ({
+          page,
+          views,
+        }))
+      );
+    } catch (error) {
+      console.error("Error deleting visit:", error);
+      setError("Server error");
+    }
   };
 
   if (error) {
@@ -312,111 +385,165 @@ const ProjectPage = () => {
         </button>
       </div>
       {activeTab === "app" && (
-        <div className="flex gap-2">
-          <Card className="w-1/2">
+        <>
+          <div className="flex gap-2">
+            <Card className="w-1/2">
+              <CardHeader>
+                <CardTitle>All Visits: {visits.length}</CardTitle>
+                <CardDescription>
+                  Number of visits per day for the last week
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <ChartContainer
+                  config={{
+                    visits: {
+                      label: "Visits",
+                      color: "#6b21a8",
+                    },
+                  }}
+                  className="h-80"
+                >
+                  <ResponsiveContainer width="95%" height="100%">
+                    <BarChart
+                      data={Object.entries(dailyVisits || {}).map(
+                        ([date, count]) => ({
+                          date,
+                          count,
+                        })
+                      )}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <XAxis
+                        dataKey="date"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${value}`}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar
+                        dataKey="count"
+                        fill="var(--color-visits)"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+
+            <Card className="w-1/2">
+              <CardHeader>
+                <CardTitle>Browser Usage</CardTitle>
+                <CardDescription>
+                  Distribution of visits by browser
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <ResponsiveContainer width="95%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={browserData}
+                      dataKey="value"
+                      nameKey="key"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                    >
+                      {browserData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[entry.key] || "#8884d8"}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex flex-wrap gap-6 mt-4">
+                  {Object.entries(COLORS).map(([browser, color]) => (
+                    <div key={browser} className="flex items-center mb-2">
+                      <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: color }}
+                      ></div>
+                      <div className="flex items-center ml-2">
+                        <Image
+                          src={BROWSER_LOGOS[browser]}
+                          alt={browser}
+                          width={20}
+                          height={20}
+                        />
+                        <span className="ml-2">{browser}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <Card className="w-full max-w-3xl mt-6">
             <CardHeader>
-              <CardTitle>All Visits: {visits.length}</CardTitle>
-              <CardDescription>
-                Number of visits per day for the last week
-              </CardDescription>
+              <CardTitle>Page Views</CardTitle>
+              <CardDescription>Number of views per page</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent>
               <ChartContainer
                 config={{
-                  visits: {
-                    label: "Visits",
-                    color: "#6b21a8",
+                  views: {
+                    label: "Views",
+                    color: "hsl(var(--primary))",
                   },
                 }}
-                className="h-80"
+                className="h-[400px]"
               >
-                <ResponsiveContainer width="95%" height="100%">
+                <ResponsiveContainer width="100%" height="100%">
                   <BarChart
-                    data={Object.entries(dailyVisits || {}).map(
-                      ([date, count]) => ({
-                        date,
-                        count,
-                      })
-                    )}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    data={pageViewsData}
+                    layout="vertical"
+                    margin={{ top: 10, right: 50, left: 10, bottom: 10 }}
                   >
-                    <XAxis
-                      dataKey="date"
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
+                    <XAxis type="number" hide />
                     <YAxis
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
+                      dataKey="page"
+                      type="category"
                       axisLine={false}
-                      tickFormatter={(value) => `${value}`}
+                      tickLine={false}
+                      tick={{
+                        fill: "hsl(var(--muted-foreground))",
+                        fontSize: 14,
+                      }}
+                      width={100}
                     />
-                    <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar
-                      dataKey="count"
-                      fill="var(--color-visits)"
-                      radius={[4, 4, 0, 0]}
-                    />
+                      dataKey="views"
+                      fill="hsl(var(--primary))"
+                      radius={[0, 4, 4, 0]}
+                      barSize={20}
+                    >
+                      <LabelList
+                        dataKey="views"
+                        position="right"
+                        fill="hsl(var(--muted-foreground))"
+                        fontSize={14}
+                        formatter={(value) => value.toLocaleString()}
+                      />
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
-
-          <Card className="w-1/2">
-            <CardHeader>
-              <CardTitle>Browser Usage</CardTitle>
-              <CardDescription>
-                Distribution of visits by browser
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <ResponsiveContainer width="95%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={browserData}
-                    dataKey="value"
-                    nameKey="key"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    fill="#8884d8"
-                  >
-                    {browserData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[entry.key] || "#8884d8"}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="flex flex-wrap gap-6 mt-4">
-                {Object.entries(COLORS).map(([browser, color]) => (
-                  <div key={browser} className="flex items-center mb-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: color }}
-                    ></div>
-                    <div className="flex items-center ml-2">
-                      <Image
-                        src={BROWSER_LOGOS[browser]}
-                        alt={browser}
-                        width={20}
-                        height={20}
-                      />
-                      <span className="ml-2">{browser}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        </>
       )}
       {activeTab === "settings" && (
         <div>
@@ -447,8 +574,12 @@ const ProjectPage = () => {
                     Referrer
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Timestamp
+                    Page
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -469,22 +600,51 @@ const ProjectPage = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {visit.ip}
+                      {visit?.ip}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {visit.device}
+                      {visit?.device}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {visit.browser}
+                      {visit?.browser}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {visit.platform}
+                      {visit?.platform}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {visit.referrer}
+                      {visit?.referrer}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Date(visit.timestamp).toLocaleString()}
+                      {visit?.page || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {new Date(visit?.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <MoreHorizontal
+                        className="h-5 w-5 text-gray-500 hover:text-gray-900 cursor-pointer transition-colors duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleTableDropdown(visit._id);
+                        }}
+                      />
+                      {openDropdownId === visit._id && (
+                        <div
+                          className="absolute bg-white shadow-md rounded-md -ml-2 z-10"
+                          ref={tableDropdownRef}
+                        >
+                          <div
+                            className="flex items-center gap-1 px-4 py-2 text-sm text-red-500 hover:bg-red-100 hover:text-red-600 rounded-md cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteVisit(visit._id);
+                            }}
+                          >
+                            <Trash className="h-4 w-4" />
+                            Delete Record
+                          </div>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -516,6 +676,9 @@ const ProjectPage = () => {
             </p>
             <p>
               <strong>Referrer:</strong> {specificVisit.referrer}
+            </p>
+            <p>
+              <strong>Page:</strong> {specificVisit.page || "N/A"}
             </p>
             <p>
               <strong>Timestamp:</strong>{" "}

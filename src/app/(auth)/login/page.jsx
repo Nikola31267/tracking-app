@@ -21,7 +21,7 @@ export default function Login() {
         password,
       });
       const { token } = response.data;
-      localStorage.setItem("token", token);
+      localStorage.setItem("pixeltrack-auth", token);
       window.location.href = "/";
     } catch (error) {
       setError("Invalid credentials");
@@ -38,7 +38,7 @@ export default function Login() {
       const response = await axiosInstance.post("/auth/google-signin", {
         token,
       });
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("pixeltrack-auth", response.data.token);
       window.location.href = "/";
     } catch (error) {
       console.error(

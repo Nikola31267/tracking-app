@@ -8,7 +8,7 @@ function SignedIn({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("pixeltrack-auth");
     if (token) {
       setProfile(true);
     }

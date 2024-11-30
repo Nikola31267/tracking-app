@@ -14,7 +14,7 @@ const New = () => {
       const response = await axiosInstance.post(
         "/create",
         { projectName },
-        { headers: { "x-auth-token": localStorage.getItem("token") } }
+        { headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") } }
       );
       setMessage(`Project created: ${response.data.projectName}`);
     } catch (error) {

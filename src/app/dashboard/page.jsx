@@ -30,7 +30,7 @@ const Dashboard = () => {
     const fetchUserProfile = async () => {
       try {
         const response = await axiosInstance.get("/auth/user", {
-          headers: { "x-auth-token": localStorage.getItem("token") },
+          headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
         });
         setUser(response.data);
       } catch (error) {
@@ -38,7 +38,7 @@ const Dashboard = () => {
         console.error(error);
       } finally {
         setLoading(false);
-        if (!localStorage.getItem("token")) {
+        if (!localStorage.getItem("pixeltrack-auth")) {
           router.push("/");
         }
       }
@@ -69,7 +69,7 @@ const Dashboard = () => {
   const fetchProjects = async () => {
     try {
       const response = await axiosInstance.get("/dashboard/projects", {
-        headers: { "x-auth-token": localStorage.getItem("token") },
+        headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
       });
       setProjects(response.data);
     } catch (error) {

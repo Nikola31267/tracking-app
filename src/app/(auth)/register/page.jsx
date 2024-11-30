@@ -24,7 +24,7 @@ const Register = () => {
         fullName,
         password,
       });
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("pixeltrack-auth", res.data.token);
       window.location.href = "/";
     } catch (err) {
       console.log(err);
@@ -41,7 +41,7 @@ const Register = () => {
       const response = await axiosInstance.post("/auth/google-signin", {
         token,
       });
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("pixeltrack-auth", response.data.token);
       window.location.href = "/";
     } catch (error) {
       console.error(

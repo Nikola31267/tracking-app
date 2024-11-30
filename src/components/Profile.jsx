@@ -36,7 +36,7 @@ const Profile = ({ isOpen, onClose }) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const response = await axiosInstance.get("/auth/user", {
-        headers: { "x-auth-token": localStorage.getItem("token") },
+        headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
       });
 
       setProfile(response.data);
@@ -97,7 +97,7 @@ const Profile = ({ isOpen, onClose }) => {
         formData,
         {
           headers: {
-            "x-auth-token": localStorage.getItem("token"),
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
             "Content-Type": "multipart/form-data",
           },
         }
@@ -122,7 +122,9 @@ const Profile = ({ isOpen, onClose }) => {
         "/auth/deleteProfilePicture",
         null,
         {
-          headers: { "x-auth-token": localStorage.getItem("token") },
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
         }
       );
 
