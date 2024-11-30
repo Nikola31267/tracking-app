@@ -40,6 +40,14 @@ import { ChevronsUpDown, MoreHorizontal, Plus, Trash } from "lucide-react";
 
 import Image from "next/image";
 import Loader from "@/components/layout/Loader";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 const COLORS = {
   Chrome: "#4285F4",
@@ -72,6 +80,8 @@ const PLATFORM_LOGOS = {
     "https://upload.wikimedia.org/wikipedia/commons/e/ec/Windows_Phone_logo.png",
 };
 
+const ITEMS_PER_PAGE = 10;
+
 const ProjectPage = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -90,6 +100,7 @@ const ProjectPage = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const dropdownRef = useRef(null);
   const tableDropdownRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -213,7 +224,7 @@ const ProjectPage = () => {
   };
 
   useEffect(() => {
-    if (isDropdownOpen) {
+    if (isDropdownOpen || openDropdownId !== null) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -222,18 +233,22 @@ const ProjectPage = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, openDropdownId]);
 
   useEffect(() => {
     const currentTab = new URLSearchParams(window.location.search).get("tab");
+    const pageFromUrl = new URLSearchParams(window.location.search).get("page");
     if (currentTab) {
       setActiveTab(currentTab);
+    }
+    if (pageFromUrl) {
+      setCurrentPage(Number(pageFromUrl));
     }
   }, []);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    router.push(`/projects/${id}?tab=${tab}`);
+    router.push(`/dashboard/projects/${id}?tab=${tab}`);
   };
 
   const deleteVisit = async (visitId) => {
@@ -285,6 +300,22 @@ const ProjectPage = () => {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    router.replace(
+      `/dashboard/projects/${id}?tab=${activeTab}&page=${newPage}`,
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const paginatedVisits = visits.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -294,10 +325,10 @@ const ProjectPage = () => {
   }
 
   return (
-    <div>
-      <nav className="flex justify-between items-center p-4 text-white">
-        <div className="flex items-center">
-          <Breadcrumb className="px-2 py-1">
+    <div className="p-4">
+      <nav className="flex flex-col sm:flex-row justify-between items-center p-4 text-white">
+        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+          <Breadcrumb className="px-2 py-1 w-full sm:w-auto">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink className="text-lg" href="/dashboard">
@@ -317,7 +348,7 @@ const ProjectPage = () => {
                 </BreadcrumbLink>
                 {isDropdownOpen && (
                   <div
-                    className="absolute bg-white shadow-md w-52 rounded-md z-10"
+                    className="absolute bg-white shadow-md w-full sm:w-52 rounded-md z-10"
                     style={{ top: "100%", left: 0 }}
                   >
                     {projects.map((proj) => (
@@ -326,7 +357,7 @@ const ProjectPage = () => {
                         className="px-4 py-2 hover:bg-gray-200 rounded-md cursor-pointer flex items-center gap-1"
                         onClick={() => {
                           setIsDropdownOpen(false);
-                          window.location.href = `/projects/${proj._id}`;
+                          router.push(`/dashboard/projects/${proj._id}`);
                         }}
                       >
                         <Image
@@ -343,7 +374,7 @@ const ProjectPage = () => {
                       className="px-4 py-2 hover:bg-gray-200 rounded-md cursor-pointer flex items-center"
                       onClick={() => {
                         setIsDropdownOpen(false);
-                        window.location.href = `/new`;
+                        router.push(`/dashboard/new`);
                       }}
                     >
                       <Plus className="mr-2 h-4 w-4" /> New Project
@@ -358,11 +389,11 @@ const ProjectPage = () => {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div>
+        <div className="mt-4 sm:mt-0">
           <UserButton />
         </div>
       </nav>
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <button
           className={`px-4 py-2 border-b-2 ${
             activeTab === "app"
@@ -386,8 +417,8 @@ const ProjectPage = () => {
       </div>
       {activeTab === "app" && (
         <>
-          <div className="flex gap-2">
-            <Card className="w-1/2">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>All Visits: {visits.length}</CardTitle>
                 <CardDescription>
@@ -404,7 +435,7 @@ const ProjectPage = () => {
                   }}
                   className="h-80"
                 >
-                  <ResponsiveContainer width="95%" height="100%">
+                  <ResponsiveContainer width="100%" height={320}>
                     <BarChart
                       data={Object.entries(dailyVisits || {}).map(
                         ([date, count]) => ({
@@ -440,7 +471,7 @@ const ProjectPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="w-1/2">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Browser Usage</CardTitle>
                 <CardDescription>
@@ -448,7 +479,7 @@ const ProjectPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <ResponsiveContainer width="95%" height={300}>
+                <ResponsiveContainer width="100%" height={400}>
                   <PieChart>
                     <Pie
                       data={browserData}
@@ -482,6 +513,7 @@ const ProjectPage = () => {
                           alt={browser}
                           width={20}
                           height={20}
+                          style={{ width: "auto", height: "auto" }}
                         />
                         <span className="ml-2">{browser}</span>
                       </div>
@@ -491,56 +523,46 @@ const ProjectPage = () => {
               </CardContent>
             </Card>
           </div>
-          <Card className="w-full max-w-3xl mt-6">
+          <Card className="w-full mt-6">
             <CardHeader>
               <CardTitle>Page Views</CardTitle>
               <CardDescription>Number of views per page</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer
-                config={{
-                  views: {
-                    label: "Views",
-                    color: "hsl(var(--primary))",
-                  },
-                }}
-                className="h-[400px]"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={pageViewsData}
-                    layout="vertical"
-                    margin={{ top: 10, right: 50, left: 10, bottom: 10 }}
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart
+                  data={pageViewsData}
+                  layout="vertical"
+                  margin={{ top: 10, right: 50, left: 10, bottom: 10 }}
+                >
+                  <XAxis type="number" hide />
+                  <YAxis
+                    dataKey="page"
+                    type="category"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{
+                      fill: "hsl(var(--muted-foreground))",
+                      fontSize: 14,
+                    }}
+                    width={100}
+                  />
+                  <Bar
+                    dataKey="views"
+                    fill="hsl(var(--primary))"
+                    radius={[0, 4, 4, 0]}
+                    barSize={20}
                   >
-                    <XAxis type="number" hide />
-                    <YAxis
-                      dataKey="page"
-                      type="category"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{
-                        fill: "hsl(var(--muted-foreground))",
-                        fontSize: 14,
-                      }}
-                      width={100}
-                    />
-                    <Bar
+                    <LabelList
                       dataKey="views"
-                      fill="hsl(var(--primary))"
-                      radius={[0, 4, 4, 0]}
-                      barSize={20}
-                    >
-                      <LabelList
-                        dataKey="views"
-                        position="right"
-                        fill="hsl(var(--muted-foreground))"
-                        fontSize={14}
-                        formatter={(value) => value.toLocaleString()}
-                      />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+                      position="right"
+                      fill="hsl(var(--muted-foreground))"
+                      fontSize={14}
+                      formatter={(value) => value.toLocaleString()}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         </>
@@ -583,7 +605,7 @@ const ProjectPage = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {visits.map((visit, index) => (
+                {paginatedVisits.map((visit, index) => (
                   <tr
                     key={visit._id || index}
                     className="hover:bg-gray-100 cursor-pointer"
@@ -650,6 +672,50 @@ const ProjectPage = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="flex justify-center items-center mt-4">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={`cursor-pointer ${
+                      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() =>
+                      currentPage > 1 && handlePageChange(currentPage - 1)
+                    }
+                    disabled={currentPage === 1}
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      className={`cursor-pointer ${
+                        currentPage === index + 1 ? "" : ""
+                      }`}
+                      isActive={currentPage === index + 1}
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    className={`cursor-pointer ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      currentPage < totalPages &&
+                      handlePageChange(currentPage + 1)
+                    }
+                    disabled={currentPage === totalPages}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       )}

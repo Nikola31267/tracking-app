@@ -29,3 +29,34 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+* {
+  overflow: -moz-scrollbars-none;
+}
+
+*::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}

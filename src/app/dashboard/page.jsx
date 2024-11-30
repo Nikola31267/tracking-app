@@ -1,4 +1,5 @@
 "use client";
+// TODO: Da napravq project counta da izglejda po dobre
 
 import { useEffect, useState, useRef } from "react";
 import { ArrowRight, Plus } from "lucide-react";
@@ -99,7 +100,7 @@ const Dashboard = () => {
             <Breadcrumb className="px-2 py-1 ">
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-md cursor-default">
+                  <BreadcrumbPage className="text-lg cursor-default">
                     {user?.fullName
                       ? user.fullName
                       : user?.username || user?.email}
@@ -117,7 +118,7 @@ const Dashboard = () => {
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         <li
           className="bg-white rounded-lg p-6 py-16 cursor-pointer transition-transform transform border-2 border-dotted border-gray-300 flex justify-center items-center shadow-lg"
-          onClick={() => router.push("/new")}
+          onClick={() => router.push("/dashboard/new")}
         >
           <span className="text-lg font-medium text-gray-500 flex items-center gap-1">
             <Plus size={24} /> Create New Project
@@ -127,7 +128,7 @@ const Dashboard = () => {
           <article
             key={project._id}
             className="group relative flex flex-col rounded-xl bg-white p-md cursor-pointer"
-            onClick={() => router.push(`/projects/${project._id}`)}
+            onClick={() => router.push(`/dashboard/projects/${project._id}`)}
           >
             <div className="flex flex-1 flex-col justify-between rounded-lg border border-primary bg-surface-200 p-6 py-5">
               <div
@@ -152,6 +153,10 @@ const Dashboard = () => {
                     {project.projectName}
                   </span>
                 </h3>
+
+                <div className="flex justify-between items-center">
+                  {project.visit.length}
+                </div>
               </div>
             </div>
             <div className="flex justify-between px-4 py-2 text-sm text-secondary">
