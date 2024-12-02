@@ -743,7 +743,7 @@ const ProjectPage = () => {
                   </div>
                   <Button
                     variant="purpleOutline"
-                    className="w-full transition duration-300 mt-4 hover:bg-purple-500 hover:text-neutral-50"
+                    className="w-full transition duration-300 mt-4 text-purple-500 hover:bg-purple-500 hover:text-neutral-50"
                     type="submit"
                     disabled={isUpdating}
                   >
