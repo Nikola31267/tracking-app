@@ -36,7 +36,13 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import UserButton from "@/components/UserButton";
-import { ChevronsUpDown, MoreHorizontal, Plus, Trash } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Loader2,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
 
 import Image from "next/image";
 import Loader from "@/components/layout/Loader";
@@ -48,6 +54,9 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const COLORS = {
   Chrome: "#4285F4",
@@ -101,6 +110,9 @@ const ProjectPage = () => {
   const dropdownRef = useRef(null);
   const tableDropdownRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // App routes
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -324,6 +336,64 @@ const ProjectPage = () => {
     return <Loader />;
   }
 
+  // Settings routes
+
+  const updateProjectSettings = async (updatedData) => {
+    setIsUpdating(true);
+    const formData = new FormData();
+    formData.append("projectName", updatedData.projectName);
+    formData.append("goal", updatedData.goal);
+    if (updatedData.logo) {
+      formData.append("logo", updatedData.logo);
+    }
+
+    try {
+      const response = await axiosInstance.put(`/settings/${id}`, formData, {
+        headers: {
+          "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data.message);
+      setProject((prevProject) => ({ ...prevProject, ...updatedData }));
+    } catch (error) {
+      console.error("Error updating project settings:", error);
+      setError("Server error");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const deleteProject = async () => {
+    setIsUpdating(true);
+    try {
+      await axiosInstance.delete(`/settings/${id}`, {
+        headers: {
+          "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+        },
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      setError("Server error");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const removeLogo = async () => {
+    setIsUpdating(true);
+    try {
+      await axiosInstance.put(`/settings/${id}/removeLogo`);
+      setProject((prevProject) => ({ ...prevProject, logo: null }));
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      setError("Server error");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="p-4">
       <nav className="flex flex-col sm:flex-row justify-between items-center p-4 text-white">
@@ -384,7 +454,9 @@ const ProjectPage = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-lg cursor-default"></BreadcrumbPage>
+                <BreadcrumbPage className="text-lg cursor-default">
+                  {activeTab === "app" ? "" : "Settings"}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -568,8 +640,123 @@ const ProjectPage = () => {
         </>
       )}
       {activeTab === "settings" && (
-        <div>
-          <h1>Settings</h1>
+        <div className="container mx-auto py-8">
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Left column */}
+            <div className="w-full md:w-1/3 space-y-6">
+              <div className="space-y-4 flex flex-col justify-center items-center">
+                <p className="text-sm text-gray-500">
+                  Upload a new logo for your project
+                </p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setProject({ ...project, logo: e.target.files[0] })
+                  }
+                  className="hidden"
+                  id="logoInput"
+                />
+                <label
+                  htmlFor="logoInput"
+                  className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer"
+                >
+                  <Image
+                    src={
+                      project.logo instanceof File
+                        ? URL.createObjectURL(project.logo)
+                        : project.logo || "/logo-nobg.png"
+                    }
+                    alt="Project Logo"
+                    className="h-12 w-12"
+                    width={48}
+                    height={48}
+                  />
+                </label>
+                <h1 className="text-xl font-bold text-gray-800">
+                  {project.projectName}
+                </h1>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={deleteProject}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Delete Project"
+                  )}
+                </Button>
+                <Button
+                  variant="destructiveOutline"
+                  className="w-full text-red-500 transition-colors duration-300"
+                  onClick={removeLogo}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Remove Logo"
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {/* Right column */}
+            <div className="w-full md:w-2/3 space-y-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">General Settings</h3>
+                <hr />
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const updatedData = {
+                      projectName: e.target.projectName.value,
+                      goal: e.target.goal.value,
+                      logo: project.logo,
+                    };
+                    updateProjectSettings(updatedData);
+                  }}
+                >
+                  <div className="space-y-1 mb-4">
+                    <Label htmlFor="projectName" className="text-md">
+                      Project Name
+                    </Label>
+                    <Input
+                      id="projectName"
+                      placeholder="Enter new project name"
+                      defaultValue={project.projectName}
+                      className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="goal" className="text-md">
+                      Goal
+                    </Label>
+                    <Input
+                      id="goal"
+                      placeholder="Enter project goal"
+                      defaultValue={project.goal}
+                      className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
+                    />
+                  </div>
+                  <Button
+                    variant="purpleOutline"
+                    className="w-full transition duration-300 mt-4 hover:bg-purple-500 hover:text-neutral-50"
+                    type="submit"
+                    disabled={isUpdating}
+                  >
+                    {isUpdating ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Update"
+                    )}
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

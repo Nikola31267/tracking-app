@@ -1,8 +1,7 @@
 "use client";
-// TODO: Da napravq project counta da izglejda po dobre
 
 import { useEffect, useState, useRef } from "react";
-import { ArrowRight, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { axiosInstance } from "@/lib/axios";
 import UserButton from "@/components/UserButton";
 import Loader from "@/components/layout/Loader";
@@ -117,7 +116,7 @@ const Dashboard = () => {
       <h1 className="text-2xl mt-4 font-semibold mb-4">Projects</h1>
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         <li
-          className="bg-white rounded-lg p-6 py-16 cursor-pointer transition-transform transform border-2 border-dotted border-gray-300 flex justify-center items-center shadow-lg"
+          className="bg-white rounded-lg p-6 py-16 cursor-pointer  border-2 border-dotted border-gray-300 flex justify-center items-center shadow-lg hover:shadow-xl transition-shadow duration-300"
           onClick={() => router.push("/dashboard/new")}
         >
           <span className="text-lg font-medium text-gray-500 flex items-center gap-1">
@@ -127,7 +126,7 @@ const Dashboard = () => {
         {projects.map((project) => (
           <article
             key={project._id}
-            className="group relative flex flex-col rounded-xl bg-white p-md cursor-pointer"
+            className="group relative flex flex-col rounded-xl bg-white p-md cursor-pointer hover:shadow-md transition-shadow duration-300"
             onClick={() => router.push(`/dashboard/projects/${project._id}`)}
           >
             <div className="flex flex-1 flex-col justify-between rounded-lg border border-primary bg-surface-200 p-6 py-5">
@@ -135,7 +134,7 @@ const Dashboard = () => {
                 className={`absolute inset-x-16 top-0 h-1 rounded-b-full bg-${project.theme}-500`}
               ></div>
 
-              <div className="flex items-center justify-between gap-4 mb-8">
+              <div className="flex items-center font-semibold gap-2 mb-8">
                 <Image
                   src="/logo-nobg.png"
                   alt="Logo"
@@ -143,26 +142,20 @@ const Dashboard = () => {
                   width={32}
                   height={32}
                 />
-                <div className="truncate font-mono text-sm text-secondary">
-                  {project.url}
+                <div className="truncate text-md text-secondary">
+                  {project.projectName}
                 </div>
               </div>
               <div className="space-y-4">
                 <h3 className="font-medium">
-                  <span className="line-clamp-3 outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:text-legacy-purple">
-                    {project.projectName}
-                  </span>
+                  <span className="line-clamp-3 outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:text-legacy-purple"></span>
                 </h3>
 
-                <div className="flex justify-between items-center">
-                  {project.visit.length}
+                <div className="flex ml-4 gap-1 items-center">
+                  <span className="font-semibold">{project.visit.length}</span>{" "}
+                  visits
                 </div>
               </div>
-            </div>
-            <div className="flex justify-between px-4 py-2 text-sm text-secondary">
-              <span className="flex items-center gap-2 text-primary transform translate-x-full opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-transform duration-300">
-                Go to {project.projectName} <ArrowRight size={20} />
-              </span>
             </div>
           </article>
         ))}
