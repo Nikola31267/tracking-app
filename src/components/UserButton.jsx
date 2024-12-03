@@ -63,7 +63,7 @@ const UserButton = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear("token");
+    localStorage.removeItem("pixeltrack-auth");
     window.location.href = "/login";
   };
 

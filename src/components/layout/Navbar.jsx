@@ -14,7 +14,7 @@ export default function Navbar() {
 
   const signOut = () => {
     console.log("Signing out");
-    localStorage.removeItem("token");
+    localStorage.removeItem("pixeltrack-auth");
     window.location.href = "/login";
   };
 

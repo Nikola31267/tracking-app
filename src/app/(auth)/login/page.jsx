@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
@@ -11,6 +11,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [signingIn, setSigningIn] = useState(false);
+  const [showPasswordless, setShowPasswordless] = useState(false);
+  const [passwordlessEmail, setPasswordlessEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const modalRef = useRef(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,6 +55,44 @@ export default function Login() {
     setError("Google login failed");
   };
 
+  const handlePasswordlessLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post("/auth/magic-link", {
+        email: passwordlessEmail,
+      });
+
+      const data = await response.data;
+
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.message || "An error occurred");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("An error occurred while sending the magic link");
+    }
+  };
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setShowPasswordless(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showPasswordless) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showPasswordless]);
+
   return (
     <div className="flex items-center justify-center min-h-screen relative">
       <form
@@ -79,6 +121,16 @@ export default function Login() {
             />
           </div>
         </GoogleOAuthProvider>
+        <button
+          className="text-purple-500 hover:text-purple-600 transition-colors duration-300 font-semibold"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowPasswordless(true);
+          }}
+        >
+          Passwordless Sign In
+        </button>
+        <hr className="my-1" />
         <input
           type="email"
           placeholder="Email"
@@ -95,6 +147,15 @@ export default function Login() {
           className="p-2 rounded-md border w-96 border-gray-300"
           required
         />
+        <p className="text-sm text-gray-500">
+          Forgot your password?{" "}
+          <Link
+            href="/reset-password"
+            className="text-purple-500 hover:underline"
+          >
+            Reset Password
+          </Link>
+        </p>
         <button
           type="submit"
           className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-md"
@@ -138,6 +199,49 @@ export default function Login() {
           Made with <span className="font-bold ">TurboVerify</span>
         </p>
       </form>
+      {showPasswordless && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div
+            ref={modalRef}
+            className="bg-white p-8 rounded-lg shadow-lg z-10 w-[30rem] mx-auto relative"
+          >
+            <h2 className="text-2xl font-bold mb-4">Passwordless Sign In</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              An email containing a verification token will be sent to you the
+              token expires in 15 minutes.
+            </p>
+            <form className="space-y-4">
+              <div>
+                <label
+                  htmlFor="passwordless-email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="passwordless-email"
+                  placeholder="Enter your email"
+                  value={passwordlessEmail}
+                  onChange={(e) => setPasswordlessEmail(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md"
+                  onClick={handlePasswordlessLogin}
+                >
+                  Send Magic Link
+                </button>
+                {message && <p className="text-sm text-gray-500">{message}</p>}
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
