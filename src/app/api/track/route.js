@@ -1,12 +1,9 @@
-import Visit from "../models/Visit.js";
-import UAParser from "ua-parser-js";
+import Visit from "@/models/Visit.js";
+import UserAgentParser from "user-agent-parser";
 import { Resend } from "resend";
-import dotenv from "dotenv";
 import geoip from "geoip-lite";
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/connectDB.js";
-
-dotenv.config();
 
 const resend = new Resend("re_6fanxK3h_DnbSG3RKNTJoBufYWEqVkctD");
 
@@ -15,8 +12,7 @@ export async function POST(req) {
   try {
     const { headers, body } = req;
     const { apiKey, page } = body;
-    const parser = new UAParser();
-    const agent = parser.setUA(headers["user-agent"]).getResult();
+    const agent = UserAgentParser(headers["user-agent"]);
 
     const geo = geoip.lookup(
       req.headers["x-forwarded-for"] || req.connection.remoteAddress
