@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [last24HoursVisits, setLast24HoursVisits] = useState("");
   const router = useRouter();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -71,20 +72,20 @@ const Dashboard = () => {
       const response = await axiosInstance.get("/dashboard/projects", {
         headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
       });
-      setProjects(response.data);
+      setProjects(response.data.allProjects);
+      setLast24HoursVisits(response.data.totalRecentVisits);
     } catch (error) {
       setError("Error fetching projects");
       console.error(error);
     }
   };
-
   if (loading) {
     return <Loader size="lg" color="blue" />;
   }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="flex justify-between items-center border-b border-gray-200">
+      <div className="flex justify-between items-center border-b border-gray-200 mb-12">
         <div className="flex items-center">
           <Link href="/dashboard">
             <Image
@@ -113,7 +114,14 @@ const Dashboard = () => {
         <UserButton />
       </div>
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      <h1 className="text-2xl mt-4 font-semibold mb-4">Projects</h1>
+      {last24HoursVisits && (
+        <div className="flex items-center gap-1">
+          <h2>Hello {user?.fullName}, you have </h2>
+          <span className="text-lg font-semibold">{last24HoursVisits}</span>
+          <h2>visits in the last 24 hours</h2>
+        </div>
+      )}
+
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         <li
           className="bg-white rounded-lg p-6 py-16 cursor-pointer  border-2 border-dotted border-gray-300 flex justify-center items-center shadow-lg hover:shadow-xl transition-shadow duration-300"
