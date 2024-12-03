@@ -2,14 +2,22 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { axiosInstance } from "@/lib/axios";
-import { UserCircle2, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "./ui/alert-dialog";
 
 const Profile = ({ isOpen, onClose }) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
   const [editProfile, setEditProfile] = useState({
     username: "",
     email: "",
@@ -22,6 +30,7 @@ const Profile = ({ isOpen, onClose }) => {
   const [securityEditing, setSecurityEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [profile, setProfile] = useState({
     username: "",
@@ -57,7 +66,7 @@ const Profile = ({ isOpen, onClose }) => {
       }
     };
 
-    if (isOpen) {
+    if (isOpen && !showDeleteModal) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -66,7 +75,7 @@ const Profile = ({ isOpen, onClose }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, showDeleteModal]);
 
   const handleProfileChange = (e) => {
     const { name, value, files } = e.target;
@@ -142,7 +151,57 @@ const Profile = ({ isOpen, onClose }) => {
   };
 
   const handleProfileDelete = async () => {
-    console.log("Profile deleted");
+    try {
+      const response = await axiosInstance.delete("/auth/delete-account", {
+        headers: {
+          "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Account deleted successfully");
+        localStorage.removeItem("pixeltrack-auth");
+        window.location.href = "/";
+      } else {
+        console.error("Failed to delete account", response.data);
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting account:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
+  const handleRemoveAccount = async (accountName) => {
+    try {
+      const response = await axiosInstance.put(
+        "/auth/disconnect-social",
+        { social: accountName },
+        {
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Social disconnected successfully");
+        setProfile((prev) => ({
+          ...prev,
+          socialConnected: prev.socialConnected.filter(
+            (account) => account.name !== accountName
+          ),
+        }));
+      } else {
+        console.error("Failed to disconnect social account", response.data);
+      }
+    } catch (error) {
+      console.error(
+        "Error disconnecting social account:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   if (!isOpen) return null;
@@ -436,26 +495,57 @@ const Profile = ({ isOpen, onClose }) => {
                   <span className="text-gray-700 font-semibold">Password</span>
                   <span className="font-bold">••••••••</span>
                 </div>
-                <button
-                  onClick={() => {
-                    console.log("Reset password");
-                  }}
-                  disabled
-                  className="text-purple-600 px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors duration-200 font-medium hover:bg-purple-100 hover:text-purple-500"
+                <Button
+                  className="text-purple-600 px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors duration-200 font-medium hover:bg-purple-100 hover:text-purple-500 text-md"
+                  asChild
                 >
-                  Reset password
-                </button>
+                  <Link href="/reset-password">Reset password</Link>
+                </Button>
               </div>
               <div className="flex justify-between items-center gap-4">
                 <span className="text-gray-700 font-semibold">
                   Account Termination
                 </span>
-                <button
-                  onClick={handleProfileDelete}
-                  className="text-red-500 font-medium px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors hover:bg-red-100"
-                >
-                  Delete Account
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      onClick={() => setShowDeleteModal(true)}
+                      className="text-red-500 font-medium px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors hover:bg-red-100"
+                    >
+                      Delete Account
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to delete your account?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel asChild>
+                        <button
+                          onClick={() => setShowDeleteModal(false)}
+                          className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md border-none cursor-pointer transition-colors duration-200"
+                        >
+                          Cancel
+                        </button>
+                      </AlertDialogCancel>
+                      <AlertDialogAction asChild>
+                        <button
+                          onClick={handleProfileDelete}
+                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md border-none cursor-pointer transition-colors duration-200"
+                        >
+                          Delete
+                        </button>
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           )}

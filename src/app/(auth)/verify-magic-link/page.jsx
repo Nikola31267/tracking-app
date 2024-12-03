@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { axiosInstance } from "@/lib/axios";
 import Loader from "@/components/layout/Loader";
+
 function VerifyMagicLinkPage() {
   const router = useRouter();
   const [message, setMessage] = useState("");
@@ -51,9 +52,9 @@ function VerifyMagicLinkPage() {
     <div className="max-w-md mx-auto p-5">
       <h1 className="text-xl font-bold mb-4">Verify Magic Link</h1>
       {loading ? (
-        <p className="text-gray-600">
+        <div className="text-gray-600">
           <Loader />
-        </p>
+        </div>
       ) : (
         <p className="text-gray-800">{message}</p>
       )}
