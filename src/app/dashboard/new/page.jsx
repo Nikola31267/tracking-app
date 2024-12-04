@@ -33,7 +33,7 @@ const TrackVisit = () => {
     const page = window.location.pathname;
     const pagePath = page.startsWith("/") ? page : \`/\${page}\`;
     axios
-      .post("http://localhost:9000/track", { apiKey, page: pagePath })
+      .post("https://pixeltrack-api.onrender.com/track", { apiKey, page: pagePath })
       .then((response) => console.log("Visit logged:", response.data))
       .catch((error) => console.error("Error logging visit:", error));
   }, []);
@@ -139,7 +139,7 @@ export default TrackVisit;
             {codeSnippet && (
               <>
                 <div className="mt-4 p-4 bg-gray-900 rounded-lg relative">
-                  <pre className="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto">
+                  <pre className="bg-gray-800 text-purple-500 p-4 rounded overflow-x-auto">
                     <code>{codeSnippet}</code>
                   </pre>
                   <button
