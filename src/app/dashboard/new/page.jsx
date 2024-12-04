@@ -3,12 +3,11 @@
 import React, { useState } from "react";
 
 import { axiosInstance } from "@/lib/axios";
-import { ArrowLeft, Clipboard } from "lucide-react";
+import { ArrowLeft, ArrowRight, Files } from "lucide-react";
 import Link from "next/link";
 
 const New = () => {
   const [projectName, setProjectName] = useState("");
-  const [message, setMessage] = useState("");
   const [codeSnippet, setCodeSnippet] = useState("");
   const [step, setStep] = useState(1);
   const [projectId, setProjectId] = useState("");
@@ -20,41 +19,23 @@ const New = () => {
         { projectName },
         { headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") } }
       );
-      setMessage(`Project created: ${response.data.projectName}`);
       setProjectId(response.data._id);
-      setCodeSnippet(`"use client";
-
-import { useEffect } from "react";
-import axios from "axios";
-
-const TrackVisit = () => {
-  useEffect(() => {
-    const apiKey = "${response.data.key}";
-    const page = window.location.pathname;
-    const pagePath = page.startsWith("/") ? page : \`/\${page}\`;
-    axios
-      .post("https://pixeltrack-api.onrender.com/track", { apiKey, page: pagePath })
-      .then((response) => console.log("Visit logged:", response.data))
-      .catch((error) => console.error("Error logging visit:", error));
-  }, []);
-
-  return null;
-};
-
-export default TrackVisit;
-`);
+      setCodeSnippet(
+        `<script src="http://localhost:3000/js/tracker.js" \n` +
+          `        data-api-key="${response.data.apiKey}" async></script>`
+      );
       setStep(2);
     } catch (error) {
-      setMessage(`Error: ${error.response.data.message}`);
+      console.error(error);
     }
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center ">
+      <div className="flex flex-col justify-center items-center bg-white">
         {step === 1 && (
           <Link href="/dashboard" className="flex justify-self-start">
-            <button className="bg-purple-500 hover:bg-purple-600 w-fit text-white p-2 mt-36 -ml-[9rem] sm:-ml-[22rem]  mb-8 rounded-lg font-semibold transition-colors duration-300 flex items-center gap-1">
+            <button className="bg-gray-100 hover:bg-gray-200 w-fit text-gray-700 p-2 mt-36 -ml-[9rem] sm:-ml-[22rem]  mb-8 rounded-lg font-semibold transition-colors duration-300 flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               Dashboard
             </button>
@@ -124,33 +105,43 @@ export default TrackVisit;
                 }`}
               ></div>
             </div>
-            <h1 className="text-lg font-bold text-gray-700">
-              Installation Code
-            </h1>
-            <hr className="border-gray-300 my-4" />
-            <div className="flex justify-between items-center">
-              <Link href={`/dashboard/projects/${projectId}`}>
-                <button className="bg-purple-500 hover:bg-purple-600 w-fit text-white p-2 rounded-lg font-semibold transition-colors duration-300">
-                  See analytics
-                </button>
-              </Link>
-              {message && <p className=" text-gray-700">{message}</p>}
-            </div>
-            {codeSnippet && (
-              <>
-                <div className="mt-4 p-4 bg-gray-900 rounded-lg relative">
-                  <pre className="bg-gray-800 text-purple-500 p-4 rounded overflow-x-auto">
-                    <code>{codeSnippet}</code>
-                  </pre>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(codeSnippet)}
-                    className="absolute top-6 right-6 text-white hover:text-gray-400 transition-colors duration-300"
-                  >
-                    <Clipboard className="w-6 h-6" />
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <h1 className="text-lg font-bold text-gray-700">
+                Installation Script
+              </h1>
+              <p className="text-gray-700">
+                Paste the following code into the <code>&lt;head&gt;</code> tag.
+              </p>
+              <hr className="border-gray-300 my-4" />
+              <div className="flex justify-between items-center space-x-4">
+                <Link href={`/dashboard/projects/${projectId}`}>
+                  <button className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 w-fit text-gray-700 p-2 rounded-lg font-semibold transition-colors duration-300">
+                    Go to project <ArrowRight className="w-4 h-4" />
                   </button>
-                </div>
-              </>
-            )}
+                </Link>
+                <button
+                  onClick={() => navigator.clipboard.writeText(codeSnippet)}
+                  className="text-gray-700 hover:text-gray-900 bg-gray-200 hover:bg-gray-300 p-2 rounded-lg font-semibold transition-colors duration-300 mt-3"
+                >
+                  <Files className="w-5 h-5" />
+                </button>
+              </div>
+              {codeSnippet && (
+                <>
+                  <div className="mt-4 p-4 bg-gray-900 rounded-lg relative">
+                    <pre className="bg-gray-800 text-gray-300 p-4 rounded overflow-x-auto">
+                      <code>{codeSnippet}</code>
+                    </pre>
+                  </div>
+                </>
+              )}
+
+              <div className="flex justify-center items-center space-x-4 mt-4">
+                <button className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg font-semibold transition-colors duration-300 w-full">
+                  Verify Installation
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

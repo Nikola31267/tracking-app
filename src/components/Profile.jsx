@@ -528,10 +528,7 @@ const Profile = ({ isOpen, onClose }) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel asChild>
-                        <button
-                          onClick={() => setShowDeleteModal(false)}
-                          className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md border-none cursor-pointer transition-colors duration-200"
-                        >
+                        <button onClick={() => setShowDeleteModal(false)}>
                           Cancel
                         </button>
                       </AlertDialogCancel>

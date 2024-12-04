@@ -8,13 +8,7 @@ import Loader from "@/components/layout/Loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import Navigation from "@/components/Navigation";
 
 const Dashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -97,18 +91,7 @@ const Dashboard = () => {
             />
           </Link>
           <div className="relative" ref={dropdownRef}>
-            <Breadcrumb className="px-2 py-1 ">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-lg cursor-default">
-                    {user?.fullName
-                      ? user.fullName
-                      : user?.username || user?.email}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Navigation dashboardPage={true} user={user} />
           </div>
         </div>
         <UserButton />
