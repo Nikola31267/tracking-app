@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { axiosInstance } from "@/lib/axios";
 import { ArrowLeft, ArrowRight, Files } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 const New = () => {
   const [projectName, setProjectName] = useState("");
   const [codeSnippet, setCodeSnippet] = useState("");
   const [step, setStep] = useState(1);
   const [projectId, setProjectId] = useState("");
+  const [snippetFound, setSnippetFound] = useState(null);
+  const [error, setError] = useState(null);
+  const [verifyClicked, setVerifyClicked] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,11 +27,26 @@ const New = () => {
       setProjectId(response.data._id);
       setCodeSnippet(
         `<script src="http://localhost:3000/js/tracker.js" \n` +
-          `        data-api-key="${response.data.apiKey}" async></script>`
+          `        data-api-key="${response.data.key}" async></script>`
       );
       setStep(2);
     } catch (error) {
       console.error(error);
+      setError(error.response?.data?.error || "An unknown error occurred.");
+    }
+  };
+
+  const handleVerifyInstallation = async () => {
+    setVerifyClicked(true);
+    try {
+      const websiteUrl = `https://${projectName}`;
+      const checkResponse = await axios.get(
+        `/api/check-snippet?url=${encodeURIComponent(websiteUrl)}`
+      );
+      setSnippetFound(checkResponse.data.snippetFound);
+    } catch (error) {
+      console.error(error);
+      setError(error.response?.data?.error || "An unknown error occurred.");
     }
   };
 
@@ -137,10 +157,26 @@ const New = () => {
               )}
 
               <div className="flex justify-center items-center space-x-4 mt-4">
-                <button className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg font-semibold transition-colors duration-300 w-full">
+                <button
+                  onClick={handleVerifyInstallation}
+                  className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg font-semibold transition-colors duration-300 w-full"
+                >
                   Verify Installation
                 </button>
               </div>
+              {verifyClicked && error && (
+                <div className="text-red-500 mt-4">{error}</div>
+              )}
+              {verifyClicked && snippetFound && (
+                <div className="text-green-500 mt-4">
+                  Snippet found! Access granted.
+                </div>
+              )}
+              {verifyClicked && snippetFound === false && (
+                <div className="text-red-500 mt-4">
+                  Snippet not found. Access denied.
+                </div>
+              )}
             </div>
           </div>
         )}

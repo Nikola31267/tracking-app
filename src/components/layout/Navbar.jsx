@@ -8,14 +8,26 @@ import SignedIn from "../auth/SignedIn";
 import SignedOut from "../auth/SignedOut";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   const signOut = () => {
     console.log("Signing out");
     localStorage.removeItem("pixeltrack-auth");
     window.location.href = "/login";
+  };
+
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push(`/${targetId}`);
+    }
   };
 
   return (
@@ -40,25 +52,15 @@ export default function Navbar() {
         </Link>
         <nav className="hidden md:flex space-x-6">
           <Link
-            href="/product"
-            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
-          >
-            Features
-          </Link>
-          <Link
-            href="/docs"
-            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
-          >
-            Docs
-          </Link>
-          <Link
-            href="/pricing"
+            href="/#pricing"
+            onClick={(e) => handleSmoothScroll(e, "#pricing")}
             className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             Pricing
           </Link>
           <Link
-            href="/faq"
+            href="/#faq"
+            onClick={(e) => handleSmoothScroll(e, "#faq")}
             className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
           >
             FAQs
@@ -125,31 +127,30 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col space-y-4">
               <Link
-                href="/product"
-                className="block py-2 w-fit text-muted-foreground hover:text-primary"
-              >
-                Features
-              </Link>
-              <Link
-                href="/docs"
-                className="block py-2 w-fit text-muted-foreground hover:text-primary"
-              >
-                Docs
-              </Link>
-              <Link
-                href="/pricing"
+                href="/#pricing"
+                onClick={(e) => {
+                  handleSmoothScroll(e, "#pricing");
+                  setIsOpen(false);
+                }}
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 Pricing
               </Link>
               <Link
-                href="/faq"
+                href="/#faq"
+                onClick={(e) => {
+                  handleSmoothScroll(e, "#faq");
+                  setIsOpen(false);
+                }}
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 FAQs
               </Link>
               <Link
                 href="/contact"
+                onClick={(e) => {
+                  setIsOpen(false);
+                }}
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 Contact

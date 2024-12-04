@@ -29,7 +29,7 @@ const Footer = () => {
             </p>
             <a
               href="https://turboverify.vercel.app"
-              className="mt-4 inline-block text-sm bg-gray-100 px-2 py-1 transition-all duration-300 rounded-md hover:py-[0.360rem] "
+              className="mt-4 inline-block text-sm bg-gray-100 px-2 py-1 transition-all duration-300 rounded-md hover:scale-[1.02] "
             >
               <span className="flex items-center gap-1">
                 <Image
@@ -49,17 +49,13 @@ const Footer = () => {
               <div className="text-sm font-semibold mb-3">Product</div>
               <ul className="text-sm space-y-2">
                 <li>
-                  <Link href="/product" className="link-hover">
-                    Features
+                  <Link href="/#faq" className="link-hover">
+                    FAQs
                   </Link>
                 </li>
+                <li></li>
                 <li>
-                  <Link href="/docs" className="link-hover">
-                    Docs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pricing" className="link-hover">
+                  <Link href="/#pricing" className="link-hover">
                     Pricing
                   </Link>
                 </li>
