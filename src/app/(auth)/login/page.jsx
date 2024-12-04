@@ -5,6 +5,7 @@ import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+  const [sendingMagicLink, setSendingMagicLink] = useState(false);
   const modalRef = useRef(null);
   const resetPasswordRef = useRef(null);
 
@@ -60,6 +62,7 @@ export default function Login() {
 
   const handlePasswordlessLogin = async (e) => {
     e.preventDefault();
+    setSendingMagicLink(true);
     try {
       const response = await axiosInstance.post("/auth/magic-link", {
         email: passwordlessEmail,
@@ -75,6 +78,8 @@ export default function Login() {
     } catch (error) {
       console.error("Error:", error);
       setMessage(error.response.data.message);
+    } finally {
+      setSendingMagicLink(false);
     }
   };
 
@@ -264,8 +269,13 @@ export default function Login() {
                   type="button"
                   className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md"
                   onClick={handlePasswordlessLogin}
+                  disabled={sendingMagicLink}
                 >
-                  Send Magic Link
+                  {sendingMagicLink ? (
+                    <Loader2 className="animate-spin h-5 w-5 text-white mx-auto" />
+                  ) : (
+                    "Send Magic Link"
+                  )}
                 </button>
               </div>
             </form>

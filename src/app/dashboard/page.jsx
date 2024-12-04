@@ -114,7 +114,7 @@ const Dashboard = () => {
         <UserButton />
       </div>
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      {last24HoursVisits && (
+      {last24HoursVisits !== 0 && (
         <div className="flex items-center gap-1">
           <h2>Hello {user?.fullName}, you have </h2>
           <span className="text-lg font-semibold">{last24HoursVisits}</span>
