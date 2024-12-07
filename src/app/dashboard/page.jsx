@@ -107,7 +107,7 @@ const Dashboard = () => {
 
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         <li
-          className="bg-white rounded-lg p-6 py-16 cursor-pointer  border-2 border-dotted border-gray-300 flex justify-center items-center shadow-lg hover:shadow-xl transition-shadow duration-300"
+          className="bg-white rounded-2xl p-6 py-16 cursor-pointer border-2 border-dotted border-gray-300 hover:border-gray-500 flex justify-center items-center shadow-lg hover:shadow-xl transition-all duration-300"
           onClick={() => router.push("/dashboard/new")}
         >
           <span className="text-lg font-medium text-gray-500 flex items-center gap-1">
@@ -117,24 +117,24 @@ const Dashboard = () => {
         {projects.map((project) => (
           <article
             key={project._id}
-            className="group relative flex flex-col rounded-xl bg-white p-md cursor-pointer hover:shadow-md transition-shadow duration-300"
+            className="group relative flex flex-col rounded-2xl bg-white p-md cursor-pointer hover:shadow-md transition-shadow duration-300"
             onClick={() => router.push(`/dashboard/projects/${project._id}`)}
           >
             <div className="flex flex-1 flex-col justify-between rounded-lg border border-primary bg-surface-200 p-6 py-5">
               <div
-                className={`absolute inset-x-16 top-0 h-1 rounded-b-full bg-${project.theme}-500`}
+                className={`absolute inset-x-16 top-0 h-1 rounded-b-full bg-purple-500`}
               ></div>
 
               <div className="flex items-center font-semibold gap-2 mb-8">
                 <Image
-                  src="/logo-nobg.png"
+                  src={project?.logo || "/logo-nobg.png"}
                   alt="Logo"
                   className="h-8 w-8"
                   width={32}
                   height={32}
                 />
                 <div className="truncate text-md text-secondary">
-                  {project.projectName}
+                  {project?.projectName}
                 </div>
               </div>
               <div className="space-y-4">

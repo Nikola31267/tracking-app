@@ -25,6 +25,7 @@ import WeeklyVisitChart from "./components/WeeklyVisitChart";
 import Navigation from "@/components/Navigation";
 import TabNavigation from "./components/TabNavigation";
 import { Button } from "@/components/ui/button";
+import FindSnippet from "@/components/FindSnippet";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -213,6 +214,21 @@ const ProjectPage = () => {
 
   if (error) {
     return <div>{error}</div>;
+  }
+
+  if (project?.addedSnippet === false) {
+    return (
+      <div className="flex flex-col justify-center items-center bg-white">
+        <div className="p-6 mt-20 relative">
+          <FindSnippet
+            projectName={project.projectName}
+            projectId={id}
+            apiKey={project.key}
+            projectPage={true}
+          />
+        </div>
+      </div>
+    );
   }
 
   if (!project || visits === null) {
