@@ -274,7 +274,7 @@ export default function Login() {
                   {sendingMagicLink ? (
                     <Loader2 className="animate-spin h-5 w-5 text-white mx-auto" />
                   ) : (
-                    "Send Magic Link"
+                    "Send Link"
                   )}
                 </button>
               </div>
