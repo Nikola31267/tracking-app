@@ -43,14 +43,14 @@ export default function Pricing() {
                 {isYearly ? (
                   <>
                     <span className="line-through text-lg font-normal text-gray-500">
-                      $348
+                      $240
                     </span>{" "}
-                    $290
+                    $200
                     <span className="text-lg">/year</span>
                   </>
                 ) : (
                   <>
-                    $29<span className="text-lg">/month</span>
+                    $20<span className="text-lg">/month</span>
                   </>
                 )}
               </span>
