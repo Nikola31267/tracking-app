@@ -59,7 +59,11 @@ const ProjectPage = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
-    if (!localStorage.getItem("pixeltrack-auth")) {
+    if (
+      !localStorage.getItem("pixeltrack-auth") ||
+      localStorage.getItem("pixeltrack-auth") === null ||
+      localStorage.getItem("pixeltrack-auth") === ""
+    ) {
       router.push("/sign-in");
     } else {
       setLoadingAuth(false);

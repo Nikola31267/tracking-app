@@ -27,7 +27,11 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("pixeltrack-auth")) {
+    if (
+      localStorage.getItem("pixeltrack-auth") ||
+      !localStorage.getItem("pixeltrack-auth") === null ||
+      !localStorage.getItem("pixeltrack-auth") === ""
+    ) {
       router.push("/dashboard");
     } else {
       setLoadingAuth(false);
