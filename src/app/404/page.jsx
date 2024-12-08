@@ -30,7 +30,7 @@ export default function NotFound() {
             Home
           </Link>
           <Link
-            href="/contact"
+            href="mailto:contact-pixeltrack@builderbee.pro"
             className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 transition-colors duration-300 px-4 py-2 rounded-lg text-black"
           >
             <MessageCircleMore className="w-4 h-4" />
