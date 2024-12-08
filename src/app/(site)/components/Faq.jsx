@@ -14,15 +14,15 @@ import { useFAQSearch } from "@/hooks/useFAQSearch";
 
 const faqData = [
   {
-    question: "What is PixelTrack?",
+    question: "What is Pixel Track?",
     answer:
-      "PixelTrack is a tool that helps you track your website's performance and user engagement. It offers a range of features to help you understand your users and improve your website's performance based on the traffic it receives.",
+      "Pixel Track is a tool that helps you track your website's performance and user engagement. It offers a range of features to help you understand your users and improve your website's performance based on the traffic it receives.",
     category: "General",
   },
   {
-    question: "How does PixelTrack work?",
+    question: "How does Pixel Track work?",
     answer:
-      "PixelTrack works by placing a small snippet of code on your website. This code allows us to track your website's performance and user engagement. It's completely invisible to your users and doesn't affect the performance of your website.",
+      "Pixel Track works by placing a small snippet of code on your website. This code allows us to track your website's performance and user engagement. It's completely invisible to your users and doesn't affect the performance of your website.",
     category: "General",
   },
   {
@@ -32,9 +32,9 @@ const faqData = [
     category: "General",
   },
   {
-    question: "How much does PixelTrack cost?",
+    question: "How much does Pixel Track cost?",
     answer:
-      "PixelTrack is free for the first 7 days so you can try it out and see if it's a good fit for your needs. After that, it's $29. Pay one time it's yours forever.",
+      "Pixel Track is free for the first 7 days so you can try it out and see if it's a good fit for your needs. After that, it's $29. Pay one time it's yours forever.",
     category: "Pricing",
   },
   {
@@ -46,13 +46,19 @@ const faqData = [
   {
     question: "Can I cancel my subscription at any time?",
     answer:
-      "Unfortunatley, no. Once you've paid, you're locked in for life. We do not offer refunds either.",
+      "Yes, you can cancel your subscription at any time. You will not be charged again after your current billing period ends.",
     category: "Billing",
   },
   {
     question: "Do you offer customer support?",
     answer:
       "We provide 24/7 customer support via email. Our dedicated support team is always ready to assist you.",
+    category: "Support",
+  },
+  {
+    question: "How can I contact support?",
+    answer:
+      "You can contact support via email at contact-pixeltrack@builderbee.pro",
     category: "Support",
   },
 ];
@@ -108,7 +114,18 @@ export default function FAQSection() {
               {displayedItems.map((item, index) => (
                 <AccordionItem value={`item-${index}`} key={index}>
                   <AccordionTrigger>{item.question}</AccordionTrigger>
-                  <AccordionContent>{item.answer}</AccordionContent>
+                  <AccordionContent>
+                    {item.answer
+                      .split("contact-pixeltrack@builderbee.pro")
+                      .map((part, index) => (
+                        <React.Fragment key={index}>
+                          {part}
+                          {index === 1 && (
+                            <strong>contact-pixeltrack@builderbee.pro</strong>
+                          )}
+                        </React.Fragment>
+                      ))}
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

@@ -1,42 +1,55 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/layout/Loader";
 
-const Register = () => {
-  const [username, setUsername] = useState("");
+export default function Login() {
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [registering, setRegistering] = useState(false);
+  const [error, setError] = useState(null);
+  const [signingIn, setSigningIn] = useState(false);
   const [showPasswordless, setShowPasswordless] = useState(false);
   const [passwordlessEmail, setPasswordlessEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [sendingMagicLink, setSendingMagicLink] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const modalRef = useRef(null);
+  const resetPasswordRef = useRef(null);
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (localStorage.getItem("pixeltrack-auth")) {
+      router.push("/dashboard");
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [router]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setRegistering(true);
+    setSigningIn(true);
     try {
-      const res = await axiosInstance.post("/auth/register", {
-        username,
+      const response = await axiosInstance.post("/auth/sign-in", {
         email,
-        fullName,
         password,
       });
-      localStorage.setItem("pixeltrack-auth", res.data.token);
-      window.location.href = "/";
-    } catch (err) {
-      console.log(err);
-      setError("Registration failed");
+      const { token } = response.data;
+      localStorage.setItem("pixeltrack-auth", token);
+      router.push("/dashboard");
+    } catch (error) {
+      setError("Invalid credentials");
+      console.error("Error logging in:", error);
     } finally {
-      setRegistering(false);
+      setSigningIn(false);
     }
   };
 
@@ -48,7 +61,7 @@ const Register = () => {
         token,
       });
       localStorage.setItem("pixeltrack-auth", response.data.token);
-      window.location.href = "/";
+      router.push("/dashboard");
     } catch (error) {
       console.error(
         "Google login failed:",
@@ -60,7 +73,7 @@ const Register = () => {
     setError("Google login failed");
   };
 
-  const handlePasswordlessRegister = async (e) => {
+  const handlePasswordlessLogin = async (e) => {
     e.preventDefault();
     setSendingMagicLink(true);
     try {
@@ -83,14 +96,38 @@ const Register = () => {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post("/auth/reset-password", {
+        email: resetPasswordEmail,
+      });
+
+      if (response.status === 200) {
+        setMessage("A reset password link has been sent to your email.");
+      } else {
+        setMessage(response.data.message || "An error occurred");
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      setMessage(error.response.data.message);
+    }
+  };
+
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       setShowPasswordless(false);
     }
+    if (
+      resetPasswordRef.current &&
+      !resetPasswordRef.current.contains(event.target)
+    ) {
+      setShowResetPassword(false);
+    }
   };
 
   useEffect(() => {
-    if (showPasswordless) {
+    if (showPasswordless || showResetPassword) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -99,68 +136,55 @@ const Register = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showPasswordless]);
+  }, [showPasswordless, showResetPassword]);
+
+  if (loadingAuth) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen relative">
       <form
         className="flex flex-col gap-4 p-10 rounded-lg shadow-xl bg-gray-50"
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
       >
         <Image
           src="/logo-nobg.png"
           alt="Project Logo"
-          className="w-14"
+          className=" w-14"
           width={56}
           height={56}
         />
 
         <div className="flex flex-col gap-1 mb-4">
-          <h2 className="text-xl font-semibold">Sign Up</h2>
+          <h2 className="text-xl font-semibold">Sign In</h2>
           <p className="text-sm text-gray-500">to continue to PixelTrack</p>
         </div>
 
         {error && <p className="text-red-500">{error}</p>}
-
         <GoogleOAuthProvider clientId="130701496125-gqtj78hm9ub2s5jkmki0ur6mtnah06ma.apps.googleusercontent.com">
           <div>
             <GoogleLogin
               onSuccess={handleGoogleLoginSuccess}
               onError={handleGoogleLoginFailure}
-              className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm rounded-lg text-gray-700 transition-colors hover:bg-gray-100"
             />
           </div>
         </GoogleOAuthProvider>
-        <button
-          className="text-purple-500 hover:text-purple-600 transition-colors duration-300 font-semibold"
+        <Button
+          className="bg-transparent text-purple-500 hover:text-purple-600 hover:bg-transparent text-md transition-colors duration-300 font-semibold"
           onClick={(e) => {
             e.preventDefault();
             setShowPasswordless(true);
           }}
         >
-          Passwordless Sign Up
-        </button>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="p-2 rounded-md border w-96 border-gray-300"
-          required
-        />
+          Passwordless Sign In
+        </Button>
+        <hr className="my-1" />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="p-2 rounded-md border w-96 border-gray-300"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
           className="p-2 rounded-md border w-96 border-gray-300"
           required
         />
@@ -172,12 +196,24 @@ const Register = () => {
           className="p-2 rounded-md border w-96 border-gray-300"
           required
         />
+        <p className="text-sm text-gray-500">
+          Forgot your password?{" "}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setShowResetPassword(true);
+            }}
+            className="text-purple-500 hover:underline"
+          >
+            Reset Password
+          </button>
+        </p>
         <button
           type="submit"
           className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-md"
-          disabled={registering}
+          disabled={signingIn}
         >
-          {registering ? (
+          {signingIn ? (
             <svg
               className="animate-spin h-5 w-5 text-white mx-auto"
               xmlns="http://www.w3.org/2000/svg"
@@ -205,9 +241,9 @@ const Register = () => {
 
         <hr className="my-4" />
         <p className="text-md text-gray-500 flex gap-1 justify-center">
-          Already have an account?{" "}
-          <Link href="/login" className="text-purple-500 hover:underline">
-            Sign In
+          Don&apos;t have an account?{" "}
+          <Link href="/sign-up" className="text-purple-500 hover:underline">
+            Sign Up
           </Link>
         </p>
         <hr className=" border-gray-100" />
@@ -222,7 +258,7 @@ const Register = () => {
             ref={modalRef}
             className="bg-white p-8 rounded-lg shadow-lg z-10 w-[30rem] mx-auto relative"
           >
-            <h2 className="text-2xl font-bold mb-4">Passwordless Sign Up</h2>
+            <h2 className="text-2xl font-bold mb-4">Passwordless Sign In</h2>
             <p className="text-sm text-gray-500 mb-4">
               An email containing a verification token will be sent to you the
               token expires in 15 minutes.
@@ -249,7 +285,7 @@ const Register = () => {
                 <button
                   type="button"
                   className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md"
-                  onClick={handlePasswordlessRegister}
+                  onClick={handlePasswordlessLogin}
                   disabled={sendingMagicLink}
                 >
                   {sendingMagicLink ? (
@@ -263,8 +299,46 @@ const Register = () => {
           </div>
         </div>
       )}
+
+      {showResetPassword && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div
+            ref={resetPasswordRef}
+            className="bg-white p-8 rounded-lg shadow-lg z-10 w-[30rem] mx-auto relative"
+          >
+            <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
+            <form className="space-y-4">
+              <div>
+                <label
+                  htmlFor="reset-password-email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="reset-password-email"
+                  placeholder="Enter your email"
+                  value={resetPasswordEmail}
+                  onChange={(e) => setResetPasswordEmail(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                />
+              </div>
+              {message && <p className="text-sm text-gray-500">{message}</p>}
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md"
+                  onClick={handleResetPassword}
+                >
+                  Send email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default Register;
+}

@@ -64,7 +64,7 @@ const UserButton = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("pixeltrack-auth");
-    window.location.href = "/login";
+    window.location.href = "/sign-in";
   };
 
   if (error) return <div>{error}</div>;

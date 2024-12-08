@@ -1,17 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { axiosInstance } from "@/lib/axios";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import FindSnippet from "@/components/FindSnippet";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/layout/Loader";
 
 const New = () => {
   const [projectName, setProjectName] = useState("");
   const [step, setStep] = useState(1);
   const [projectId, setProjectId] = useState("");
   const [apiKey, setApiKey] = useState("");
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!localStorage.getItem("pixeltrack-auth")) {
+      router.push("/sign-in");
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +41,10 @@ const New = () => {
       setError(error.response?.data?.error || "An unknown error occurred.");
     }
   };
+
+  if (loadingAuth) {
+    return <Loader />;
+  }
 
   return (
     <>

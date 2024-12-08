@@ -17,7 +17,7 @@ export default function Navbar() {
   const signOut = () => {
     console.log("Signing out");
     localStorage.removeItem("pixeltrack-auth");
-    window.location.href = "/login";
+    window.location.href = "/sign-in";
   };
 
   const handleSmoothScroll = (e, targetId) => {
@@ -48,28 +48,22 @@ export default function Navbar() {
             width={60}
             height={60}
           />
-          PixelTrack
+          Pixel Track
         </Link>
         <nav className="hidden md:flex space-x-6">
           <Link
             href="/#pricing"
             onClick={(e) => handleSmoothScroll(e, "#pricing")}
-            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
+            className="text-muted-foreground transition-all duration-300 hover:underline"
           >
             Pricing
           </Link>
           <Link
             href="/#faq"
             onClick={(e) => handleSmoothScroll(e, "#faq")}
-            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
+            className="text-muted-foreground  transition-all duration-300 hover:underline"
           >
             FAQs
-          </Link>
-          <Link
-            href="/contact"
-            className="text-muted-foreground hover:text-purple-500 transition-colors duration-300"
-          >
-            Contact
           </Link>
         </nav>
         <div className="flex items-center space-x-4">
@@ -94,13 +88,13 @@ export default function Navbar() {
               className="text-purple-500 hover:bg-purple-50"
               asChild
             >
-              <Link href="/login">Log in</Link>
+              <Link href="/sign-in">Log in</Link>
             </Button>
             <Button
               className="bg-purple-500 hover:bg-purple-600 text-white"
               asChild
             >
-              <Link href="/register">Sign up</Link>
+              <Link href="/sign-up">Sign up</Link>
             </Button>
           </SignedOut>
         </div>
@@ -145,15 +139,6 @@ export default function Navbar() {
                 className="block py-2 w-fit text-muted-foreground hover:text-primary"
               >
                 FAQs
-              </Link>
-              <Link
-                href="/contact"
-                onClick={(e) => {
-                  setIsOpen(false);
-                }}
-                className="block py-2 w-fit text-muted-foreground hover:text-primary"
-              >
-                Contact
               </Link>
             </div>
           </motion.nav>

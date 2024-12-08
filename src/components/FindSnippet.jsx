@@ -5,6 +5,7 @@ import { Files, Loader2 } from "lucide-react";
 import axios from "axios";
 import { axiosInstance } from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
   const [snippetFound, setSnippetFound] = useState(null);
@@ -25,10 +26,10 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
       const checkResponse = await axios.get(
         `/api/check-snippet?url=${encodeURIComponent(websiteUrl)}`
       );
-      await axiosInstance.put(`/create/${projectId}`);
       setSnippetFound(checkResponse.data.snippetFound);
 
       if (checkResponse.data.snippetFound) {
+        await axiosInstance.put(`/create/${projectId}`);
         setTimeout(() => {
           if (projectPage) {
             window.location.reload();
@@ -71,17 +72,17 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
       )}
 
       <div className="flex justify-center items-center space-x-4 mt-4">
-        <button
+        <Button
           onClick={handleVerifyInstallation}
           className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg font-semibold transition-colors duration-300 w-full"
           disabled={loading}
         >
           {loading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="animate-spin" />
           ) : (
             "Verify Installation"
           )}
-        </button>
+        </Button>
       </div>
       {verifyClicked && error && (
         <div className="text-red-500 mt-4">{error}</div>
@@ -91,7 +92,7 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
       )}
       {verifyClicked && snippetFound === false && (
         <div className="text-red-500 mt-4">
-          Snippet not found. Please try again.
+          Snippet not found. Please add it to your code.
         </div>
       )}
     </div>

@@ -38,7 +38,7 @@ function ResetPasswordPage() {
 
       if (response.status === 200) {
         setMessage(data.message);
-        router.push("/login");
+        router.push("/sign-in");
       } else {
         setMessage(data.message || "An error occurred");
       }

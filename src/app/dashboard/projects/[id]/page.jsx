@@ -56,6 +56,15 @@ const ProjectPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [visitToDelete, setVisitToDelete] = useState(null);
   const [selectedChart, setSelectedChart] = useState("browser");
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    if (!localStorage.getItem("pixeltrack-auth")) {
+      router.push("/sign-in");
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -225,12 +234,12 @@ const ProjectPage = () => {
     setSelectedChart(value);
   };
 
-  const handleChartChange2 = (value) => {
-    setSelectedChart2(value);
-  };
-
   if (error) {
     return <div>{error}</div>;
+  }
+
+  if (loadingAuth) {
+    return <Loader />;
   }
 
   if (project?.addedSnippet === false) {

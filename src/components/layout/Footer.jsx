@@ -18,11 +18,13 @@ const Footer = () => {
                 height={24}
                 className="h-6 w-6"
               />
-              <strong className="text-lg font-extrabold">PixelTrack</strong>
+              <strong className="text-lg font-extrabold">Pixel Track</strong>
             </Link>
-            <p className="text-sm mt-2 text-base-secondary">Description</p>
             <p className="text-sm mt-2 text-base-secondary">
-              © 2024 - All rights reserved
+              Your Data, Your Power.
+            </p>
+            <p className="text-sm mt-2 text-base-secondary">
+              Copyright © 2024 - All rights reserved
             </p>
             <p className="text-sm mt-2 text-base-secondary">
               Made with ❤️ by TurboVerify Team.
@@ -67,11 +69,6 @@ const Footer = () => {
                 <li>
                   <Link href="/tos" className="link-hover">
                     Terms of services
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="link-hover">
-                    Contact
                   </Link>
                 </li>
                 <li>

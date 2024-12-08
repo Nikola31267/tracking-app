@@ -14,12 +14,21 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const [error, setError] = useState("");
   const [last24HoursVisits, setLast24HoursVisits] = useState("");
   const router = useRouter();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!localStorage.getItem("pixeltrack-auth")) {
+      router.push("/sign-in");
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -33,9 +42,6 @@ const Dashboard = () => {
         console.error(error);
       } finally {
         setLoading(false);
-        if (!localStorage.getItem("pixeltrack-auth")) {
-          router.push("/");
-        }
       }
     };
 
@@ -79,8 +85,12 @@ const Dashboard = () => {
     };
   }, [dropdownOpen]);
 
+  if (loadingAuth) {
+    return <Loader />;
+  }
+
   if (loading) {
-    return <Loader size="lg" color="blue" />;
+    return <Loader />;
   }
 
   return (
