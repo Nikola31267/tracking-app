@@ -39,9 +39,27 @@ const Dashboard = () => {
       }
     };
 
+    const fetchProjects = async () => {
+      try {
+        const response = await axiosInstance.get("/dashboard/projects", {
+          headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
+        });
+        const fetchedProjects = response.data.allProjects;
+        setProjects(fetchedProjects);
+        setLast24HoursVisits(response.data.totalRecentVisits);
+
+        if (fetchedProjects.length === 0) {
+          router.push("/dashboard/new");
+        }
+      } catch (error) {
+        setError("Error fetching projects");
+        console.error(error);
+      }
+    };
+
     fetchUserProfile();
     fetchProjects();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -61,18 +79,6 @@ const Dashboard = () => {
     };
   }, [dropdownOpen]);
 
-  const fetchProjects = async () => {
-    try {
-      const response = await axiosInstance.get("/dashboard/projects", {
-        headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
-      });
-      setProjects(response.data.allProjects);
-      setLast24HoursVisits(response.data.totalRecentVisits);
-    } catch (error) {
-      setError("Error fetching projects");
-      console.error(error);
-    }
-  };
   if (loading) {
     return <Loader size="lg" color="blue" />;
   }

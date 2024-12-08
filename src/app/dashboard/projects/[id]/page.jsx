@@ -12,7 +12,6 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,
-  AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 
@@ -26,6 +25,14 @@ import Navigation from "@/components/Navigation";
 import TabNavigation from "./components/TabNavigation";
 import { Button } from "@/components/ui/button";
 import FindSnippet from "@/components/FindSnippet";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import ReferrerChart from "./components/ReferrerChart";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -47,6 +54,7 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [visitToDelete, setVisitToDelete] = useState(null);
+  const [selectedChart, setSelectedChart] = useState("pageViews");
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -212,6 +220,10 @@ const ProjectPage = () => {
 
   const totalPages = Math.ceil(visits.length / ITEMS_PER_PAGE);
 
+  const handleChartChange = (value) => {
+    setSelectedChart(value);
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -269,9 +281,32 @@ const ProjectPage = () => {
             <BrowserChart visitsData={visits} />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2 mt-6">
+          <div className="flex justify-end mb-4 mt-6">
+            <div className="w-64">
+              <Select
+                value={selectedChart}
+                onValueChange={handleChartChange}
+                className="w-full"
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pageViews">Page Views</SelectItem>
+                  <SelectItem value="referrer">Referrer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2">
             <CountryChart visitsData={visits} />
-            <PagesChart visitsData={visits} />
+            {selectedChart === "pageViews" && (
+              <PagesChart visitsData={visits} />
+            )}
+            {selectedChart === "referrer" && (
+              <ReferrerChart visitsData={visits} />
+            )}
           </div>
 
           <VisitTable

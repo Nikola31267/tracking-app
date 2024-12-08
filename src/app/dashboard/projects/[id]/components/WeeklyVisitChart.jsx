@@ -14,26 +14,61 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
 const WeeklyVisitChart = ({ visits, visitsData }) => {
   const [dailyVisits, setDailyVisits] = useState({});
+  const [selectedWeek, setSelectedWeek] = useState("current");
 
   useEffect(() => {
+    const calculateStartOfWeek = (weeksAgo) => {
+      const date = new Date();
+      date.setDate(date.getDate() - date.getDay() - weeksAgo * 7);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    };
+
+    const startOfWeek = calculateStartOfWeek(
+      selectedWeek === "current" ? 0 : 1
+    );
+
     const visitsByDay = visitsData.reduce((acc, visit) => {
-      const date = new Date(visit.timestamp).toLocaleDateString();
-      acc[date] = (acc[date] || 0) + 1;
+      const visitDate = new Date(visit.timestamp);
+      if (visitDate >= startOfWeek) {
+        const date = visitDate.toLocaleDateString();
+        acc[date] = (acc[date] || 0) + 1;
+      }
       return acc;
     }, {});
     setDailyVisits(visitsByDay);
-  }, [visitsData]);
+  }, [visitsData, selectedWeek]);
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>All Visits: {visits.length}</CardTitle>
-        <CardDescription>
-          Number of visits per day for the last week
-        </CardDescription>
+        <CardDescription>Number of visits per day</CardDescription>
+        <div className="w-56 mt-1">
+          <Select
+            value={selectedWeek}
+            onValueChange={setSelectedWeek}
+            className="w-full"
+          >
+            <SelectTrigger id="week-select">
+              <SelectValue placeholder="Select a week" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="current">Current Week</SelectItem>
+              <SelectItem value="previous">All Time</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent className="pt-6">
         <ChartContainer

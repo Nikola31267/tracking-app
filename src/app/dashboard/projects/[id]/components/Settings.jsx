@@ -18,11 +18,13 @@ import {
   AlertDialogDescription,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const Settings = ({ project, setProject, id }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const updateProjectSettings = async (updatedData) => {
     setIsUpdating(true);
@@ -42,9 +44,17 @@ const Settings = ({ project, setProject, id }) => {
       });
       console.log(response.data.message);
       setProject((prevProject) => ({ ...prevProject, ...updatedData }));
+      toast({
+        title: "Success",
+        description: "Project settings updated successfully.",
+      });
     } catch (error) {
       console.error("Error updating project settings:", error);
       setError("Server error");
+      toast({
+        title: "Error",
+        description: "Failed to update project settings.",
+      });
     } finally {
       setIsUpdating(false);
     }
@@ -59,9 +69,11 @@ const Settings = ({ project, setProject, id }) => {
         },
       });
       router.push("/dashboard");
+      toast({ title: "Success", description: "Project deleted successfully." });
     } catch (error) {
       console.error("Error deleting project:", error);
       setError("Server error");
+      toast({ title: "Error", description: "Failed to delete project." });
     } finally {
       setIsUpdating(false);
       setIsDeleteDialogOpen(false);
@@ -73,9 +85,11 @@ const Settings = ({ project, setProject, id }) => {
     try {
       await axiosInstance.put(`/settings/${id}/removeLogo`);
       setProject((prevProject) => ({ ...prevProject, logo: null }));
+      toast({ title: "Success", description: "Logo removed successfully." });
     } catch (error) {
       console.error("Error deleting project:", error);
       setError("Server error");
+      toast({ title: "Error", description: "Failed to remove logo." });
     } finally {
       setIsUpdating(false);
     }

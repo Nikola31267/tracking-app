@@ -16,7 +16,6 @@ export async function GET(req) {
     const response = await axios.get(url);
     const html = response.data;
 
-    // Check if the snippet exists
     const snippetFound = html.includes(
       '<script src="http://localhost:3000/js/tracker.js"'
     );
