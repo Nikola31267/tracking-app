@@ -77,7 +77,7 @@ export default function Pricing() {
               >
                 <Button className="w-full flex items-center justify-center gap-2 group bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200">
                   <Crown className="transform rotate-0 group-hover:-rotate-[6.5deg] group-hover:scale-[1.18] transition-transform duration-200" />
-                  Join PixelTrack
+                  Join Pixel Track
                 </Button>
               </motion.div>
             </CardFooter>

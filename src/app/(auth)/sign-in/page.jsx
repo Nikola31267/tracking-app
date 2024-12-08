@@ -162,7 +162,7 @@ export default function Login() {
 
         <div className="flex flex-col gap-1 mb-4">
           <h2 className="text-xl font-semibold">Sign In</h2>
-          <p className="text-sm text-gray-500">to continue to PixelTrack</p>
+          <p className="text-sm text-gray-500">to continue to Pixel Track</p>
         </div>
 
         {error && <p className="text-red-500">{error}</p>}
