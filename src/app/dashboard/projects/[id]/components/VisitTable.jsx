@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Trash, XIcon } from "lucide-react";
 import Image from "next/image";
 import {
   AlertDialog,
@@ -15,7 +15,6 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,
-  AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -34,6 +33,17 @@ const PLATFORM_LOGOS = {
   WindowsPhone:
     "https://upload.wikimedia.org/wikipedia/commons/e/ec/Windows_Phone_logo.png",
 };
+
+function DetailItem({ label, value }) {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+        {label}
+      </span>
+      <span className="text-base text-gray-900 dark:text-white">{value}</span>
+    </div>
+  );
+}
 
 const VisitTable = ({
   paginatedVisits,
@@ -54,37 +64,37 @@ const VisitTable = ({
   handleDeleteVisit,
 }) => {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 px-4 sm:px-0">
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full bg-white divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 IP Address
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Device
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Browser
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Platform
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Referrer
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Country
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Page
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-2 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -94,7 +104,7 @@ const VisitTable = ({
                 className="hover:bg-gray-100 cursor-pointer"
                 onClick={() => fetchSpecificVisit(visit._id)}
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {PLATFORM_LOGOS[visit.platform] && (
                     <Image
                       src={PLATFORM_LOGOS[visit.platform]}
@@ -104,31 +114,31 @@ const VisitTable = ({
                     />
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.ip || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.device || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.browser || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.platform || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.referrer || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.country || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.page || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {new Date(visit?.timestamp).toLocaleString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   <MoreHorizontal
                     className="h-5 w-5 text-gray-500 hover:text-gray-900 cursor-pointer transition-colors duration-200"
                     onClick={(e) => {
@@ -206,39 +216,32 @@ const VisitTable = ({
       {isModalOpen && specificVisit && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div
-            className="fixed inset-0 bg-black opacity-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={closeModal}
           ></div>
-          <div className="bg-white p-6 rounded-lg shadow-lg z-10">
-            <h2 className="text-xl font-bold mb-4">Specific Visit Details</h2>
-            <p>
-              <strong>IP Address:</strong> {specificVisit.ip}
-            </p>
-            <p>
-              <strong>Device:</strong> {specificVisit.device}
-            </p>
-            <p>
-              <strong>Browser:</strong> {specificVisit.browser}
-            </p>
-            <p>
-              <strong>Platform:</strong> {specificVisit.platform}
-            </p>
-            <p>
-              <strong>Referrer:</strong> {specificVisit.referrer}
-            </p>
-            <p>
-              <strong>Page:</strong> {specificVisit.page || "N/A"}
-            </p>
-            <p>
-              <strong>Timestamp:</strong>{" "}
-              {new Date(specificVisit.timestamp).toLocaleString()}
-            </p>
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={closeModal}
-            >
-              Close
-            </button>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl z-10 w-full max-w-md mx-4 overflow-hidden">
+            <div className="flex justify-between items-center p-6 bg-purple-500">
+              <h2 className="text-2xl font-bold text-white">Visit Details</h2>
+              <button
+                onClick={closeModal}
+                className="text-white hover:text-gray-200 transition-colors"
+              >
+                <XIcon className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <DetailItem label="IP Address" value={specificVisit.ip} />
+              <DetailItem label="Device" value={specificVisit.device} />
+              <DetailItem label="Browser" value={specificVisit.browser} />
+              <DetailItem label="Platform" value={specificVisit.platform} />
+              <DetailItem label="Referrer" value={specificVisit.referrer} />
+              <DetailItem label="Page" value={specificVisit.page || "N/A"} />
+              <DetailItem
+                label="Timestamp"
+                value={new Date(specificVisit.timestamp).toLocaleString()}
+              />
+            </div>
+            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-end"></div>
           </div>
         </div>
       )}

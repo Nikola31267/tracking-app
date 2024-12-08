@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ReferrerChart from "./components/ReferrerChart";
+import OsChart from "./components/OsChart";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -54,7 +55,7 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [visitToDelete, setVisitToDelete] = useState(null);
-  const [selectedChart, setSelectedChart] = useState("pageViews");
+  const [selectedChart, setSelectedChart] = useState("browser");
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -224,6 +225,10 @@ const ProjectPage = () => {
     setSelectedChart(value);
   };
 
+  const handleChartChange2 = (value) => {
+    setSelectedChart2(value);
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -276,12 +281,14 @@ const ProjectPage = () => {
 
       {activeTab === "app" && (
         <>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <WeeklyVisitChart visits={visits} visitsData={visits} />
-            <BrowserChart visitsData={visits} />
+          <WeeklyVisitChart visits={visits} visitsData={visits} />
+
+          <div className="flex flex-col sm:flex-row gap-2 mt-6">
+            <PagesChart visitsData={visits} />
+            <ReferrerChart visitsData={visits} />
           </div>
 
-          <div className="flex justify-end mb-4 mt-6">
+          <div className="flex justify-end mb-4 mt-6 mr-4">
             <div className="w-64">
               <Select
                 value={selectedChart}
@@ -292,8 +299,8 @@ const ProjectPage = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pageViews">Page Views</SelectItem>
-                  <SelectItem value="referrer">Referrer</SelectItem>
+                  <SelectItem value="browser">Browser</SelectItem>
+                  <SelectItem value="os">OS</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -301,12 +308,10 @@ const ProjectPage = () => {
 
           <div className="flex flex-col sm:flex-row gap-2">
             <CountryChart visitsData={visits} />
-            {selectedChart === "pageViews" && (
-              <PagesChart visitsData={visits} />
+            {selectedChart === "browser" && (
+              <BrowserChart visitsData={visits} />
             )}
-            {selectedChart === "referrer" && (
-              <ReferrerChart visitsData={visits} />
-            )}
+            {selectedChart === "os" && <OsChart visitsData={visits} />}
           </div>
 
           <VisitTable

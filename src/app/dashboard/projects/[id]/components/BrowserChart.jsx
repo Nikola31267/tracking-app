@@ -41,7 +41,7 @@ const BrowserChart = ({ visitsData }) => {
   }, [visitsData]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full mr-4">
       <CardHeader>
         <CardTitle>Browser Usage</CardTitle>
         <CardDescription>Distribution of visits by browser</CardDescription>

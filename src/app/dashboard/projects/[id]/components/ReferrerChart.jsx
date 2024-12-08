@@ -31,7 +31,7 @@ const ReferrerChart = ({ visitsData }) => {
   }, [visitsData]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full mr-4">
       <CardHeader>
         <CardTitle>Referrer</CardTitle>
         <CardDescription>Number of views per referrer</CardDescription>
