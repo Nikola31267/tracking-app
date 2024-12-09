@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import ReferrerChart from "./components/ReferrerChart";
 import OsChart from "./components/OsChart";
+import NoAccessDashboard from "@/components/NoAccessDashboard";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -123,6 +124,14 @@ const ProjectPage = () => {
     fetchProjectAndVisits();
     fetchProjects();
   }, [id]);
+
+  useEffect(() => {
+    setLoadingAuth(true);
+    if (user?.hasAccess === false) {
+      router.push("/dashboard/pricing");
+    }
+    setLoadingAuth(false);
+  }, [router, user]);
 
   const fetchSpecificVisit = async (visitId) => {
     try {

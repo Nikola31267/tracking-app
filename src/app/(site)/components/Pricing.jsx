@@ -6,13 +6,46 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function Pricing() {
+export const plans = [
+  {
+    type: "Monthly",
+    price: "$20",
+    duration: "/month",
+    features: [
+      "Unlimited websites",
+      "Priority support",
+      "Advanced analytics",
+      "Custom integrations",
+    ],
+    link: "https://buy.stripe.com/test_fZecMTb8UcargH64gg",
+    priceId: "price_1QU98wKlodgYbzsVnwRcWq9p",
+  },
+  {
+    type: "Yearly",
+    price: "$200",
+    originalPrice: "$240",
+    duration: "/year",
+    features: [
+      "Unlimited websites",
+      "Priority support",
+      "Advanced analytics",
+      "Custom integrations",
+    ],
+    link: "https://buy.stripe.com/test_cN2eV12Coa2jeyYdQR",
+    priceId: "price_1QU99lKlodgYbzsVcMjUrcSD",
+  },
+];
+
+export default function Pricing({ user }) {
   const [isYearly, setIsYearly] = useState(false);
 
   const togglePricing = () => {
     setIsYearly(!isYearly);
   };
+
+  const currentPlan = isYearly ? plans[1] : plans[0];
 
   return (
     <section id="pricing" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50">
@@ -40,28 +73,16 @@ export default function Pricing() {
             </div>
             <CardContent className="flex flex-col items-start text-left gap-2 mt-2">
               <span className="text-5xl font-bold tracking-tight font-dm-sans">
-                {isYearly ? (
-                  <>
-                    <span className="line-through text-lg font-normal text-gray-500">
-                      $240
-                    </span>{" "}
-                    $200
-                    <span className="text-lg">/year</span>
-                  </>
-                ) : (
-                  <>
-                    $20<span className="text-lg">/month</span>
-                  </>
-                )}
+                {isYearly && (
+                  <span className="line-through text-lg font-normal text-gray-500">
+                    {currentPlan.originalPrice}
+                  </span>
+                )}{" "}
+                {currentPlan.price}
+                <span className="text-lg">{currentPlan.duration}</span>
               </span>
               <ul className="mt-4 space-y-2 text-left">
-                {[
-                  ...(isYearly ? ["2 months free"] : []),
-                  "Unlimited websites",
-                  "Priority support",
-                  "Advanced analytics",
-                  "Custom integrations",
-                ].map((feature) => (
+                {currentPlan.features.map((feature) => (
                   <li key={feature} className="flex items-center">
                     <Check className="mr-2 h-4 w-4" />
                     <span>{feature}</span>
@@ -76,9 +97,22 @@ export default function Pricing() {
                 key={isYearly}
                 className="w-full"
               >
-                <Button className="w-full flex items-center justify-center gap-2 group bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200">
-                  <Crown className="transform rotate-0 group-hover:-rotate-[6.5deg] group-hover:scale-[1.18] transition-transform duration-200" />
-                  Join Pixel Track
+                <Button
+                  className="w-full group bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200"
+                  asChild
+                >
+                  <Link
+                    href={
+                      currentPlan.link +
+                      (user ? "?prefilled_email=" + user.email : "")
+                    }
+                    target="_blank"
+                    className="flex items-center justify-center gap-2"
+                  >
+                    {" "}
+                    <Crown className="transform rotate-0 group-hover:-rotate-[6.5deg] group-hover:scale-[1.18] transition-transform duration-200" />
+                    Join Pixel Track
+                  </Link>
                 </Button>
               </motion.div>
             </CardFooter>

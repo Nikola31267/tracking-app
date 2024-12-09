@@ -9,13 +9,14 @@ import FindSnippet from "@/components/FindSnippet";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/layout/Loader";
 import { Button } from "@/components/ui/button";
-
 const New = () => {
+  const [user, setUser] = useState(null);
   const [projectName, setProjectName] = useState("");
   const [step, setStep] = useState(1);
   const [projectId, setProjectId] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -29,6 +30,32 @@ const New = () => {
     } else {
       setLoadingAuth(false);
     }
+  }, [router]);
+
+  useEffect(() => {
+    setLoadingAuth(true);
+    if (user?.hasAccess === false) {
+      router.push("/dashboard/pricing");
+    }
+    setLoadingAuth(false);
+  }, [router, user]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get("/auth/user", {
+          headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
+        });
+        setUser(response.data);
+      } catch (error) {
+        setError("Error fetching user profile");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserProfile();
   }, [router]);
 
   const handleSubmit = async (e) => {
@@ -52,6 +79,10 @@ const New = () => {
   };
 
   if (loadingAuth) {
+    return <Loader />;
+  }
+
+  if (loading) {
     return <Loader />;
   }
 

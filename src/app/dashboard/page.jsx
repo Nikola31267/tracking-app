@@ -35,6 +35,14 @@ const Dashboard = () => {
   }, [router]);
 
   useEffect(() => {
+    setLoadingAuth(true);
+    if (user?.hasAccess === false) {
+      router.push("/dashboard/pricing");
+    }
+    setLoadingAuth(false);
+  }, [router, user]);
+
+  useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const response = await axiosInstance.get("/auth/user", {
