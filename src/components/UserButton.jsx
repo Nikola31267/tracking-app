@@ -4,6 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { axiosInstance } from "@/lib/axios";
 import Image from "next/image";
 import Profile from "./Profile";
+import ResetPasswordModal from "./ResetPasswordModal";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 const UserButton = () => {
   const [user, setUser] = useState(null);
@@ -11,7 +14,9 @@ const UserButton = () => {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [justClosedResetPassword, setJustClosedResetPassword] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -56,10 +61,22 @@ const UserButton = () => {
   };
 
   const toggleProfileModal = () => {
-    if (dropdownOpen) {
-      setDropdownOpen(false);
-    }
     setProfileModalOpen(!profileModalOpen);
+    setDropdownOpen(false);
+    if (!profileModalOpen) {
+      setJustClosedResetPassword(false);
+    }
+  };
+
+  const openResetPasswordModal = () => {
+    setProfileModalOpen(false);
+    setResetPasswordModalOpen(true);
+  };
+
+  const closeResetPasswordModal = () => {
+    setResetPasswordModalOpen(false);
+    setProfileModalOpen(true);
+    setJustClosedResetPassword(true);
   };
 
   const handleLogout = () => {
@@ -108,7 +125,7 @@ const UserButton = () => {
           </div>
         )}
       </button>
-      {dropdownOpen && (
+      {dropdownOpen && !profileModalOpen && !resetPasswordModalOpen && (
         <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg z-10 overflow-hidden">
           <div className="p-3">
             {loading ? (
@@ -130,20 +147,28 @@ const UserButton = () => {
           <hr className="border-gray-100" />
           <ul className="py-2" aria-labelledby="user-menu-button">
             <li>
-              <button
+              <Button
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer transition-colors hover:bg-gray-100"
                 onClick={toggleProfileModal}
               >
                 Profile
-              </button>
+              </Button>
             </li>
             <li>
-              <button
+              <Button
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer transition-colors hover:bg-gray-100"
+                asChild
+              >
+                <Link href="/billing">Billing</Link>
+              </Button>
+            </li>
+            <li>
+              <Button
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer transition-colors hover:bg-gray-100"
               >
                 Sign out
-              </button>
+              </Button>
             </li>
             <hr className="border-gray-200 my-2" />
             <p className="text-gray-500 text-sm px-4 py-2">
@@ -154,7 +179,19 @@ const UserButton = () => {
       )}
 
       {profileModalOpen && (
-        <Profile isOpen={profileModalOpen} onClose={toggleProfileModal} />
+        <Profile
+          isOpen={profileModalOpen}
+          onClose={toggleProfileModal}
+          onResetPassword={openResetPasswordModal}
+          initialTab={justClosedResetPassword ? "security" : "account"}
+        />
+      )}
+
+      {resetPasswordModalOpen && (
+        <ResetPasswordModal
+          isOpen={resetPasswordModalOpen}
+          onClose={closeResetPasswordModal}
+        />
       )}
     </div>
   );

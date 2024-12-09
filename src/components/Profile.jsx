@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { axiosInstance } from "@/lib/axios";
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "./ui/button";
 import {
   AlertDialog,
@@ -17,7 +16,12 @@ import {
   AlertDialogCancel,
 } from "./ui/alert-dialog";
 
-const Profile = ({ isOpen, onClose }) => {
+const Profile = ({
+  isOpen,
+  onClose,
+  onResetPassword,
+  initialTab = "account",
+}) => {
   const [editProfile, setEditProfile] = useState({
     username: "",
     email: "",
@@ -26,11 +30,14 @@ const Profile = ({ isOpen, onClose }) => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [profilePicturePreview, setProfilePicturePreview] = useState(null);
-  const [accountTab, setAccountTab] = useState(true);
-  const [securityEditing, setSecurityEditing] = useState(false);
+  const [accountTab, setAccountTab] = useState(initialTab === "account");
+  const [securityEditing, setSecurityEditing] = useState(
+    initialTab === "security"
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
   const [profile, setProfile] = useState({
     username: "",
@@ -41,6 +48,9 @@ const Profile = ({ isOpen, onClose }) => {
   });
 
   const modalRef = useRef(null);
+  const resetPasswordRef = useRef(null);
+
+  const [accountToDelete, setAccountToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -64,9 +74,15 @@ const Profile = ({ isOpen, onClose }) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
+      if (
+        resetPasswordRef.current &&
+        !resetPasswordRef.current.contains(event.target)
+      ) {
+        setShowResetPassword(false);
+      }
     };
 
-    if (isOpen && !showDeleteModal) {
+    if ((isOpen || showResetPassword) && !showDeleteModal && !accountToDelete) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -75,7 +91,19 @@ const Profile = ({ isOpen, onClose }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, onClose, showDeleteModal]);
+  }, [
+    isOpen,
+    onClose,
+    showResetPassword,
+    showDeleteModal,
+    accountToDelete,
+    false,
+  ]);
+
+  useEffect(() => {
+    setAccountTab(initialTab === "account");
+    setSecurityEditing(initialTab === "security");
+  }, [initialTab]);
 
   const handleProfileChange = (e) => {
     const { name, value, files } = e.target;
@@ -174,34 +202,12 @@ const Profile = ({ isOpen, onClose }) => {
   };
 
   const handleRemoveAccount = async (accountName) => {
-    try {
-      const response = await axiosInstance.put(
-        "/auth/disconnect-social",
-        { social: accountName },
-        {
-          headers: {
-            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
-          },
-        }
-      );
+    setAccountToDelete(accountName);
+  };
 
-      if (response.status === 200) {
-        console.log("Social disconnected successfully");
-        setProfile((prev) => ({
-          ...prev,
-          socialConnected: prev.socialConnected.filter(
-            (account) => account.name !== accountName
-          ),
-        }));
-      } else {
-        console.error("Failed to disconnect social account", response.data);
-      }
-    } catch (error) {
-      console.error(
-        "Error disconnecting social account:",
-        error.response?.data || error.message
-      );
-    }
+  const handleResetPassword = () => {
+    onClose();
+    onResetPassword();
   };
 
   if (!isOpen) return null;
@@ -214,7 +220,7 @@ const Profile = ({ isOpen, onClose }) => {
         style={{ width: "80%", height: "80%" }}
       >
         <div className="w-1/4 border-r border-gray-300 flex flex-col justify-between sticky top-0 no-scrollbar">
-          <div>
+          <div className="px-2">
             <button
               onClick={() => {
                 setIsEditing(false);
@@ -428,12 +434,92 @@ const Profile = ({ isOpen, onClose }) => {
                               {account.name}
                             </span>
                           </div>
-                          <button
-                            onClick={() => handleRemoveAccount(account.name)}
-                            className="text-red-500 font-medium px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors hover:bg-red-100"
-                          >
-                            Remove
-                          </button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <button
+                                onClick={() =>
+                                  handleRemoveAccount(account.name)
+                                }
+                                className="text-red-500 font-medium px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors hover:bg-red-100"
+                              >
+                                Remove
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure you want to disconnect this
+                                  account?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action will disconnect your social
+                                  account.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel asChild>
+                                  <button
+                                    onClick={() => setAccountToDelete(null)}
+                                  >
+                                    Cancel
+                                  </button>
+                                </AlertDialogCancel>
+                                <AlertDialogAction asChild>
+                                  <button
+                                    onClick={async () => {
+                                      if (accountToDelete) {
+                                        try {
+                                          const response =
+                                            await axiosInstance.put(
+                                              "/auth/disconnect-social",
+                                              { social: accountToDelete },
+                                              {
+                                                headers: {
+                                                  "x-auth-token":
+                                                    localStorage.getItem(
+                                                      "pixeltrack-auth"
+                                                    ),
+                                                },
+                                              }
+                                            );
+
+                                          if (response.status === 200) {
+                                            console.log(
+                                              "Social disconnected successfully"
+                                            );
+                                            setProfile((prev) => ({
+                                              ...prev,
+                                              socialConnected:
+                                                prev.socialConnected.filter(
+                                                  (account) =>
+                                                    account.name !==
+                                                    accountToDelete
+                                                ),
+                                            }));
+                                          } else {
+                                            console.error(
+                                              "Failed to disconnect social account",
+                                              response.data
+                                            );
+                                          }
+                                        } catch (error) {
+                                          console.error(
+                                            "Error disconnecting social account:",
+                                            error.response?.data ||
+                                              error.message
+                                          );
+                                        }
+                                      }
+                                      setAccountToDelete(null);
+                                    }}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md border-none cursor-pointer transition-colors duration-200"
+                                  >
+                                    Disconnect
+                                  </button>
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       ))
                     ) : (
@@ -497,9 +583,9 @@ const Profile = ({ isOpen, onClose }) => {
                 </div>
                 <Button
                   className="text-purple-600 px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors duration-200 font-medium hover:bg-purple-100 hover:text-purple-500 text-md"
-                  asChild
+                  onClick={handleResetPassword}
                 >
-                  <Link href="/reset-password">Reset password</Link>
+                  Reset password
                 </Button>
               </div>
               <div className="flex justify-between items-center gap-4">

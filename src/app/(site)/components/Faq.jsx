@@ -34,7 +34,7 @@ const faqData = [
   {
     question: "How much does Pixel Track cost?",
     answer:
-      "Pixel Track is free for the first 7 days so you can try it out and see if it's a good fit for your needs. After that, it's $29. Pay one time it's yours forever.",
+      "Pixel Track is free for the first 7 days so you can try it out and see if it's a good fit for your needs. After that, it's $20/month.",
     category: "Pricing",
   },
   {

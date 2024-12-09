@@ -56,7 +56,8 @@ export default function Pricing() {
               </span>
               <ul className="mt-4 space-y-2 text-left">
                 {[
-                  "Unlimited projects",
+                  ...(isYearly ? ["2 months free"] : []),
+                  "Unlimited websites",
                   "Priority support",
                   "Advanced analytics",
                   "Custom integrations",

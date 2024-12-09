@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from "react";
 
 import { axiosInstance } from "@/lib/axios";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import FindSnippet from "@/components/FindSnippet";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/layout/Loader";
+import { Button } from "@/components/ui/button";
 
 const New = () => {
   const [projectName, setProjectName] = useState("");
@@ -15,6 +16,7 @@ const New = () => {
   const [projectId, setProjectId] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const New = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const response = await axiosInstance.post(
         "/create",
@@ -43,6 +46,8 @@ const New = () => {
     } catch (error) {
       console.error(error);
       setError(error.response?.data?.error || "An unknown error occurred.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -100,12 +105,17 @@ const New = () => {
                       required
                     />
                   </div>
-                  <button
+                  <Button
                     type="submit"
-                    className="bg-purple-500 hover:bg-purple-600 text-white p-2 mt-8 rounded-lg font-semibold transition-colors duration-300"
+                    className="bg-purple-500 hover:bg-purple-600 text-white p-2 mt-8 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center"
+                    disabled={isSubmitting}
                   >
-                    Add website
-                  </button>
+                    {isSubmitting ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Add website"
+                    )}
+                  </Button>
                 </div>
               </form>
             </div>

@@ -57,7 +57,6 @@ const Dashboard = () => {
         const fetchedProjects = response.data.allProjects;
         setProjects(fetchedProjects);
         setLast24HoursVisits(response.data.totalRecentVisits);
-
         if (fetchedProjects.length === 0) {
           router.push("/dashboard/new");
         }
