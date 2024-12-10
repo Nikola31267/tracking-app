@@ -45,7 +45,7 @@ const Navigation = ({
               </BreadcrumbLink>
               {isDropdownOpen && (
                 <div
-                  className="absolute bg-white shadow-md w-full sm:w-52 rounded-md z-10"
+                  className="absolute bg-[#fbfcfd] shadow-md w-full sm:w-52 rounded-md z-10"
                   style={{ top: "100%", left: 0 }}
                 >
                   {projects.map((proj) => (

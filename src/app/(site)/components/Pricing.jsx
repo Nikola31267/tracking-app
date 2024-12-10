@@ -19,8 +19,8 @@ export const plans = [
       "Advanced analytics",
       "Custom integrations",
     ],
-    link: "https://buy.stripe.com/test_fZecMTb8UcargH64gg",
-    priceId: "price_1QU98wKlodgYbzsVnwRcWq9p",
+    link: "https://buy.stripe.com/test_3cs5lQ3C5byM6cw7ss",
+    priceId: "price_1QU8QaK7FOhIMh40NVnUaKDo",
   },
   {
     type: "Yearly",
@@ -33,8 +33,8 @@ export const plans = [
       "Advanced analytics",
       "Custom integrations",
     ],
-    link: "https://buy.stripe.com/test_cN2eV12Coa2jeyYdQR",
-    priceId: "price_1QU99lKlodgYbzsVcMjUrcSD",
+    link: "https://buy.stripe.com/test_8wMcOi3C50U81Wg4gh",
+    priceId: "price_1QU8UxK7FOhIMh40XUkkz8FB",
   },
 ];
 

@@ -3,16 +3,18 @@ import { headers } from "next/headers";
 import Stripe from "stripe";
 import connectMongo from "@/lib/connectDB";
 import User from "@/models/User";
+import { Resend } from "resend";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   await connectMongo();
 
   const body = await req.text();
 
-  // Await the headers() function to ensure it resolves before accessing its value
   const signature = await headers().get("stripe-signature");
 
   let data;
@@ -62,7 +64,32 @@ export async function POST(req) {
 
         user.priceId = priceId;
         user.hasAccess = true;
+        user.customerId = customerId;
         await user.save();
+
+        try {
+          await resend.emails.send({
+            from: "Pixel Track <pixeltrack@builderbee.pro>",
+            to: user.email,
+            subject: "Welcome to Pixel Track!",
+            html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+              <h1 style="color: #8b5cf6; text-align: center;">Welcome to Pixel Track!</h1>
+              <p style="font-size: 16px; color: #333;">Hello ${user.email},</p>
+              <p style="font-size: 16px; color: #333;">Thank you for buying PixelTrack. If you didn't have an account before, login with google or passwordless with the email you used to buy the product.</p>
+      
+              <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+                &copy; ${new Date().getFullYear()} Pixel Track. All rights reserved.
+              </p>
+            </div>
+          `,
+          });
+          console.log(`Email successfully sent to ${user.email}`);
+        } catch (error) {
+          console.error(
+            `Failed to send email to ${user.email}: ${error.message}`
+          );
+        }
 
         break;
       }

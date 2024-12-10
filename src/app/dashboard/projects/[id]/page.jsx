@@ -35,6 +35,8 @@ import {
 import ReferrerChart from "./components/ReferrerChart";
 import OsChart from "./components/OsChart";
 import NoAccessDashboard from "@/components/NoAccessDashboard";
+import Link from "next/link";
+import Image from "next/image";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -275,25 +277,32 @@ const ProjectPage = () => {
   }
   return (
     <div className="p-4">
-      <nav className="flex flex-col sm:flex-row justify-between items-center p-4 text-white">
-        <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
-          <Navigation
-            dashboardPage={false}
-            projectPage={true}
-            projects={projects}
-            user={user}
-            toggleDropdown={toggleDropdown}
-            dropdownRef={dropdownRef}
-            project={project}
-            isDropdownOpen={isDropdownOpen}
-            setIsDropdownOpen={setIsDropdownOpen}
-            activeTab={activeTab}
-          />
+      <div className="flex justify-between items-center border-b border-gray-200 mb-12">
+        <div className="flex items-center">
+          <Link href="/dashboard">
+            <Image
+              src="/logo-nobg.png"
+              alt="Logo"
+              className="h-12 w-12 mr-2"
+              width={48}
+              height={48}
+            />
+          </Link>
+          <div className="relative" ref={dropdownRef}>
+            <Navigation
+              toggleDropdown={toggleDropdown}
+              isDropdownOpen={isDropdownOpen}
+              dropdownRef={dropdownRef}
+              setIsDropdownOpen={setIsDropdownOpen}
+              project={project}
+              activeTab={activeTab}
+              projects={projects}
+              user={user}
+            />
+          </div>
         </div>
-        <div className="mt-4 sm:mt-0">
-          <UserButton />
-        </div>
-      </nav>
+        <UserButton />
+      </div>
 
       <TabNavigation
         activeTab={activeTab}
