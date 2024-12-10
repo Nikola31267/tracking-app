@@ -16,7 +16,7 @@
     bodyData.referrer = ref;
   }
 
-  fetch("http://localhost:9000/track", {
+  fetch("https://pixel-track-api.vercel.app/track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

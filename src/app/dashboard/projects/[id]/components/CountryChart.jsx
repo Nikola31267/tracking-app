@@ -8,7 +8,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { codeToCountryName } from "@/utils/reverseCountryCodes";
 import { useEffect, useState } from "react";
 
 const CountryChart = ({ visitsData }) => {
@@ -55,10 +54,7 @@ const CountryChart = ({ visitsData }) => {
               cy="50%"
               outerRadius={80}
               fill="#8884d8"
-              label={({ name, value }) => {
-                const fullName = codeToCountryName[name] || name || "Unknown";
-                return `${fullName}: ${value}`;
-              }}
+              label={({ name, value }) => `${name || "Unknown"}: ${value}`}
             >
               {countryData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={getColor(entry.count)} />
