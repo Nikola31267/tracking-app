@@ -61,7 +61,9 @@ export default function Pricing({ user }) {
         <div className="mx-auto max-w-lg mt-8">
           <Card>
             <div className="flex justify-between items-center gap-2 p-6 mb-10">
-              <CardTitle className="text-2xl font-bold">Pixel Track</CardTitle>
+              <CardTitle className="text-[1.35rem] font-bold">
+                Pixel Track
+              </CardTitle>
               <div className="flex items-center gap-3 bg-purple-100 rounded-full py-1 px-2">
                 <Switch
                   checked={isYearly}
@@ -72,7 +74,7 @@ export default function Pricing({ user }) {
               </div>
             </div>
             <CardContent className="flex flex-col items-start text-left gap-2 mt-2">
-              <span className="text-5xl font-bold tracking-tight font-dm-sans">
+              <span className="text-5xl font-bold tracking-tight">
                 {isYearly && (
                   <span className="line-through text-lg font-normal text-gray-500">
                     {currentPlan.originalPrice}
