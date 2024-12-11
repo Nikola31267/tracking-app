@@ -84,7 +84,7 @@ export default function FAQSection() {
           placeholder="Search FAQ..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full"
+          className="w-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
         />
       </div>
       <div className="flex flex-wrap gap-2 mb-6">
@@ -92,7 +92,11 @@ export default function FAQSection() {
           <Badge
             key={category}
             variant={selectedCategory === category ? "default" : "outline"}
-            className="cursor-pointer"
+            className={`cursor-pointer ${
+              selectedCategory === category
+                ? "bg-purple-500 text-white hover:bg-purple-500"
+                : " text-gray-900"
+            }`}
             onClick={() =>
               setSelectedCategory(
                 selectedCategory === category ? null : category

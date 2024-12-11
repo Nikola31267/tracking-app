@@ -51,13 +51,13 @@ const Footer = () => {
               <div className="text-sm font-semibold mb-3">Product</div>
               <ul className="text-sm space-y-2">
                 <li>
-                  <Link href="/#faq" className="link-hover">
+                  <Link href="/#faq" className="hover:underline">
                     FAQs
                   </Link>
                 </li>
                 <li></li>
                 <li>
-                  <Link href="/#pricing" className="link-hover">
+                  <Link href="/#pricing" className="hover:underline">
                     Pricing
                   </Link>
                 </li>
@@ -67,12 +67,12 @@ const Footer = () => {
               <div className="text-sm font-semibold mb-3">LEGAL</div>
               <ul className="text-sm space-y-2">
                 <li>
-                  <Link href="/tos" className="link-hover">
+                  <Link href="/tos" className="hover:underline">
                     Terms of services
                   </Link>
                 </li>
                 <li>
-                  <Link href="/privacy-policy" className="link-hover">
+                  <Link href="/privacy-policy" className="hover:underline">
                     Privacy policy
                   </Link>
                 </li>

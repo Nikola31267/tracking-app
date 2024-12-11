@@ -53,6 +53,7 @@ export async function POST(req) {
               email: customer.email,
               fullName: customer.name,
               customerId,
+              newUser: false,
             });
 
             await user.save();
@@ -65,6 +66,8 @@ export async function POST(req) {
         user.priceId = priceId;
         user.hasAccess = true;
         user.customerId = customerId;
+        user.newUser = false;
+        user.freeTrialEndsAt = null;
         await user.save();
 
         try {

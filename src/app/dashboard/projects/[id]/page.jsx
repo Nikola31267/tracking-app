@@ -69,9 +69,13 @@ const ProjectPage = () => {
     ) {
       router.push("/sign-in");
     } else {
+      setLoadingAuth(true);
+      if (user?.hasAccess === false) {
+        router.push("/dashboard/pricing");
+      }
       setLoadingAuth(false);
     }
-  }, [router]);
+  }, [router, user]);
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -126,14 +130,6 @@ const ProjectPage = () => {
     fetchProjectAndVisits();
     fetchProjects();
   }, [id]);
-
-  useEffect(() => {
-    setLoadingAuth(true);
-    if (user?.hasAccess === false) {
-      router.push("/dashboard/pricing");
-    }
-    setLoadingAuth(false);
-  }, [router, user]);
 
   const fetchSpecificVisit = async (visitId) => {
     try {

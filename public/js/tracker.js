@@ -11,12 +11,9 @@
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get("ref");
 
-  const bodyData = { apiKey, page: pagePath };
-  if (ref) {
-    bodyData.referrer = ref;
-  }
+  const bodyData = { apiKey, page: pagePath, referrer: ref || "Unknown" };
 
-  fetch("https://pixel-track-api.vercel.app/track", {
+  fetch("https://pixel-track-website-api.vercel.app/track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

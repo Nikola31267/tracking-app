@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Plus } from "lucide-react";
+import { BarChart, Plus, Sparkles, XIcon, Zap } from "lucide-react";
 import { axiosInstance } from "@/lib/axios";
 import UserButton from "@/components/UserButton";
 import Loader from "@/components/layout/Loader";
@@ -9,6 +9,15 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const Dashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -17,6 +26,7 @@ const Dashboard = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [error, setError] = useState("");
   const [last24HoursVisits, setLast24HoursVisits] = useState("");
+  const [freeTrialStartedModal, setFreeTrialStartedModal] = useState(true);
   const router = useRouter();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -30,16 +40,12 @@ const Dashboard = () => {
     ) {
       router.push("/sign-in");
     } else {
+      setLoadingAuth(true);
+      if (user?.hasAccess === false) {
+        router.push("/dashboard/pricing");
+      }
       setLoadingAuth(false);
     }
-  }, [router]);
-
-  useEffect(() => {
-    setLoadingAuth(true);
-    if (user?.hasAccess === false) {
-      router.push("/dashboard/pricing");
-    }
-    setLoadingAuth(false);
   }, [router, user]);
 
   useEffect(() => {
@@ -49,6 +55,9 @@ const Dashboard = () => {
           headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
         });
         setUser(response.data);
+        if (response.data.newUser) {
+          setFreeTrialStartedModal(true);
+        }
       } catch (error) {
         setError("Error fetching user profile");
         console.error(error);
@@ -103,6 +112,11 @@ const Dashboard = () => {
   if (loading) {
     return <Loader />;
   }
+
+  const handleFreeTrialStartedModalClick = async () => {
+    setFreeTrialStartedModal(false);
+    await axiosInstance.put("/auth/removeNewUser", { userId: user._id });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -177,6 +191,71 @@ const Dashboard = () => {
             </div>
           </article>
         ))}
+        {freeTrialStartedModal && (
+          <Dialog
+            open={freeTrialStartedModal}
+            onOpenChange={setFreeTrialStartedModal}
+          >
+            <DialogContent className="sm:max-w-[425px] bg-white p-0 overflow-hidden">
+              <div className="absolute top-2 right-2">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-purple-400 group"
+                  size="icon"
+                  onClick={() => setFreeTrialStartedModal(false)}
+                >
+                  <XIcon className="h-4 w-4 text-white group-hover:text-purple-100" />
+                </Button>
+              </div>
+              <div className="bg-purple-500 p-6 flex items-center justify-center">
+                <Sparkles className="w-16 h-16 text-white" />
+              </div>
+              <div className="p-6">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold text-center text-gray-900">
+                    Your 7-Day Free Trial of Pixel Track Has Begun!
+                  </DialogTitle>
+                  <DialogDescription className="text-center text-gray-600 mt-2">
+                    Welcome to Pixel Track! For the next 7 days, you&apos;ll
+                    have full access to all features designed to supercharge
+                    your website tracking and optimize user engagement. No
+                    credit card required — just insights, performance, and
+                    growth.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="flex items-center gap-4 bg-purple-50 p-3 rounded-lg">
+                    <BarChart className="w-6 h-6 text-purple-500 flex-shrink-0" />
+                    <p className="text-sm font-medium text-gray-700">
+                      Powerful Insights Dashboard
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4 bg-purple-50 p-3 rounded-lg">
+                    <Zap className="w-6 h-6 text-purple-500 flex-shrink-0" />
+                    <p className="text-sm font-medium text-gray-700">
+                      Effortless Integration
+                    </p>
+                  </div>
+                </div>
+                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-between mt-6">
+                  <Button
+                    variant="outline"
+                    className="w-full sm:w-auto border-purple-500 text-purple-500 hover:bg-purple-50"
+                    onClick={handleFreeTrialStartedModalClick}
+                  >
+                    Maybe Later
+                  </Button>
+                  <Button
+                    className="w-full sm:w-auto bg-purple-500 text-white hover:bg-purple-600"
+                    onClick={handleFreeTrialStartedModalClick}
+                  >
+                    Start My Trial
+                  </Button>
+                </DialogFooter>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </ul>
     </div>
   );

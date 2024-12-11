@@ -28,16 +28,12 @@ const New = () => {
     ) {
       router.push("/sign-in");
     } else {
+      setLoadingAuth(true);
+      if (user?.hasAccess === false) {
+        router.push("/dashboard/pricing");
+      }
       setLoadingAuth(false);
     }
-  }, [router]);
-
-  useEffect(() => {
-    setLoadingAuth(true);
-    if (user?.hasAccess === false) {
-      router.push("/dashboard/pricing");
-    }
-    setLoadingAuth(false);
   }, [router, user]);
 
   useEffect(() => {

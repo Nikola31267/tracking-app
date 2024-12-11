@@ -70,7 +70,13 @@ export default function Pricing({ user }) {
                   onCheckedChange={togglePricing}
                   className="data-[state=checked]:bg-purple-500 data-[state=unchecked]:bg-purple-300"
                 />
-                <p className="uppercase text-xs font-bold">Yearly</p>
+                <p
+                  className={`uppercase text-xs font-bold ${
+                    isYearly ? "text-gray-900" : "text-gray-500"
+                  }`}
+                >
+                  Yearly
+                </p>
               </div>
             </div>
             <CardContent className="flex flex-col items-start text-left gap-2 mt-2">

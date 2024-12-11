@@ -20,6 +20,8 @@ const userSchema = new mongoose.Schema({
   hasAccess: { type: Boolean, default: false },
   priceId: { type: String, default: "" },
   customerId: { type: String, default: "" },
+  freeTrialEndsAt: { type: Date, default: null },
+  newUser: { type: Boolean, default: true },
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
