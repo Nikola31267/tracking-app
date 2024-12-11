@@ -55,10 +55,8 @@ const Dashboard = () => {
           headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
         });
         setUser(response.data);
-        if (response.data.newUser === true) {
+        if (response.data.newUser) {
           setFreeTrialStartedModal(true);
-        } else {
-          setFreeTrialStartedModal(false);
         }
       } catch (error) {
         setError("Error fetching user profile");
