@@ -26,7 +26,7 @@ const Dashboard = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [error, setError] = useState("");
   const [last24HoursVisits, setLast24HoursVisits] = useState("");
-  const [freeTrialStartedModal, setFreeTrialStartedModal] = useState(true);
+  const [freeTrialStartedModal, setFreeTrialStartedModal] = useState(false);
   const router = useRouter();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -55,7 +55,7 @@ const Dashboard = () => {
           headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
         });
         setUser(response.data);
-        if (response.data.newUser) {
+        if (response.data.newUser === true) {
           setFreeTrialStartedModal(true);
         }
       } catch (error) {
