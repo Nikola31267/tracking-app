@@ -57,6 +57,8 @@ const Dashboard = () => {
         setUser(response.data);
         if (response.data.newUser === true) {
           setFreeTrialStartedModal(true);
+        } else {
+          setFreeTrialStartedModal(false);
         }
       } catch (error) {
         setError("Error fetching user profile");

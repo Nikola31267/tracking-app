@@ -13,7 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import {
   Select,
   SelectTrigger,
@@ -80,7 +80,7 @@ const WeeklyVisitChart = ({ visits, visitsData }) => {
           }}
           className="h-80"
         >
-          <BarChart
+          <LineChart
             width={569}
             height={320}
             data={Object.entries(dailyVisits || {}).map(([date, count]) => ({
@@ -104,12 +104,14 @@ const WeeklyVisitChart = ({ visits, visitsData }) => {
               tickFormatter={(value) => `${value}`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar
+            <Line
+              type="monotone"
               dataKey="count"
-              fill="var(--color-visits)"
-              radius={[4, 4, 0, 0]}
+              stroke="var(--color-visits)"
+              strokeWidth={2}
+              dot={{ r: 3 }}
             />
-          </BarChart>
+          </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>
