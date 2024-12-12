@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 export const plans = [
   {
@@ -105,23 +106,17 @@ export default function Pricing({ user }) {
                 key={isYearly}
                 className="w-full"
               >
-                <Button
-                  className="w-full group bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200"
-                  asChild
+                <ShinyButton
+                  className="h-11 w-full"
+                  href={
+                    currentPlan.link +
+                    (user ? "?prefilled_email=" + user.email : "")
+                  }
+                  target="_blank"
+                  showIcon={true}
                 >
-                  <Link
-                    href={
-                      currentPlan.link +
-                      (user ? "?prefilled_email=" + user.email : "")
-                    }
-                    target="_blank"
-                    className="flex items-center justify-center gap-2"
-                  >
-                    {" "}
-                    <Crown className="transform rotate-0 group-hover:-rotate-[6.5deg] group-hover:scale-[1.18] transition-transform duration-200" />
-                    Join Pixel Track
-                  </Link>
-                </Button>
+                  Join Pixel Track
+                </ShinyButton>
               </motion.div>
             </CardFooter>
           </Card>

@@ -9,6 +9,7 @@ import SignedOut from "../auth/SignedOut";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ShinyButton } from "../ui/shiny-button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,19 +69,18 @@ export default function Navbar() {
         </nav>
         <div className="flex items-center space-x-4">
           <SignedIn>
-            <Button
-              variant="ghost"
-              className="text-purple-500 hover:bg-purple-50 hover:text-purple-700 mr-2"
-              onClick={() => signOut()}
-            >
-              Sign out
-            </Button>
-            <Button
-              className="bg-purple-500 hover:bg-purple-600 text-white"
-              asChild
-            >
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                className="text-purple-500 hover:bg-purple-50 hover:text-purple-700 mr-2"
+                onClick={() => signOut()}
+              >
+                Sign out
+              </Button>
+              <ShinyButton className="h-10 w-28" href="/dashboard">
+                Dashboard
+              </ShinyButton>
+            </div>
           </SignedIn>
           <SignedOut>
             <Button
@@ -88,14 +88,11 @@ export default function Navbar() {
               className="text-purple-500 hover:bg-purple-50"
               asChild
             >
-              <Link href="/sign-in">Log in</Link>
+              <Link href="/sign-in">Sign in</Link>
             </Button>
-            <Button
-              className="bg-purple-500 hover:bg-purple-600 text-white"
-              asChild
-            >
-              <Link href="/sign-up">Sign up</Link>
-            </Button>
+            <ShinyButton className="h-10 w-28" href="/sign-up">
+              Sign up
+            </ShinyButton>
           </SignedOut>
         </div>
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>

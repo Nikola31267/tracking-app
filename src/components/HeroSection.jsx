@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
+import { ShinyButton } from "./ui/shiny-button";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -39,33 +40,29 @@ const HeroSection = () => {
                 Optimize website performance with data-driven decisions.
               </li>
               <li className="flex items-start">
-                <Check className="h-5 w-5 mr-2" text-purple-500 />
+                <Check className="h-5 w-5 mr-2 text-purple-500" />
                 Secure and scalable analytics for businesses of all sizes.
               </li>
             </ul>
           </div>
-          <div className="flex items-center gap-2 mt-8">
-            <Button
-              className="w-full bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200"
-              size="lg"
-              asChild
-            >
-              <Link href="/dashboard">Start Tracking Now</Link>
-            </Button>
-            <Button
-              className="w-full bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200"
-              size="lg"
-              asChild
-            >
-              <Link
+          <div>
+            <div className="flex items-center gap-2 mt-2">
+              <ShinyButton href="/dashboard" className="h-11 w-full">
+                Start Tracking Now
+              </ShinyButton>
+              <ShinyButton
+                className="h-11 w-full"
                 href="/#features"
                 onClick={(e) => {
                   handleSmoothScroll(e, "#features");
                 }}
               >
                 View Features
-              </Link>
-            </Button>
+              </ShinyButton>
+            </div>
+            <p className="text-sm mt-4 text-center text-gray-500 mb-8">
+              7 days free trial. No credit card required.
+            </p>
           </div>
         </div>
         <div className="rounded-[1.3rem] border border-gray-200/5 bg-gray-200 p-1.5">
