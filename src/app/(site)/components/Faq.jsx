@@ -26,9 +26,9 @@ const faqData = [
     category: "General",
   },
   {
-    question: "What data does PixelTrack track?",
+    question: "What data does Pixel Track track?",
     answer:
-      "PixelTrack tracks a variety of data including number of views per page, referrers, browsers, countries, os and more. You can view this data in the dashboard.",
+      "Pixel Track tracks a variety of data including number of views per page, referrers, browsers, countries, os and more. You can view this data in the dashboard.",
     category: "General",
   },
   {
