@@ -6,6 +6,7 @@ import Pricing from "./components/Pricing";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import Loader from "@/components/layout/Loader";
+import FeaturesSection from "@/components/FeaturesSection";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -44,6 +45,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <FeaturesSection />
       <Pricing user={user} />
       <Faq />
     </>
