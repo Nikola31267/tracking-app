@@ -39,17 +39,16 @@ export default function Navbar() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Link
-          href="/"
-          className="text-2xl font-bold text-primary flex items-center"
-        >
+        <Link href="/" className="flex items-center">
           <Image
             src="/logo-nobg.png"
             alt="TurboVerify"
             width={60}
             height={60}
           />
-          Pixel Track
+          <span className="text-2xl font-bold text-primary hidden md:block">
+            Pixel Track
+          </span>
         </Link>
         <nav className="hidden md:flex space-x-6">
           <Link

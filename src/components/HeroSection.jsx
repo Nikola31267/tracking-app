@@ -18,19 +18,22 @@ const HeroSection = () => {
       router.push(`/${targetId}`);
     }
   };
+
   return (
     <div className="min-h-screen">
-      <div className="flex flex-col gap-28 justify-center items-center mt-40 mb-20">
+      <div className="flex flex-col gap-28 justify-center items-center px-4 py-20 sm:px-6 sm:py-32 md:px-8 md:py-40 lg:px-12 lg:py-32">
         <div className="flex flex-col gap-4 justify-center items-center">
-          <h1 className="text-5xl font-bold tracking-tight text-center">
-            Track Every Click, Unlock Every Insight
-          </h1>
+          <div className="flex items-center justify-center">
+            <h1 className="text-5xl font-bold tracking-tight text-center sm:text-5xl md:text-4xl lg:text-5xl">
+              Track Every Click, Unlock Every Insight
+            </h1>
+          </div>
 
-          <div className="mt-8">
-            <h3 className="text-center text-xl font-semibold">
+          <div className="mt-12">
+            <h3 className="text-center text-sm font-semibold sm:text-lg md:text-lg lg:text-2xl">
               Make decisions based on data that matters:
             </h3>
-            <ul className="mt-4 list-none ">
+            <ul className="mt-8 list-none flex flex-col gap-4 sm:gap-6 md:gap-8 lg:gap-4 text-xs sm:text-sm md:text-base lg:text-lg md:flex-row md:flex-wrap md:justify-center md:gap-x-8 lg:flex-col lg:gap-x-0">
               <li className="flex items-start">
                 <Check className="h-5 w-5 mr-2 text-purple-500" />
                 Gain actionable insights into visitor behavior.
@@ -46,12 +49,15 @@ const HeroSection = () => {
             </ul>
           </div>
           <div>
-            <div className="flex items-center gap-2 mt-2">
-              <ShinyButton href="/dashboard" className="h-11 w-full">
+            <div className="flex flex-col gap-2 mt-4 sm:flex-col md:flex-col lg:flex-row">
+              <ShinyButton
+                href="/dashboard"
+                className="h-9 w-full sm:h-9 md:h-10 lg:h-12"
+              >
                 Start Tracking Now
               </ShinyButton>
               <ShinyButton
-                className="h-11 w-full"
+                className="h-9 w-full sm:h-9 md:h-10 lg:h-12"
                 href="/#features"
                 onClick={(e) => {
                   handleSmoothScroll(e, "#features");
@@ -70,7 +76,7 @@ const HeroSection = () => {
             <Image
               alt="Hero"
               fetchPriority="high"
-              width={800}
+              width={1000}
               height={600}
               decoding="async"
               data-nimg="1"
