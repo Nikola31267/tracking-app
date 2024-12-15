@@ -71,18 +71,15 @@ const HeroSection = () => {
             </p>
           </div>
         </div>
-        <div className="rounded-[1.3rem] border border-gray-200/5 bg-gray-200 p-1.5">
-          <div className="mx-auto overflow-hidden rounded-[1.3rem] border border-gray-200/10">
+        <div className="hidden sm:block rounded-[1.4rem] border border-gray-200/5 bg-gray-200 p-1.5">
+          <div className="mx-auto overflow-hidden rounded-[1.4rem] border border-gray-200/10">
             <Image
-              alt="Hero"
+              alt="Hero Section Image"
               fetchPriority="high"
               width={1000}
               height={600}
-              decoding="async"
-              data-nimg="1"
               draggable="false"
               className="w-full"
-              style={{ color: "transparent" }}
               src="/hero.jpg"
             />
           </div>

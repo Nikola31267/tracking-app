@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import Loader from "@/components/layout/Loader";
 import FeaturesSection from "@/components/FeaturesSection";
-import InfoAboutVisitorSection from "@/components/InfoAboutVisitorSection";
+import CallToAction from "@/components/CallToAction";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -47,9 +47,9 @@ export default function Home() {
     <>
       <HeroSection />
       <FeaturesSection />
-      <InfoAboutVisitorSection />
       <Pricing user={user} />
       <Faq />
+      <CallToAction />
     </>
   );
 }
