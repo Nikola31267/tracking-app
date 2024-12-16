@@ -4,7 +4,7 @@ import { ShinyButton } from "./ui/shiny-button";
 const CallToAction = () => {
   return (
     <section className="mt-20 flex flex-col items-center justify-center text-center mb-20 ">
-      <div className="bg-gray-50 w-fit p-8 rounded-lg ">
+      <div className="bg-gray-50 w-fit p-8 rounded-xl ">
         <div>
           <h2 className="mb-6 text-3xl font-bold text-gray-900">
             Ready to Supercharge Your Website?

@@ -83,24 +83,25 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen relative">
       <form
-        className="flex flex-col gap-4 p-10 rounded-lg shadow-xl bg-gray-50"
+        className="flex flex-col gap-4 px-14 py-8 rounded-xl shadow-xl bg-gray-50"
         onSubmit={handlePasswordlessLogin}
       >
-        <Image
-          src="/logo-nobg.png"
-          alt="Project Logo"
-          className=" w-14"
-          width={56}
-          height={56}
-        />
+        <div className="flex items-center justify-center mb-4">
+          <Image
+            src="/logo-nobg.png"
+            alt="Project Logo"
+            className=" w-14"
+            draggable={false}
+            width={56}
+            height={56}
+          />
 
-        <div className="flex flex-col gap-1 mb-4">
-          <h2 className="text-xl font-semibold">Sign In</h2>
-          <p className="text-sm text-gray-500">to continue to Pixel Track</p>
+          <h2 className="text-xl font-semibold">PixelTrack</h2>
         </div>
 
-        {error && <p className="text-red-500">{error}</p>}
-        <GoogleOAuthProvider clientId="130701496125-gqtj78hm9ub2s5jkmki0ur6mtnah06ma.apps.googleusercontent.com">
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        >
           <div>
             <GoogleLogin
               onSuccess={handleGoogleLoginSuccess}
@@ -115,10 +116,10 @@ export default function Login() {
         </div>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="elon@tesla.com"
           value={passwordlessEmail}
           onChange={(e) => setPasswordlessEmail(e.target.value)}
-          className="p-2 rounded-md border w-96 border-gray-300"
+          className="p-2 rounded-md border w-96 border-gray-300 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
           required
         />
         <button
@@ -134,6 +135,8 @@ export default function Login() {
             "Continue"
           )}
         </button>
+        {error && <p className="text-red-500">{error}</p>}
+        {message && <p className="text-green-500">{message}</p>}
         <hr className=" border-gray-100" />
         <p className="text-md text-gray-500 flex gap-1 justify-center">
           Made with <span className="font-bold ">TurboVerify</span>

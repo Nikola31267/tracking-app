@@ -82,15 +82,8 @@ export default function Navbar() {
             </div>
           </SignedIn>
           <SignedOut>
-            <Button
-              variant="ghost"
-              className="text-purple-500 hover:bg-purple-50"
-              asChild
-            >
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-            <ShinyButton className="h-10 w-28" href="/sign-up">
-              Sign up
+            <ShinyButton className="h-10 w-28" href="/sign-in">
+              Sign in
             </ShinyButton>
           </SignedOut>
         </div>
