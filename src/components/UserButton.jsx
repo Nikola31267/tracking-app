@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { axiosInstance } from "@/lib/axios";
 import Image from "next/image";
 import Profile from "./Profile";
-import ResetPasswordModal from "./ResetPasswordModal";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
@@ -14,7 +13,6 @@ const UserButton = () => {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [justClosedResetPassword, setJustClosedResetPassword] = useState(false);
 
@@ -68,17 +66,6 @@ const UserButton = () => {
     }
   };
 
-  const openResetPasswordModal = () => {
-    setProfileModalOpen(false);
-    setResetPasswordModalOpen(true);
-  };
-
-  const closeResetPasswordModal = () => {
-    setResetPasswordModalOpen(false);
-    setProfileModalOpen(true);
-    setJustClosedResetPassword(true);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("pixeltrack-auth");
     window.location.href = "/sign-in";
@@ -125,7 +112,7 @@ const UserButton = () => {
           </div>
         )}
       </button>
-      {dropdownOpen && !profileModalOpen && !resetPasswordModalOpen && (
+      {dropdownOpen && !profileModalOpen && (
         <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg z-10 overflow-hidden">
           <div className="p-3">
             {loading ? (
@@ -189,15 +176,7 @@ const UserButton = () => {
         <Profile
           isOpen={profileModalOpen}
           onClose={toggleProfileModal}
-          onResetPassword={openResetPasswordModal}
           initialTab={justClosedResetPassword ? "security" : "account"}
-        />
-      )}
-
-      {resetPasswordModalOpen && (
-        <ResetPasswordModal
-          isOpen={resetPasswordModalOpen}
-          onClose={closeResetPasswordModal}
         />
       )}
     </div>

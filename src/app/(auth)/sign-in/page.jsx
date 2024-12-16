@@ -4,19 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
-import Link from "next/link";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import Loader from "@/components/layout/Loader";
-import ResetPasswordModal from "@/components/ResetPasswordModal";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [signingIn, setSigningIn] = useState(false);
-  const [showPasswordless, setShowPasswordless] = useState(false);
   const [passwordlessEmail, setPasswordlessEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
@@ -38,25 +32,6 @@ export default function Login() {
       setLoadingAuth(false);
     }
   }, [router]);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setSigningIn(true);
-    try {
-      const response = await axiosInstance.post("/auth/sign-in", {
-        email,
-        password,
-      });
-      const { token } = response.data;
-      localStorage.setItem("pixeltrack-auth", token);
-      router.push("/dashboard");
-    } catch (error) {
-      setError("Invalid credentials");
-      console.error("Error logging in:", error);
-    } finally {
-      setSigningIn(false);
-    }
-  };
 
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
@@ -101,30 +76,6 @@ export default function Login() {
     }
   };
 
-  const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setShowPasswordless(false);
-    }
-    if (
-      resetPasswordRef.current &&
-      !resetPasswordRef.current.contains(event.target)
-    ) {
-      setShowResetPassword(false);
-    }
-  };
-
-  useEffect(() => {
-    if (showPasswordless || showResetPassword) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showPasswordless, showResetPassword]);
-
   if (loadingAuth) {
     return <Loader />;
   }
@@ -133,7 +84,7 @@ export default function Login() {
     <div className="flex items-center justify-center min-h-screen relative">
       <form
         className="flex flex-col gap-4 p-10 rounded-lg shadow-xl bg-gray-50"
-        onSubmit={handleLogin}
+        onSubmit={handlePasswordlessLogin}
       >
         <Image
           src="/logo-nobg.png"
@@ -157,142 +108,37 @@ export default function Login() {
             />
           </div>
         </GoogleOAuthProvider>
-        <Button
-          className="bg-transparent text-purple-500 hover:text-purple-600 hover:bg-transparent text-md transition-colors duration-300 font-semibold"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowPasswordless(true);
-          }}
-        >
-          Passwordless Sign In
-        </Button>
-        <hr className="my-1" />
+        <div className="flex items-center my-1 text-black">
+          <hr className="w-1/2 border-gray-300" />
+          <span className="mx-2">or</span>
+          <hr className="w-1/2 border-gray-300" />
+        </div>
         <input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={passwordlessEmail}
+          onChange={(e) => setPasswordlessEmail(e.target.value)}
           className="p-2 rounded-md border w-96 border-gray-300"
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="p-2 rounded-md border w-96 border-gray-300"
-          required
-        />
-        <p className="text-sm text-gray-500">
-          Forgot your password?{" "}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              setShowResetPassword(true);
-            }}
-            className="text-purple-500 hover:underline"
-          >
-            Reset Password
-          </button>
-        </p>
         <button
           type="submit"
           className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-md"
-          disabled={signingIn}
+          disabled={sendingMagicLink}
         >
-          {signingIn ? (
-            <svg
-              className="animate-spin h-5 w-5 text-white mx-auto"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
+          {sendingMagicLink ? (
+            <div className="flex items-center justify-center">
+              <Loader2 className="animate-spin" />
+            </div>
           ) : (
             "Continue"
           )}
         </button>
-
-        <hr className="my-4" />
-        <p className="text-md text-gray-500 flex gap-1 justify-center">
-          Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-purple-500 hover:underline">
-            Sign Up
-          </Link>
-        </p>
         <hr className=" border-gray-100" />
         <p className="text-md text-gray-500 flex gap-1 justify-center">
           Made with <span className="font-bold ">TurboVerify</span>
         </p>
       </form>
-      {showPasswordless && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div
-            ref={modalRef}
-            className="bg-white p-8 rounded-lg shadow-lg z-10 w-[30rem] mx-auto relative"
-          >
-            <h2 className="text-2xl font-bold mb-4">Passwordless Sign In</h2>
-            <p className="text-sm text-gray-500 mb-4">
-              An email containing a verification token will be sent to you the
-              token expires in 15 minutes.
-            </p>
-            <form className="space-y-4">
-              <div>
-                <label
-                  htmlFor="passwordless-email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="passwordless-email"
-                  placeholder="Enter your email"
-                  value={passwordlessEmail}
-                  onChange={(e) => setPasswordlessEmail(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                />
-              </div>
-              {message && <p className="text-sm text-gray-500">{message}</p>}
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md"
-                  onClick={handlePasswordlessLogin}
-                  disabled={sendingMagicLink}
-                >
-                  {sendingMagicLink ? (
-                    <Loader2 className="animate-spin h-5 w-5 text-white mx-auto" />
-                  ) : (
-                    "Send Link"
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showResetPassword && (
-        <ResetPasswordModal
-          isOpen={showResetPassword}
-          onClose={() => setShowResetPassword(false)}
-        />
-      )}
     </div>
   );
 }

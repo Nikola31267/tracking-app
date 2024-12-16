@@ -27,21 +27,21 @@ const Footer = () => {
               Copyright © 2024 - All rights reserved
             </p>
             <p className="text-sm mt-2 text-base-secondary">
-              Made with ❤️ by TurboVerify Team.
+              Made with ❤️ by StartGrid Team.
             </p>
             <a
-              href="https://turboverify.vercel.app"
+              href="https://startgrid.vercel.app"
               className="mt-4 inline-block text-sm bg-gray-100 px-2 py-1 transition-all duration-300 rounded-md hover:scale-[1.02] "
             >
               <span className="flex items-center gap-1">
                 <Image
-                  src="/turboverify-logo.png"
+                  src="/startgrid-logo.png"
                   alt="Logo"
                   width={24}
                   height={24}
                 />
-                Authenticated with
-                <span className="font-semibold">TurboVerify</span>
+                Built with
+                <span className="font-semibold">StartGrid</span>
               </span>
             </a>
           </div>

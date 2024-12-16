@@ -39,7 +39,7 @@ const features = [
         <Line
           type="monotone"
           dataKey="value"
-          stroke="#00bcd4"
+          stroke="#ab57ff"
           strokeWidth={2}
           dot={false}
         />
@@ -96,9 +96,9 @@ const features = [
           { name: "D", dim1: 600, dim2: 700, dim3: 800 },
         ]}
       >
-        <Bar dataKey="dim1" stackId="a" fill="#4caf50" />
-        <Bar dataKey="dim2" stackId="a" fill="#8bc34a" />
-        <Bar dataKey="dim3" stackId="a" fill="#cddc39" />
+        <Bar dataKey="dim1" stackId="a" fill="#6c5ce7" />
+        <Bar dataKey="dim2" stackId="a" fill="#7a6ee9" />
+        <Bar dataKey="dim3" stackId="a" fill="#8b7cef" />
       </BarChart>
     ),
   },
@@ -108,9 +108,15 @@ const features = [
       "Start using the ultimate tracking API with just one line of code",
     icon: <Plug className="text-white" />,
     chart: (
-      <div className="relative lg:row-span-2">
-        <div className="relative min-h-[30rem] w-full grow">
-          <div className="absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]">
+      <div className="relative">
+        <div className="relative min-h-[9rem] w-full grow">
+          <div className="absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-tl-xl bg-gray-900 rounded-xl">
+            <div className="absolute top-4 right-4 flex items-center space-x-1">
+              <div className="h-2 w-2 rounded-full bg-red-500" />
+              <div className="h-2 w-2 rounded-full bg-yellow-500" />
+              <div className="h-2 w-2 rounded-full bg-green-500" />
+            </div>
+
             <div className="flex bg-gray-800/40 ring-1 ring-white/5">
               <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
                 <div className="border-b border-r border-b-white/20 border-r-white/10 bg-white/5 px-4 py-2 text-white">
@@ -164,7 +170,7 @@ export default function FeaturesSection() {
     <div className="bg-white py-24 sm:py-32">
       <div className="relative">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="mx-auto max-w-2xl lg:text-center">
+          <div id="features" className="mx-auto max-w-2xl lg:text-center">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
               Revolutionize Your Data Insights
             </h1>
@@ -182,7 +188,7 @@ export default function FeaturesSection() {
                 >
                   <dt className="text-base font-semibold leading-7 text-black">
                     <div className="absolute left-0 top-0 h-full w-2" />
-                    <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500">
+                    <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500">
                       {feature.icon}
                     </div>
                     {feature.name}

@@ -16,12 +16,7 @@ import {
   AlertDialogCancel,
 } from "./ui/alert-dialog";
 
-const Profile = ({
-  isOpen,
-  onClose,
-  onResetPassword,
-  initialTab = "account",
-}) => {
+const Profile = ({ isOpen, onClose, initialTab = "account" }) => {
   const [editProfile, setEditProfile] = useState({
     username: "",
     email: "",
@@ -37,7 +32,6 @@ const Profile = ({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showResetPassword, setShowResetPassword] = useState(false);
 
   const [profile, setProfile] = useState({
     username: "",
@@ -48,7 +42,6 @@ const Profile = ({
   });
 
   const modalRef = useRef(null);
-  const resetPasswordRef = useRef(null);
 
   const [accountToDelete, setAccountToDelete] = useState(null);
 
@@ -74,15 +67,9 @@ const Profile = ({
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
-      if (
-        resetPasswordRef.current &&
-        !resetPasswordRef.current.contains(event.target)
-      ) {
-        setShowResetPassword(false);
-      }
     };
 
-    if ((isOpen || showResetPassword) && !showDeleteModal && !accountToDelete) {
+    if (isOpen && !showDeleteModal && !accountToDelete) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -91,14 +78,7 @@ const Profile = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [
-    isOpen,
-    onClose,
-    showResetPassword,
-    showDeleteModal,
-    accountToDelete,
-    false,
-  ]);
+  }, [isOpen, onClose, showDeleteModal, accountToDelete, false]);
 
   useEffect(() => {
     setAccountTab(initialTab === "account");
@@ -204,13 +184,6 @@ const Profile = ({
   const handleRemoveAccount = async (accountName) => {
     setAccountToDelete(accountName);
   };
-
-  const handleResetPassword = () => {
-    onClose();
-    onResetPassword();
-  };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
@@ -576,18 +549,6 @@ const Profile = ({
           )}
           {securityEditing && (
             <div className="flex flex-col gap-6">
-              <div className="flex justify-between items-center gap-4">
-                <div className="flex items-center gap-5">
-                  <span className="text-gray-700 font-semibold">Password</span>
-                  <span className="font-bold">••••••••</span>
-                </div>
-                <Button
-                  className="text-purple-600 px-4 py-2 rounded-md bg-transparent border-none cursor-pointer transition-colors duration-200 font-medium hover:bg-purple-100 hover:text-purple-500 text-md"
-                  onClick={handleResetPassword}
-                >
-                  Reset password
-                </Button>
-              </div>
               <div className="flex justify-between items-center gap-4">
                 <span className="text-gray-700 font-semibold">
                   Account Termination

@@ -7,6 +7,7 @@ export const ShinyButton = ({
   children,
   href,
   showIcon,
+  icon,
   ...props
 }) => (
   <Link
@@ -22,6 +23,7 @@ export const ShinyButton = ({
         <Crown className="w-5 transform rotate-0 group-hover:-rotate-[6.5deg] group-hover:scale-[1.18] transition-transform duration-200" />
       )}
       {children}
+      {icon}
     </span>
 
     <div className="ease-[cubic-bezier(0.19,1,0.22,1)] absolute -left-[75px] -top-[50px] -z-10 h-[155px] w-8 rotate-[35deg] bg-white opacity-20 transition-all duration-500 group-hover:left-[120%]" />
