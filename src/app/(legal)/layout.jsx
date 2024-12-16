@@ -1,13 +1,7 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-const Layout = ({ children }) => {
-  return (
-    <>
-      <Navbar />
-      {children}
-      <Footer />
-    </>
-  );
+export const metadata = {
+  title: "Legal | Pixel Track",
 };
 
-export default Layout;
+export default function RootLayout({ children }) {
+  return <>{children}</>;
+}

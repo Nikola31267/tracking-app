@@ -60,7 +60,6 @@ const VisitTable = ({
   tableDropdownRef,
   isDialogOpen,
   setIsDialogOpen,
-  visitToDelete,
   handleDeleteVisit,
 }) => {
   return (

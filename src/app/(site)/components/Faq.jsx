@@ -32,6 +32,18 @@ const faqData = [
     category: "General",
   },
   {
+    question: "How does goals work?",
+    answer:
+      "Really simple. Set a goal of views and we'll send you an email when you reach it. That way you stay on track.",
+    category: "General",
+  },
+  {
+    question: "How does referrers work?",
+    answer:
+      "When you want to track from where your visits are you just add ?ref= to the link for example if you want to see how many visits you get from youtube at the end of your url you just add ?ref=youtube. It's that simple.",
+    category: "General",
+  },
+  {
     question: "How much does Pixel Track cost?",
     answer:
       "Pixel Track is free for the first 7 days so you can try it out and see if it's a good fit for your needs. After that, it's $20/month.",

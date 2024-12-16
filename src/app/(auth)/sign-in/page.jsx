@@ -81,7 +81,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen relative">
+    <div className="flex flex-col gap-8 items-center justify-center min-h-screen relative">
       <form
         className="flex flex-col gap-4 px-14 py-8 rounded-xl shadow-xl bg-gray-50"
         onSubmit={handlePasswordlessLogin}
@@ -142,6 +142,9 @@ export default function Login() {
           Made with <span className="font-bold ">TurboVerify</span>
         </p>
       </form>
+      <p className="text-sm text-gray-500">
+        By signing up, you agree to our Terms of Service.
+      </p>
     </div>
   );
 }

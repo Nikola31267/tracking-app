@@ -38,6 +38,7 @@ import NoAccessDashboard from "@/components/NoAccessDashboard";
 import Link from "next/link";
 import Image from "next/image";
 import CountryChart from "./components/CountryChart";
+import { NoVisitsTable } from "./components/NoVisitsTable";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -365,20 +366,24 @@ const ProjectPage = () => {
             {selectedChart === "os" && <OsChart visitsData={visits} />}
           </div>
 
-          <VisitTable
-            paginatedVisits={paginatedVisits}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-            isModalOpen={isModalOpen}
-            specificVisit={specificVisit}
-            closeModal={closeModal}
-            fetchSpecificVisit={fetchSpecificVisit}
-            deleteVisit={confirmDeleteVisit}
-            toggleTableDropdown={toggleTableDropdown}
-            openDropdownId={openDropdownId}
-            tableDropdownRef={tableDropdownRef}
-          />
+          {visits.length > 0 ? (
+            <VisitTable
+              paginatedVisits={paginatedVisits}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              isModalOpen={isModalOpen}
+              specificVisit={specificVisit}
+              closeModal={closeModal}
+              fetchSpecificVisit={fetchSpecificVisit}
+              deleteVisit={confirmDeleteVisit}
+              toggleTableDropdown={toggleTableDropdown}
+              openDropdownId={openDropdownId}
+              tableDropdownRef={tableDropdownRef}
+            />
+          ) : (
+            <NoVisitsTable />
+          )}
         </>
       )}
       {activeTab === "settings" && (
