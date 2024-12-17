@@ -4,7 +4,7 @@ const TagSEO = () => {
   return (
     <head>
       {/* Basic Meta Tags */}
-      <title>Pixel Track</title>
+      <title>Pixel Track | Track every click, unlock every insight</title>
       <meta
         name="description"
         content="Track your website's performance and growth with Pixel Track. Monitor views, traffic, and more. Get insights to optimize your website and grow your business."
