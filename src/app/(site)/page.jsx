@@ -8,6 +8,7 @@ import { axiosInstance } from "@/lib/axios";
 import Loader from "@/components/layout/Loader";
 import FeaturesSection from "@/components/FeaturesSection";
 import CallToAction from "@/components/CallToAction";
+// import TestimonialGrid from "@/components/Testimonials";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ export default function Home() {
     <>
       <HeroSection />
       <FeaturesSection />
+      {/* <TestimonialGrid /> */}
       <Pricing user={user} />
       <Faq />
       <CallToAction />
