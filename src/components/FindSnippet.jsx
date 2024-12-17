@@ -16,7 +16,7 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
 
   const codeSnippet =
     `<script src="https://pixel-track.vercel.app/js/tracker.js" \n` +
-    `        data-api-key="${apiKey}" async></script>`;
+    `        data-website-url="${projectName}" async></script>`;
 
   const handleVerifyInstallation = async () => {
     setVerifyClicked(true);

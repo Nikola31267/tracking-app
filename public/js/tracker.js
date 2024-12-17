@@ -1,9 +1,9 @@
 (function () {
   const currentScript = document.currentScript;
 
-  const apiKey = currentScript.getAttribute("data-website-url");
-  if (!apiKey) {
-    console.error("API Key not provided");
+  const projectName = currentScript.getAttribute("data-website-url");
+  if (!projectName) {
+    console.error("Website url not provided");
     return;
   }
 
@@ -12,7 +12,7 @@
   const ref = urlParams.get("ref");
 
   const bodyData = {
-    projectName: apiKey,
+    projectName,
     page: pagePath,
     referrer: ref || "Direct",
   };
