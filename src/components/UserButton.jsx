@@ -151,6 +151,7 @@ const UserButton = () => {
                     `https://billing.stripe.com/p/login/test_4gw5lG5Ti8YTcs8eUU` +
                     `?prefilled_email=${user.email}`
                   }
+                  target="_blank"
                 >
                   Billing
                 </Link>
