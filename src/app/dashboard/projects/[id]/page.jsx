@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/select";
 import ReferrerChart from "./components/ReferrerChart";
 import OsChart from "./components/OsChart";
-import NoAccessDashboard from "@/components/NoAccessDashboard";
 import Link from "next/link";
 import Image from "next/image";
 import CountryChart from "./components/CountryChart";
@@ -65,20 +64,33 @@ const ProjectPage = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
-    if (
-      !localStorage.getItem("pixeltrack-auth") ||
-      localStorage.getItem("pixeltrack-auth") === null ||
-      localStorage.getItem("pixeltrack-auth") === ""
-    ) {
-      router.push("/sign-in");
-    } else {
-      setLoadingAuth(true);
-      if (user?.hasAccess === false) {
-        router.push("/dashboard/pricing");
+    const checkAuthAndAccess = async () => {
+      if (!localStorage.getItem("pixeltrack-auth")) {
+        router.push("/sign-in");
+        return;
       }
-      setLoadingAuth(false);
-    }
-  }, [router, user]);
+
+      try {
+        const userResponse = await axiosInstance.get(`/auth/user`, {
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
+        });
+        setUser(userResponse.data);
+
+        if (!userResponse.data.hasAccess) {
+          router.push("/dashboard/pricing");
+        } else {
+          setLoadingAuth(false);
+        }
+      } catch (error) {
+        setError("Failed to fetch user data");
+        router.push("/sign-in");
+      }
+    };
+
+    checkAuthAndAccess();
+  }, [router]);
 
   useEffect(() => {
     const fetchProjectAndVisits = async () => {
@@ -93,13 +105,6 @@ const ProjectPage = () => {
         );
         setProject(projectResponse.data);
 
-        const userResponse = await axiosInstance.get(`/auth/user`, {
-          headers: {
-            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
-          },
-        });
-        setUser(userResponse.data);
-
         const visitsResponse = await axiosInstance.get(
           `/dashboard/projects/${id}/visits`,
           {
@@ -112,6 +117,9 @@ const ProjectPage = () => {
         setVisits(visitsData);
       } catch (error) {
         console.error("Error fetching project or visits:", error);
+        if (error.response.status === 404) {
+          router.push("/404");
+        }
         setError("Server error");
       }
     };
@@ -130,9 +138,22 @@ const ProjectPage = () => {
       }
     };
 
-    fetchProjectAndVisits();
-    fetchProjects();
-  }, [id]);
+    if (!loadingAuth) {
+      fetchProjectAndVisits();
+      fetchProjects();
+    }
+  }, [id, loadingAuth]);
+
+  useEffect(() => {
+    const currentTab = new URLSearchParams(window.location.search).get("tab");
+    const pageFromUrl = new URLSearchParams(window.location.search).get("page");
+    if (currentTab) {
+      setActiveTab(currentTab);
+    }
+    if (pageFromUrl) {
+      setCurrentPage(Number(pageFromUrl));
+    }
+  }, []);
 
   const fetchSpecificVisit = async (visitId) => {
     try {
@@ -190,17 +211,6 @@ const ProjectPage = () => {
     };
   }, [isDropdownOpen, openDropdownId]);
 
-  useEffect(() => {
-    const currentTab = new URLSearchParams(window.location.search).get("tab");
-    const pageFromUrl = new URLSearchParams(window.location.search).get("page");
-    if (currentTab) {
-      setActiveTab(currentTab);
-    }
-    if (pageFromUrl) {
-      setCurrentPage(Number(pageFromUrl));
-    }
-  }, []);
-
   const confirmDeleteVisit = (visitId) => {
     setVisitToDelete(visitId);
     setIsDialogOpen(true);
@@ -252,12 +262,12 @@ const ProjectPage = () => {
     setSelectedChart2(value);
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   if (loadingAuth) {
     return <Loader />;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   if (project?.addedSnippet === false) {

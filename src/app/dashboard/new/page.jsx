@@ -9,6 +9,7 @@ import FindSnippet from "@/components/FindSnippet";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/layout/Loader";
 import { Button } from "@/components/ui/button";
+
 const New = () => {
   const [user, setUser] = useState(null);
   const [projectName, setProjectName] = useState("");
@@ -22,20 +23,31 @@ const New = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (
-      !localStorage.getItem("pixeltrack-auth") ||
-      localStorage.getItem("pixeltrack-auth") === null ||
-      localStorage.getItem("pixeltrack-auth") === ""
-    ) {
-      router.push("/sign-in");
-    } else {
-      setLoadingAuth(true);
-      if (user?.hasAccess === false) {
-        router.push("/dashboard/pricing");
+    const checkAuthAndAccess = async () => {
+      if (!localStorage.getItem("pixeltrack-auth")) {
+        router.push("/sign-in");
+        return;
       }
-      setLoadingAuth(false);
-    }
-  }, [router, user]);
+
+      try {
+        const response = await axiosInstance.get("/auth/user", {
+          headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") },
+        });
+        setUser(response.data);
+
+        if (!response.data.hasAccess) {
+          router.push("/dashboard/pricing");
+        } else {
+          setLoadingAuth(false);
+        }
+      } catch (error) {
+        setError("Failed to fetch user data");
+        router.push("/sign-in");
+      }
+    };
+
+    checkAuthAndAccess();
+  }, [router]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -52,8 +64,10 @@ const New = () => {
         setLoading(false);
       }
     };
-    fetchUserProfile();
-  }, [router]);
+    if (!loadingAuth) {
+      fetchUserProfile();
+    }
+  }, [router, loadingAuth]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

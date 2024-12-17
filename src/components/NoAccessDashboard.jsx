@@ -14,7 +14,33 @@ const NoAccessDashboard = ({}) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkAuthAndAccess = async () => {
+      try {
+        const response = await axiosInstance.get("/auth/user", {
+          headers: {
+            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
+          },
+        });
+        setUser(response.data);
+
+        if (response.data.hasAccess) {
+          router.push("/dashboard");
+        } else {
+          setLoadingAuth(false);
+        }
+      } catch (error) {
+        setError("Error fetching user profile");
+        console.error(error);
+        setLoadingAuth(false);
+      }
+    };
+
+    checkAuthAndAccess();
+  }, [router]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -34,10 +60,11 @@ const NoAccessDashboard = ({}) => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [router]);
 
   const dropdownRef = useRef(null);
 
+  if (loadingAuth) return <Loader />;
   if (loading) return <Loader />;
   if (error) return <p>Error fetching user profile</p>;
 
