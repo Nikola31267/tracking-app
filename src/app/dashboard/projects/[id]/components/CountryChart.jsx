@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import countryCodes from "@/lib/data/countryCodes.json";
 
 const CountryChart = ({ visitsData }) => {
   const [countryData, setCountryData] = useState([]);
@@ -37,6 +39,36 @@ const CountryChart = ({ visitsData }) => {
     return `rgb(${color.join(",")})`;
   };
 
+  const getCountryCode = (countryName) => {
+    const country = countryCodes.find((c) => c.name === countryName);
+    return country ? country.code : null;
+  };
+
+  const renderCustomTooltip = ({ payload }) => {
+    if (payload && payload.length) {
+      const { country, count } = payload[0].payload;
+      const countryCode = getCountryCode(country);
+      const flagUrl = countryCode
+        ? `https://purecatamphetamine.github.io/country-flag-icons/3x2/${countryCode}.svg`
+        : null;
+      return (
+        <div className=" bg-gray-100/80 p-1 rounded">
+          {flagUrl && (
+            <Image
+              src={flagUrl}
+              alt={country}
+              width={20}
+              height={15}
+              style={{ marginRight: 5 }}
+            />
+          )}
+          <span>{`${country}: ${count}`}</span>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -60,7 +92,7 @@ const CountryChart = ({ visitsData }) => {
                 <Cell key={`cell-${index}`} fill={getColor(entry.count)} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip content={renderCustomTooltip} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

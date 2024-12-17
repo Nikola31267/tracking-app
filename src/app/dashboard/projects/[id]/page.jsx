@@ -382,10 +382,6 @@ const ProjectPage = () => {
               handlePageChange={handlePageChange}
               isModalOpen={isModalOpen}
               specificVisit={specificVisit}
-              closeModal={closeModal}
-              fetchSpecificVisit={fetchSpecificVisit}
-              deleteVisit={confirmDeleteVisit}
-              toggleTableDropdown={toggleTableDropdown}
               openDropdownId={openDropdownId}
               tableDropdownRef={tableDropdownRef}
             />

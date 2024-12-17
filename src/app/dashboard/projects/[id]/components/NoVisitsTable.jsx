@@ -16,7 +16,7 @@ export function NoVisitsTable() {
             <TableHeader>
               <TableRow>
                 <TableHead>IP Address</TableHead>
-                <TableHead>Device</TableHead>
+
                 <TableHead>Browser</TableHead>
                 <TableHead>Platform</TableHead>
                 <TableHead>Referrer</TableHead>
@@ -34,14 +34,13 @@ export function NoVisitsTable() {
                   <TableCell>-----------------</TableCell>
                   <TableCell>-----------------</TableCell>
                   <TableCell>-----------------</TableCell>
-                  <TableCell>-----------------</TableCell>
                   <TableCell className="font-medium">--/--/----</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-            <p className="text-black text-2xl font-semibold">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/10">
+            <p className="text-black text-xl font-semibold">
               No visits to show
             </p>
           </div>

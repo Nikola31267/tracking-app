@@ -1,7 +1,7 @@
 (function () {
   const currentScript = document.currentScript;
 
-  const apiKey = currentScript.getAttribute("data-api-key");
+  const apiKey = currentScript.getAttribute("data-website-url");
   if (!apiKey) {
     console.error("API Key not provided");
     return;
@@ -11,7 +11,11 @@
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get("ref");
 
-  const bodyData = { apiKey, page: pagePath, referrer: ref || "Direct" };
+  const bodyData = {
+    projectName: apiKey,
+    page: pagePath,
+    referrer: ref || "Direct",
+  };
 
   fetch("https://pixel-track-website-api.vercel.app/track", {
     method: "POST",

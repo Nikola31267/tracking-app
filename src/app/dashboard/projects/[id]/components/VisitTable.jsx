@@ -26,7 +26,7 @@ const PLATFORM_LOGOS = {
     "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
   Linux: "https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png",
   Android:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Android_logo_2019.svg/1200px-Android_logo_2019.svg.png",
+    "https://en.wikipedia.org/wiki/File:Android_logo_2023.svg#/media/File:Android_robot_head.svg",
   iOS: "https://upload.wikimedia.org/wikipedia/commons/c/ca/IOS_logo.svg",
   ChromeOS:
     "https://upload.wikimedia.org/wikipedia/commons/5/5c/Chrome_OS_logo.png",
@@ -34,26 +34,11 @@ const PLATFORM_LOGOS = {
     "https://upload.wikimedia.org/wikipedia/commons/e/ec/Windows_Phone_logo.png",
 };
 
-function DetailItem({ label, value }) {
-  return (
-    <div className="flex flex-col space-y-1">
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        {label}
-      </span>
-      <span className="text-base text-gray-900 dark:text-white">{value}</span>
-    </div>
-  );
-}
-
 const VisitTable = ({
   paginatedVisits,
   currentPage,
   totalPages,
   handlePageChange,
-  isModalOpen,
-  specificVisit,
-  closeModal,
-  fetchSpecificVisit,
   deleteVisit,
   toggleTableDropdown,
   openDropdownId,
@@ -68,12 +53,8 @@ const VisitTable = ({
         <table className="min-w-full bg-white divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 IP Address
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Device
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Browser
@@ -101,23 +82,9 @@ const VisitTable = ({
               <tr
                 key={visit._id || index}
                 className="hover:bg-gray-100 cursor-pointer"
-                onClick={() => fetchSpecificVisit(visit._id)}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {PLATFORM_LOGOS[visit.platform] && (
-                    <Image
-                      src={PLATFORM_LOGOS[visit.platform]}
-                      alt={visit.platform}
-                      width={20}
-                      height={20}
-                    />
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.ip || "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {visit?.device || "N/A"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {visit?.browser || "N/A"}
@@ -212,38 +179,7 @@ const VisitTable = ({
           </PaginationContent>
         </Pagination>
       </div>
-      {isModalOpen && specificVisit && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={closeModal}
-          ></div>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl z-10 w-full max-w-md mx-4 overflow-hidden">
-            <div className="flex justify-between items-center p-6 bg-purple-500">
-              <h2 className="text-2xl font-bold text-white">Visit Details</h2>
-              <button
-                onClick={closeModal}
-                className="text-white hover:text-gray-200 transition-colors"
-              >
-                <XIcon className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="p-6 space-y-4">
-              <DetailItem label="IP Address" value={specificVisit.ip} />
-              <DetailItem label="Device" value={specificVisit.device} />
-              <DetailItem label="Browser" value={specificVisit.browser} />
-              <DetailItem label="Platform" value={specificVisit.platform} />
-              <DetailItem label="Referrer" value={specificVisit.referrer} />
-              <DetailItem label="Page" value={specificVisit.page || "N/A"} />
-              <DetailItem
-                label="Timestamp"
-                value={new Date(specificVisit.timestamp).toLocaleString()}
-              />
-            </div>
-            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-end"></div>
-          </div>
-        </div>
-      )}
+
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
