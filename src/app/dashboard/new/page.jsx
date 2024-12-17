@@ -69,7 +69,7 @@ const New = () => {
       setStep(2);
     } catch (error) {
       console.error(error);
-      setError(error.response?.data?.error || "An unknown error occurred.");
+      setError(error.response?.data?.message || "An unknown error occurred.");
     } finally {
       setIsSubmitting(false);
     }
