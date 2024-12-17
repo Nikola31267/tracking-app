@@ -333,8 +333,12 @@ const ProjectPage = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="map">Map</SelectItem>
-                  <SelectItem value="chart">Chart</SelectItem>
+                  <SelectItem className="cursor-pointer" value="map">
+                    Map
+                  </SelectItem>
+                  <SelectItem className="cursor-pointer" value="chart">
+                    Chart
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -348,8 +352,12 @@ const ProjectPage = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="browser">Browser</SelectItem>
-                  <SelectItem value="os">OS</SelectItem>
+                  <SelectItem className="cursor-pointer" value="browser">
+                    Browser
+                  </SelectItem>
+                  <SelectItem className="cursor-pointer" value="os">
+                    OS
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>

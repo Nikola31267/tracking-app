@@ -112,8 +112,9 @@ export default function Pricing({ user }) {
                     currentPlan.link +
                     (user ? "?prefilled_email=" + user.email : "")
                   }
-                  target="_blank"
                   showIcon={true}
+                  pricing
+                  disabled
                 >
                   Join Pixel Track
                 </ShinyButton>

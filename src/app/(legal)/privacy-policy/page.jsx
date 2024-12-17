@@ -4,9 +4,8 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Head from "next/head";
 
-const TermsOfService = () => {
+const PrivacyPolicy = () => {
   const router = useRouter();
   return (
     <>
@@ -21,7 +20,7 @@ const TermsOfService = () => {
               Back
             </Button>
             <h1 className="text-2xl font-bold text-center">
-              Terms of Service for Pixel Track
+              Privacy Policy for Pixel Track
             </h1>
             <div className="prose prose-xl prose-invert max-w-none mt-8 text-start mb-10">
               <div>
@@ -204,4 +203,4 @@ const TermsOfService = () => {
   );
 };
 
-export default TermsOfService;
+export default PrivacyPolicy;
