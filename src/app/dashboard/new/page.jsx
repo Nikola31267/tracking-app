@@ -18,6 +18,7 @@ const New = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -132,6 +133,7 @@ const New = () => {
                       required
                     />
                   </div>
+                  {error && <p className="text-red-500 mt-4">{error}</p>}
                   <Button
                     type="submit"
                     className="bg-purple-500 hover:bg-purple-600 text-white p-2 mt-8 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center"
@@ -145,7 +147,6 @@ const New = () => {
                   </Button>
                 </div>
               </form>
-              {error && <p className="text-red-500 mt-4">{error}</p>}
             </div>
           </>
         )}

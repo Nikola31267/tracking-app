@@ -88,7 +88,9 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
         <div className="text-red-500 mt-4">{error}</div>
       )}
       {verifyClicked && snippetFound && (
-        <div className="text-green-500 mt-4">Snippet found!</div>
+        <div className="text-green-500 mt-4">
+          Snippet found! Redirecting ...
+        </div>
       )}
       {verifyClicked && snippetFound === false && (
         <div className="text-red-500 mt-4">
