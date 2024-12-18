@@ -99,16 +99,18 @@ export default function Login() {
           <h2 className="text-xl font-semibold">PixelTrack</h2>
         </div>
 
-        <GoogleOAuthProvider
-          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-        >
-          <div>
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSuccess}
-              onError={handleGoogleLoginFailure}
-            />
-          </div>
-        </GoogleOAuthProvider>
+        <div className="flex items-center justify-center">
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+          >
+            <div>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginFailure}
+              />
+            </div>
+          </GoogleOAuthProvider>
+        </div>
         <div className="flex items-center my-1 text-black">
           <hr className="w-1/2 border-gray-300" />
           <span className="mx-2">or</span>
