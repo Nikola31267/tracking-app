@@ -29,7 +29,6 @@ const Settings = ({ project, setProject, id }) => {
   const updateProjectSettings = async (updatedData) => {
     setIsUpdating(true);
     const formData = new FormData();
-    formData.append("projectName", updatedData.projectName);
     formData.append("goal", updatedData.goal);
     if (updatedData.logo) {
       formData.append("logo", updatedData.logo);
@@ -130,7 +129,7 @@ const Settings = ({ project, setProject, id }) => {
               />
             </label>
             <h1 className="text-xl font-bold text-gray-800">
-              {project.projectName}
+            {project?.projectName.replace(/^https?:\/\//, "")}
             </h1>
             <AlertDialog
               open={isDeleteDialogOpen}
@@ -202,17 +201,6 @@ const Settings = ({ project, setProject, id }) => {
                 updateProjectSettings(updatedData);
               }}
             >
-              <div className="space-y-1 mb-4">
-                <Label htmlFor="projectName" className="text-md">
-                  Project Name
-                </Label>
-                <Input
-                  id="projectName"
-                  placeholder="Enter new project name"
-                  defaultValue={project.projectName}
-                  className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
-                />
-              </div>
               <div className="space-y-1">
                 <Label htmlFor="goal" className="text-md">
                   Goal
