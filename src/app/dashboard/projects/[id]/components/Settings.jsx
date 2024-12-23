@@ -194,7 +194,6 @@ const Settings = ({ project, setProject, id }) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 const updatedData = {
-                  projectName: e.target.projectName.value,
                   goal: e.target.goal.value,
                   logo: project.logo,
                 };
