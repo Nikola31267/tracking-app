@@ -82,7 +82,6 @@ const BrowserChart = ({ visitsData }) => {
                   alt={browser}
                   width={20}
                   height={20}
-                  style={{ width: "auto", height: "auto" }}
                 />
                 <span className="ml-2">{browser}</span>
               </div>

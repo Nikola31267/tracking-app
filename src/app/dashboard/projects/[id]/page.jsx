@@ -390,6 +390,9 @@ const ProjectPage = () => {
               currentPage={currentPage}
               totalPages={totalPages}
               handlePageChange={handlePageChange}
+              handleDeleteVisit={handleDeleteVisit}
+              deleteVisit={confirmDeleteVisit}
+              toggleTableDropdown={toggleTableDropdown}
               isModalOpen={isModalOpen}
               specificVisit={specificVisit}
               openDropdownId={openDropdownId}

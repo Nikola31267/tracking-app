@@ -6,8 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { MoreHorizontal, Trash, XIcon } from "lucide-react";
-import Image from "next/image";
+import { MoreHorizontal, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogContent,
