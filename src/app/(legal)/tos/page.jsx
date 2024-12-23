@@ -1,23 +1,19 @@
-"use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { getSEOTags } from "@/lib/seo";
+import BackButton from "@/components/BackButton";
+
+export const metadata = getSEOTags({
+  title: `Terms of Service | Pixel Track`,
+  canonicalUrlRelative: "/tos",
+});
 
 const TermsOfService = () => {
-  const router = useRouter();
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-2xl w-full px-4 md:px-6 lg:px-8">
         <div className="flex items-start gap-2 flex-col mt-20">
-          <Button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 bg-gray-100 shadow-md hover:bg-gray-100 text-black px-5 py-6 "
-          >
-            <ArrowLeft />
-            Back
-          </Button>
+         <BackButton />
           <h1 className="text-2xl font-bold text-center">
             Terms of Service for Pixel Track
           </h1>

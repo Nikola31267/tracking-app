@@ -172,7 +172,7 @@ const Dashboard = () => {
                   height={32}
                 />
                 <div className="truncate text-md text-secondary">
-                  {project?.projectName}
+                  {project?.projectName.replace(/^https?:\/\//, "")}
                 </div>
               </div>
               <div className="space-y-4">

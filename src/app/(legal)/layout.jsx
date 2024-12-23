@@ -1,7 +1,3 @@
-export const metadata = {
-  title: "Legal | Pixel Track",
-};
-
-export default function RootLayout({ children }) {
+export default function Layout({ children }) {
   return <>{children}</>;
 }

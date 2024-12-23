@@ -1,7 +1,10 @@
-export const metadata = {
-  title: "Dashboard | Pixel Track",
-};
+import { getSEOTags } from "@/lib/seo";
 
-export default function RootLayout({ children }) {
+export const metadata = getSEOTags({
+  title: `Dashboard | Pixel Track`,
+  canonicalUrlRelative: "/dashboard",
+});
+
+export default function Layout({ children }) {
   return <>{children}</>;
 }

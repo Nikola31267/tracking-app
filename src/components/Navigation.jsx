@@ -39,7 +39,7 @@ const Navigation = ({
             <BreadcrumbItem ref={dropdownRef} className="relative">
               <BreadcrumbLink className="text-lg" asChild>
                 <button onClick={toggleDropdown} className="flex items-center">
-                  {project.projectName}
+                {project?.projectName.replace(/^https?:\/\//, "")}
                   <ChevronsUpDown className="ml-2 h-4 w-4" />
                 </button>
               </BreadcrumbLink>
@@ -63,7 +63,7 @@ const Navigation = ({
                         width={25}
                         height={25}
                       />
-                      {proj.projectName}
+                      {proj.projectName.replace(/^https?:\/\//, "")}
                     </div>
                   ))}
                   <hr className="border-t border-gray-200 my-2" />
