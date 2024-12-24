@@ -7,6 +7,12 @@
     return;
   }
 
+  const url = window.location.href;
+  if (url.startsWith("http://localhost:")) {
+    console.error("Cannot track visits on localhost, skipping");
+    return;
+  }
+
   const pagePath = window.location.pathname;
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get("ref");
