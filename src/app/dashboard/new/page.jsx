@@ -79,7 +79,7 @@ const New = () => {
         { headers: { "x-auth-token": localStorage.getItem("pixeltrack-auth") } }
       );
       setProjectId(response.data._id);
-      setApiKey(response.data.key);
+      setProjectName(response.data.projectName);
       setStep(2);
     } catch (error) {
       console.error(error);
@@ -179,11 +179,7 @@ const New = () => {
               ></div>
             </div>
 
-            <FindSnippet
-              projectName={projectName}
-              projectId={projectId}
-              apiKey={apiKey}
-            />
+            <FindSnippet projectName={projectName} projectId={projectId} />
           </div>
         )}
       </div>

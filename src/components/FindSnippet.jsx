@@ -7,7 +7,7 @@ import { axiosInstance } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
+const FindSnippet = ({ projectName, projectId, projectPage }) => {
   const [snippetFound, setSnippetFound] = useState(null);
   const [error, setError] = useState(null);
   const [verifyClicked, setVerifyClicked] = useState(false);
@@ -22,7 +22,7 @@ const FindSnippet = ({ projectName, projectId, apiKey, projectPage }) => {
     setVerifyClicked(true);
     setLoading(true);
     try {
-      const websiteUrl = `https://${projectName}`;
+      const websiteUrl = projectName;
       const checkResponse = await axios.get(
         `/api/check-snippet?url=${encodeURIComponent(websiteUrl)}`
       );
