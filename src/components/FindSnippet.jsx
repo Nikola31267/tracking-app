@@ -22,9 +22,8 @@ const FindSnippet = ({ projectName, projectId, projectPage }) => {
     setVerifyClicked(true);
     setLoading(true);
     try {
-      const websiteUrl = projectName;
       const checkResponse = await axios.get(
-        `/api/check-snippet?url=${encodeURIComponent(websiteUrl)}`
+        `/api/check-snippet?url=${encodeURIComponent(projectName)}`
       );
       setSnippetFound(checkResponse.data.snippetFound);
 

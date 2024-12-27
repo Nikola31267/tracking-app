@@ -18,14 +18,8 @@ export default function RootLayout({ children }) {
         className={`antialiased ${poppins.variable}`}
         style={{ fontFamily: "var(--font-poppins)" }}
       >
-        {children} 
+        {children}
         <Toaster />
-
-        <script
-        src="https://pixel-track.vercel.app/js/tracker.js"
-        data-website-url="https://pixel-track.vercel.app"
-        async
-      ></script>
       </body>
     </html>
   );
