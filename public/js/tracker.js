@@ -23,6 +23,11 @@
     referrer: ref || "Direct",
   };
 
+  if (window.location.hostname === "localhost") {
+    console.error("Error: Cannot log visits on localhost");
+    return;
+  }
+
   fetch("https://pixel-track-website-api.vercel.app/track", {
     method: "POST",
     headers: {
