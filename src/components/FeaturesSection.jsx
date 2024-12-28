@@ -149,7 +149,7 @@ const features = [
                 >
                   {`
 <script src="https://pixeltrack.pro/js/tracker.js" \n` +
-                    `        data-api-key="YOUR_API_KEY" async></script>
+                    `        data-website-url="WEBSITE_URL" async></script>
                     `}
                 </SyntaxHighlighter>
               </div>

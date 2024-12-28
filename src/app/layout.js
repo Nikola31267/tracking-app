@@ -1,7 +1,9 @@
+import Navbar from "@/components/layout/Navbar";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { getSEOTags } from "@/lib/seo";
 import { Poppins } from "next/font/google";
+import Footer from "@/components/layout/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -11,7 +13,7 @@ const poppins = Poppins({
 
 export const metadata = getSEOTags();
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, modal }) {
   return (
     <html lang="en">
       <body
@@ -19,6 +21,7 @@ export default function RootLayout({ children }) {
         style={{ fontFamily: "var(--font-poppins)" }}
       >
         {children}
+        {modal}
         <Toaster />
       </body>
     </html>

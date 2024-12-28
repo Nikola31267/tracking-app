@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
@@ -10,16 +10,11 @@ import { Loader2 } from "lucide-react";
 
 export default function Login() {
   const [error, setError] = useState(null);
-  const [signingIn, setSigningIn] = useState(false);
   const [passwordlessEmail, setPasswordlessEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [showResetPassword, setShowResetPassword] = useState(false);
   const [sendingMagicLink, setSendingMagicLink] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const modalRef = useRef(null);
   const router = useRouter();
-
-  const resetPasswordRef = useRef(null);
 
   useEffect(() => {
     if (
@@ -107,6 +102,12 @@ export default function Login() {
               <GoogleLogin
                 onSuccess={handleGoogleLoginSuccess}
                 onError={handleGoogleLoginFailure}
+                theme="outline"
+                size="large"
+                width="350px"
+                logo_alignment="left"
+                type="standard"
+                text="continue_with"
               />
             </div>
           </GoogleOAuthProvider>
