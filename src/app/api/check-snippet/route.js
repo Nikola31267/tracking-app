@@ -18,7 +18,7 @@ export async function GET(req) {
     const html = response.data;
 
     const snippetFound = html.includes(
-      '<script src="https://pixel-track.vercel.app/js/tracker.js"'
+      '<script src="https://pixeltrack.startgrid.xyz/js/tracker.js"'
     );
     return NextResponse.json({ snippetFound });
   } catch (error) {

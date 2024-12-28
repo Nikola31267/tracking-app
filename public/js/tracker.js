@@ -23,7 +23,7 @@
     referrer: ref || "Direct",
   };
 
-  fetch("https://pixel-track-website-api.vercel.app/track", {
+  fetch("https://pixeltrackapi.startgrid.xyz/track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

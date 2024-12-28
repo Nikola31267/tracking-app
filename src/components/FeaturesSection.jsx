@@ -148,7 +148,7 @@ const features = [
                   }}
                 >
                   {`
-<script src="https://pixeltrack.pro/js/tracker.js" \n` +
+<script src="https:/pixeltrack.startgrid.xyz/js/tracker.js" \n` +
                     `        data-website-url="WEBSITE_URL" async></script>
                     `}
                 </SyntaxHighlighter>
