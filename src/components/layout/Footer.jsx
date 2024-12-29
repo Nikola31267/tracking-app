@@ -30,7 +30,7 @@ const Footer = () => {
               Made with ❤️ by StartGrid Team.
             </p>
             <a
-              href="https://startgrid.vercel.app"
+              href="https://startgrid.xyz"
               className="mt-4 inline-block text-sm bg-gray-100 px-2 py-1 transition-all duration-300 rounded-md hover:scale-[1.02] "
             >
               <span className="flex items-center gap-1">
