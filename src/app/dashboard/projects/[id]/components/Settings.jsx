@@ -19,12 +19,39 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import CodeSnippetDialog from "@/components/CodeSnippet";
 
 const Settings = ({ project, setProject, id }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  const paymentCode = `    await fetch("https://api-pixeltrack.startgrid.xyz/track/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        event_type: "payment",
+        paymentValue: 20,
+        projectUrl: "${project.projectName}",
+          projectId: "${project._id}",
+      }),
+    });`;
+
+  const signInCode = `
+        await fetch("https://api-pixeltrack.startgrid.xyz/track/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event_type: "sign_in",
+          projectUrl: "${project.projectName}",
+          projectId: "${project._id}",
+        }),
+      }); `;
 
   const updateProjectSettings = async (updatedData) => {
     setIsUpdating(true);
@@ -210,14 +237,10 @@ const Settings = ({ project, setProject, id }) => {
                   defaultValue={project.goal}
                   className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
                 />
-                {/* TODO: Add modals to show the code snippets */}
-                <div className="flex items-center gap-2">
-                  <Button variant="purple" className="mt-4">
-                    Add revenue{" "}
-                  </Button>
-                  <Button variant="purple" className="mt-4">
-                    Add sign-in{" "}
-                  </Button>
+
+                <div className="flex items-center gap-2 py-2">
+                  <CodeSnippetDialog title="Add Payment" code={paymentCode} />
+                  <CodeSnippetDialog title="Add Sign in" code={signInCode} />
                 </div>
               </div>
               <Button

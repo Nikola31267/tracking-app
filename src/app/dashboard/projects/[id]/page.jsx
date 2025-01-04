@@ -104,20 +104,12 @@ const ProjectPage = () => {
           }
         );
         setProject(projectResponse.data);
+        setVisits(projectResponse.data.visit);
 
-        const visitsResponse = await axiosInstance.get(
-          `/dashboard/projects/${id}/visits`,
-          {
-            headers: {
-              "x-auth-token": localStorage.getItem("pixeltrack-auth"),
-            },
-          }
-        );
-        const visitsData = visitsResponse.data;
-        setVisits(visitsData);
+        console.log(projectResponse.data);
       } catch (error) {
         console.error("Error fetching project or visits:", error);
-        if (error.response.status === 404) {
+        if (error.response.status === 404 || error.response.status === 403) {
           router.push("/404");
         }
         setError("Server error");
@@ -154,24 +146,6 @@ const ProjectPage = () => {
       setCurrentPage(Number(pageFromUrl));
     }
   }, []);
-
-  const fetchSpecificVisit = async (visitId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/dashboard/projects/${id}/visits/${visitId}`,
-        {
-          headers: {
-            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
-          },
-        }
-      );
-      setSpecificVisit(response.data);
-      setIsModalOpen(true);
-    } catch (error) {
-      console.error("Error fetching specific visit:", error);
-      setError("Server error");
-    }
-  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -331,7 +305,6 @@ const ProjectPage = () => {
             project={project}
           />
 
-          {/* TODO: Make it look good */}
           <p>Signins: {project?.signIns}</p>
 
           <div className="flex flex-col sm:flex-row gap-2 mt-6">

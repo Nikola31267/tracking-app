@@ -16,7 +16,7 @@ const FindSnippet = ({ projectName, projectId, projectPage }) => {
 
   const codeSnippet =
     `<script src="https://pixeltrack.startgrid.xyz/js/tracker.js" \n` +
-    `        data-website-url="${projectName}" async></script>`;
+    `        data-website-url="${projectName}" data-project-id="${projectId}" async></script>`;
 
   const handleVerifyInstallation = async () => {
     setVerifyClicked(true);

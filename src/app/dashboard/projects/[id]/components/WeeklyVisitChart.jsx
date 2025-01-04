@@ -8,11 +8,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 import {
   ComposedChart,
   Line,
@@ -46,34 +42,30 @@ const WeeklyVisitChart = ({ visits, visitsData, project }) => {
       return date;
     };
 
-    const startOfWeek = calculateStartOfWeek(
-      selectedWeek === "current" ? 0 : 1
-    );
+    const filterDataByWeek = (data, startOfWeek) => {
+      return data.reduce((acc, item) => {
+        const itemDate = new Date(item.timestamp);
+        if (selectedWeek === "previous" || itemDate >= startOfWeek) {
+          const date = itemDate.toLocaleDateString();
+          acc[date] = (acc[date] || 0) + (item.value || 1);
+        }
+        return acc;
+      }, {});
+    };
 
-    const visitsByDay = visitsData.reduce((acc, visit) => {
-      const visitDate = new Date(visit.timestamp);
-      if (visitDate >= startOfWeek) {
-        const date = visitDate.toLocaleDateString();
-        acc[date] = (acc[date] || 0) + 1;
-      }
-      return acc;
-    }, {});
+    const startOfWeek =
+      selectedWeek === "current" ? calculateStartOfWeek(0) : null;
 
-    const revenueByDay = project?.payments.reduce((acc, payment) => {
-      const paymentDate = new Date(payment.timestamp);
-      if (paymentDate >= startOfWeek) {
-        const date = paymentDate.toLocaleDateString();
-        acc[date] = (acc[date] || 0) + payment.value;
-      }
-      return acc;
-    }, {});
+    const visitsByDay = filterDataByWeek(visitsData, startOfWeek);
+
+    const revenueByDay = filterDataByWeek(project?.payments || [], startOfWeek);
 
     const totalRevenue = project?.payments.reduce(
       (sum, payment) => sum + payment.value,
       0
     );
-    setRevenue(totalRevenue);
 
+    setRevenue(totalRevenue);
     setDailyVisits(visitsByDay);
     setDailyRevenue(revenueByDay);
   }, [visitsData, selectedWeek, project]);
@@ -87,9 +79,18 @@ const WeeklyVisitChart = ({ visits, visitsData, project }) => {
   return (
     <Card className="w-full ">
       <CardHeader>
-        <CardTitle className="flex items-center gap-8">
-          <div>All Visits: {visits.length}</div>
-          <div>Revenue: ${revenue}</div>
+        <CardTitle className="flex flex-col gap-4">
+          <div className="flex items-center gap-6">
+            <div>All Visits: {visits.length}</div>
+            <div>Revenue: ${revenue}</div>
+          </div>
+          <div className="flex items-center gap-4 text-base text-purple-500">
+            <div>Revenue/visitor: ${(revenue / visits.length).toFixed(2)}</div>
+            <div>
+              Conversion rate:{" "}
+              {((project?.payments.length / visits.length) * 100).toFixed(2)}%
+            </div>
+          </div>
         </CardTitle>
         <CardDescription></CardDescription>
         <div className="w-56 mt-1">
@@ -130,7 +131,6 @@ const WeeklyVisitChart = ({ visits, visitsData, project }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
 
-              {/* Y Axis for visits */}
               <YAxis
                 yAxisId="left"
                 orientation="left"
@@ -141,7 +141,6 @@ const WeeklyVisitChart = ({ visits, visitsData, project }) => {
                 tickFormatter={(value) => `${value}`}
               />
 
-              {/* Y Axis for revenue */}
               <YAxis
                 yAxisId="right"
                 orientation="right"

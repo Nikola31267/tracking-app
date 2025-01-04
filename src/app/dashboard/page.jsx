@@ -26,6 +26,7 @@ const Dashboard = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [error, setError] = useState("");
   const [last24HoursVisits, setLast24HoursVisits] = useState("");
+  const [last24HourRevenue, setLast24HourRevenue] = useState("");
   const [freeTrialStartedModal, setFreeTrialStartedModal] = useState(false);
   const router = useRouter();
 
@@ -68,6 +69,7 @@ const Dashboard = () => {
         const fetchedProjects = response.data.allProjects;
         setProjects(fetchedProjects);
         setLast24HoursVisits(response.data.totalRecentVisits);
+        setLast24HourRevenue(response.data.totalRecentRevenue);
         if (fetchedProjects.length === 0) {
           router.push("/dashboard/new");
         }
@@ -139,7 +141,11 @@ const Dashboard = () => {
         <div className="flex items-center gap-1">
           <h2>Hello {user?.fullName}, you have </h2>
           <span className="text-lg font-semibold">{last24HoursVisits}</span>
-          <h2>visits in the last 24 hours</h2>
+          <h2>
+            visits and made{" "}
+            <span className="text-lg font-semibold">${last24HourRevenue}</span>{" "}
+            in the last 24 hours. Good job!
+          </h2>
         </div>
       )}
 
