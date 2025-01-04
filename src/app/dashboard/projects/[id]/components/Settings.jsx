@@ -129,7 +129,7 @@ const Settings = ({ project, setProject, id }) => {
               />
             </label>
             <h1 className="text-xl font-bold text-gray-800">
-            {project?.projectName.replace(/^https?:\/\//, "")}
+              {project?.projectName.replace(/^https?:\/\//, "")}
             </h1>
             <AlertDialog
               open={isDeleteDialogOpen}
@@ -210,6 +210,15 @@ const Settings = ({ project, setProject, id }) => {
                   defaultValue={project.goal}
                   className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
                 />
+                {/* TODO: Add modals to show the code snippets */}
+                <div className="flex items-center gap-2">
+                  <Button variant="purple" className="mt-4">
+                    Add revenue{" "}
+                  </Button>
+                  <Button variant="purple" className="mt-4">
+                    Add sign-in{" "}
+                  </Button>
+                </div>
               </div>
               <Button
                 variant="purpleOutline"

@@ -330,6 +330,8 @@ const ProjectPage = () => {
             visitsData={visits}
             project={project}
           />
+
+          {/* TODO: Make it look good */}
           <p>Signins: {project?.signIns}</p>
 
           <div className="flex flex-col sm:flex-row gap-2 mt-6">
