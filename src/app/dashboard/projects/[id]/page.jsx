@@ -325,7 +325,12 @@ const ProjectPage = () => {
 
       {activeTab === "app" && (
         <>
-          <WeeklyVisitChart visits={visits} visitsData={visits} />
+          <WeeklyVisitChart
+            visits={visits}
+            visitsData={visits}
+            project={project}
+          />
+          <p>Signins: {project?.signIns}</p>
 
           <div className="flex flex-col sm:flex-row gap-2 mt-6">
             <PagesChart visitsData={visits} />

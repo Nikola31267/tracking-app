@@ -2,8 +2,14 @@
   const currentScript = document.currentScript;
 
   const projectName = currentScript.getAttribute("data-website-url");
+  const id = currentScript.getAttribute("data-project-id");
   if (!projectName) {
     console.error("Website url not provided");
+    return;
+  }
+
+  if (!id) {
+    console.error("Project id not provided");
     return;
   }
 
@@ -19,6 +25,7 @@
 
   const bodyData = {
     projectName,
+    id,
     page: pagePath,
     referrer: ref || "Direct",
   };
