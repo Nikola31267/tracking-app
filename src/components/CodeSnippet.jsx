@@ -12,7 +12,7 @@ import {
 import { Check, Copy } from "lucide-react";
 import { handleCopy } from "@/lib/handleCopy";
 
-export default function CodeSnippetDialog({ code, title }) {
+export default function CodeSnippetDialog({ code, title, dialogTitle }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -25,7 +25,7 @@ export default function CodeSnippetDialog({ code, title }) {
       </DialogTrigger>
       <DialogContent className="max-w-[60rem]">
         <DialogHeader>
-          <DialogTitle>Code Snippet</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
         <div className="relative">
           <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">

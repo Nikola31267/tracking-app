@@ -90,6 +90,9 @@ const WeeklyVisitChart = ({ visits, visitsData, project }) => {
               Conversion rate:{" "}
               {((project?.payments.length / visits.length) * 100).toFixed(2)}%
             </div>
+            <div className="flex items-center gap-4 text-base text-purple-500">
+              Registered users: {project?.signIns}
+            </div>
           </div>
         </CardTitle>
         <CardDescription></CardDescription>

@@ -239,8 +239,16 @@ const Settings = ({ project, setProject, id }) => {
                 />
 
                 <div className="flex items-center gap-2 py-2">
-                  <CodeSnippetDialog title="Add Payment" code={paymentCode} />
-                  <CodeSnippetDialog title="Add Sign in" code={signInCode} />
+                  <CodeSnippetDialog
+                    title="Add Payment"
+                    code={paymentCode}
+                    dialogTitle="Payment Tracking Code Snippet"
+                  />
+                  <CodeSnippetDialog
+                    title="Add Sign in"
+                    code={signInCode}
+                    dialogTitle="User Registering Tracking Code Snippet"
+                  />
                 </div>
               </div>
               <Button

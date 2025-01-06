@@ -304,14 +304,6 @@ const ProjectPage = () => {
             visitsData={visits}
             project={project}
           />
-
-          <p>Signins: {project?.signIns}</p>
-
-          <div className="flex flex-col sm:flex-row gap-2 mt-6">
-            <PagesChart visitsData={visits} />
-            <ReferrerChart visitsData={visits} />
-          </div>
-
           <div className="flex justify-between mb-4 mt-6 mr-4">
             <div className="w-64">
               <Select
@@ -362,6 +354,11 @@ const ProjectPage = () => {
               <BrowserChart visitsData={visits} />
             )}
             {selectedChart === "os" && <OsChart visitsData={visits} />}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2 mt-6">
+            <PagesChart visitsData={visits} />
+            <ReferrerChart visitsData={visits} />
           </div>
 
           {visits.length > 0 ? (

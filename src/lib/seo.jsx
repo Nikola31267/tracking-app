@@ -10,7 +10,8 @@ export const getSEOTags = ({
 } = {}) => {
   return {
     // up to 50 characters (what does your app do for the user?) > your main should be here
-    title: title || `${config.appName} | Track every click, unlock every insight`,
+    title:
+      title || `${config.appName} | Track every click, unlock every insight`,
     // up to 160 characters (how does your app help the user?)
     description: description || config.description,
     // some keywords separated by commas. by default it will be your app name
