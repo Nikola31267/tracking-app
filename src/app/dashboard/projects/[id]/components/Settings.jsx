@@ -27,13 +27,14 @@ const Settings = ({ project, setProject, id }) => {
   const router = useRouter();
   const { toast } = useToast();
 
-  const paymentCode = `    await fetch("https://api-pixeltrack.startgrid.xyz/track/events", {
+  const paymentCode = `    await fetch("https://pixeltrackapi.startgrid.xyz/track/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         event_type: "payment",
+        productName: "product_name"
         paymentValue: 20,
         projectUrl: "${project.projectName}",
           projectId: "${project._id}",
@@ -41,7 +42,7 @@ const Settings = ({ project, setProject, id }) => {
     });`;
 
   const signInCode = `
-        await fetch("https://api-pixeltrack.startgrid.xyz/track/events", {
+        await fetch("https://pixeltrackapi.startgrid.xyz/track/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function NoVisitsTable() {
+export function NoPaymentsTable() {
   return (
     <div className="container mx-auto py-10 px-4">
       <div className="overflow-x-auto shadow-md rounded-lg">
@@ -15,32 +15,24 @@ export function NoVisitsTable() {
           <Table className="opacity-40">
             <TableHeader>
               <TableRow>
-                <TableHead>IP Address</TableHead>
-                <TableHead>Browser</TableHead>
-                <TableHead>Platform</TableHead>
-                <TableHead>Referrer</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>Page</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>Product Name</TableHead>
+                <TableHead>Value</TableHead>
+                <TableHead>Most Recent</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {[...Array(4)].map((_, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">--/--/----</TableCell>
+                  <TableCell className="font-medium">--------</TableCell>
                   <TableCell>-----------------</TableCell>
-                  <TableCell>-----------------</TableCell>
-                  <TableCell>-----------------</TableCell>
-                  <TableCell>-----------------</TableCell>
-                  <TableCell>-----------------</TableCell>
-                  <TableCell className="font-medium">--/--/----</TableCell>
+                  <TableCell className="font-medium">--------</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           <div className="absolute inset-0 flex items-center justify-center bg-background/10">
             <p className="text-black text-xl font-semibold">
-              No visits to show
+              No payments to show
             </p>
           </div>
         </div>

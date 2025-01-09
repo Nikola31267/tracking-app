@@ -22,7 +22,7 @@ const features = [
   {
     name: "Real-time Data Streams",
     description:
-      "Watch your data flow in as it happens with our lightning-fast streaming API.",
+      "Watch your website traffic, revenue and user authentication as it happens with our lightning-fast streaming APIs.",
     icon: <Clock className="text-white" />,
     chart: (
       <LineChart
@@ -109,7 +109,7 @@ const features = [
     icon: <Plug className="text-white" />,
     chart: (
       <div className="relative">
-        <div className="relative min-h-[9rem] w-full grow">
+        <div className="relative min-h-[9.5rem] w-full grow">
           <div className="absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-tl-xl bg-gray-900 rounded-xl">
             <div className="absolute top-4 right-4 flex items-center space-x-1">
               <div className="h-2 w-2 rounded-full bg-red-500" />
@@ -149,7 +149,8 @@ const features = [
                 >
                   {`
 <script src="https:/pixeltrack.startgrid.xyz/js/tracker.js" \n` +
-                    `        data-website-url="WEBSITE_URL" async></script>
+                    `        data-website-url="WEBSITE_URL" 
+        data-project-id="111111111111111" async></script>
                     `}
                 </SyntaxHighlighter>
               </div>

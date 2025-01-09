@@ -75,7 +75,9 @@ export default function FAQSection() {
                         <React.Fragment key={index}>
                           {part}
                           {index === 1 && (
-                            <strong>contact-pixeltrack@builderbee.pro</strong>
+                            <a href="mailto:contact-pixeltrack@builderbee.pro">
+                              <strong>contact-pixeltrack@builderbee.pro</strong>
+                            </a>
                           )}
                         </React.Fragment>
                       ))}

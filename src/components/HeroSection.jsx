@@ -46,6 +46,10 @@ const HeroSection = () => {
                 <Check className="h-5 w-5 mr-2 text-purple-500" />
                 Secure and scalable analytics for businesses of all sizes.
               </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 mr-2 text-purple-500" />
+                Choose the product to prioritize.
+              </li>
             </ul>
           </div>
           <div>

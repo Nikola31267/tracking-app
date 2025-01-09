@@ -18,21 +18,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-const PLATFORM_LOGOS = {
-  Windows:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Windows_logo_-_2012.svg/1200px-Windows_logo_-_2012.svg.png",
-  "Mac OS X":
-    "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
-  Linux: "https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png",
-  Android:
-    "https://en.wikipedia.org/wiki/File:Android_logo_2023.svg#/media/File:Android_robot_head.svg",
-  iOS: "https://upload.wikimedia.org/wikipedia/commons/c/ca/IOS_logo.svg",
-  ChromeOS:
-    "https://upload.wikimedia.org/wikipedia/commons/5/5c/Chrome_OS_logo.png",
-  WindowsPhone:
-    "https://upload.wikimedia.org/wikipedia/commons/e/ec/Windows_Phone_logo.png",
-};
-
 const VisitTable = ({
   paginatedVisits,
   currentPage,
@@ -48,6 +33,7 @@ const VisitTable = ({
 }) => {
   return (
     <div className="container mx-auto py-10 px-4">
+      <h1 className="mb-2 text-xl font-bold">Website Traffic</h1>
       <div className="overflow-x-auto shadow-md rounded-lg">
         <table className="min-w-full bg-white divide-y divide-gray-200">
           <thead className="bg-gray-50">
