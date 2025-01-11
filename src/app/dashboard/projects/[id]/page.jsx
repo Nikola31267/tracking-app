@@ -40,6 +40,7 @@ import CountryChart from "./components/CountryChart";
 import { NoVisitsTable } from "./components/NoVisitsTable";
 import { NoPaymentsTable } from "./components/NoPaymentsTable";
 import PaymentsTable from "./components/PaymentsTable";
+import Issues from "./components/Issues";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -149,11 +150,6 @@ const ProjectPage = () => {
       setCurrentPage(Number(pageFromUrl));
     }
   }, []);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSpecificVisit(null);
-  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -391,6 +387,10 @@ const ProjectPage = () => {
       )}
       {activeTab === "settings" && (
         <Settings project={project} setProject={setProject} id={id} />
+      )}
+
+      {activeTab === "issues" && (
+        <Issues project={project} setProject={setProject} />
       )}
 
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

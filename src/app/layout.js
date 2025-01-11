@@ -1,9 +1,7 @@
-import Navbar from "@/components/layout/Navbar";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { getSEOTags } from "@/lib/seo";
 import { Poppins } from "next/font/google";
-import Footer from "@/components/layout/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
