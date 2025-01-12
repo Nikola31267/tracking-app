@@ -186,9 +186,19 @@ const Dashboard = () => {
                   <span className="line-clamp-3 outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:text-legacy-purple"></span>
                 </h3>
 
-                <div className="flex ml-4 gap-1 items-center">
-                  <span className="font-semibold">{project.visit.length}</span>{" "}
-                  visits
+                <div className="flex">
+                  <div className="flex ml-4 gap-1 items-center">
+                    <span className="font-semibold">
+                      {project.visit.length}
+                    </span>{" "}
+                    visits
+                  </div>
+                  <div className="flex ml-3 gap-1 items-center">
+                    <span className="font-semibold">
+                      {project.issues.length}
+                    </span>{" "}
+                    issues
+                  </div>
                 </div>
               </div>
             </div>
