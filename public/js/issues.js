@@ -45,25 +45,54 @@
     modal = document.createElement("div");
     modal.className = "modal";
     modal.innerHTML = `
-      <div class="p-4 bg-white text-black">
-        <h2 class="text-lg font-semibold">Have an issue?</h2>
-      </div>
-      <form id="supportForm" class="p-4 space-y-4">
-        <div class="flex flex-col space-y-2">
-          <label for="email" class="text-black">Email</label>
-          <input id="email" class="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-black ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" placeholder="Your Email" type="email" required />
-        </div>
-        <div class="flex flex-col space-y-2">
-          <label for="title" class="text-black">Title</label>
-          <input id="title" class="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-black ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" placeholder="Issue Title" type="text" required />
-        </div>
-        <div class="flex flex-col space-y-2">
-          <label class="text-black" for="message">Message</label>
-          <textarea id="message"
-           class="flex h-28 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-black ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm resize-none" placeholder="What is the issue?" required></textarea>
-        </div>
-        <button type="submit" class="bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 p-2 w-full rounded-md" id="submitButton">Submit</button>
-      </form>
+<div style="padding: 1rem;">
+  <h2 style="font-size: 1.125rem; font-weight: 600;">Have an issue?</h2>
+</div>
+<style>
+  #email:focus, #title:focus, #message:focus {
+    outline: 2px solid black;
+    outline-offset: 2px;
+  }
+</style>
+<form id="supportForm" style="padding: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      placeholder="Your email"
+      required
+      style="height: 2.5rem; width: 100%; border-radius: 0.375rem; border: 1px solid #e5e5e5; background-color: white; padding: 0.5rem 0.75rem; font-size: 1rem; color: black; box-sizing: border-box;"
+    />
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      type="text"
+      placeholder="Issue Title"
+      required
+      style="height: 2.5rem; width: 100%; border-radius: 0.375rem; border: 1px solid #e5e5e5; background-color: white; padding: 0.5rem 0.75rem; font-size: 1rem; color: black; box-sizing: border-box;"
+    />
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+    <label for="message">Message</label>
+    <textarea
+      id="message"
+      required
+      placeholder="What is the issue?"
+      style="width: 100%; border-radius: 0.375rem; border: 1px solid #e5e5e5; background-color: white; padding: 0.5rem 0.75rem; font-size: 1rem; color: black; box-sizing: border-box; resize: vertical;"
+    ></textarea>
+    <button
+      type="submit"
+      id="submitButton"
+      style="background-color: black; color: white; width: 100%; padding: 0.3rem; border-radius: 6px; font-size: 1rem; border: none; cursor: pointer;"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+
     `;
     modal.style.cssText = `
       display: none;
