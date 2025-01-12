@@ -48,7 +48,7 @@ export default function SupportIcon() {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="rounded-full w-12 h-12 fixed bottom-4 right-4 p-0 transition-all duration-300 ease-in-out"
+          className="rounded-full w-12 h-12 fixed bottom-4 left-4 p-0 transition-all duration-300 ease-in-out"
           aria-label="Open support form"
         >
           <div className="flex flex-col items-center justify-center">

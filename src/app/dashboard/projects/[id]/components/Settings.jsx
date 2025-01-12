@@ -69,7 +69,6 @@ const Settings = ({ project, setProject, id }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data.message);
       setProject((prevProject) => ({ ...prevProject, ...updatedData }));
       toast({
         title: "Success",

@@ -39,7 +39,7 @@ const Navigation = ({
             <BreadcrumbItem ref={dropdownRef} className="relative">
               <BreadcrumbLink className="text-lg" asChild>
                 <button onClick={toggleDropdown} className="flex items-center">
-                {project?.projectName.replace(/^https?:\/\//, "")}
+                  {project?.projectName.replace(/^https?:\/\//, "")}
                   <ChevronsUpDown className="ml-2 h-4 w-4" />
                 </button>
               </BreadcrumbLink>
@@ -82,7 +82,9 @@ const Navigation = ({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="text-lg cursor-default">
-                {activeTab === "app" ? "" : "Settings"}
+                {activeTab === "app" && ""}
+                {activeTab === "issues" && "Issues"}
+                {activeTab === "settings" && "Settings"}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </>

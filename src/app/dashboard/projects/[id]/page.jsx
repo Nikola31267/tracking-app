@@ -109,7 +109,6 @@ const ProjectPage = () => {
         );
         setProject(projectResponse.data);
         setVisits(projectResponse.data.visit);
-        console.log(projectResponse.data.payments);
         setPayments(projectResponse.data.payments);
       } catch (error) {
         console.error("Error fetching project or visits:", error);
