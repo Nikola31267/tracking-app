@@ -23,12 +23,6 @@ export default function RootLayout({ children, modal }) {
         {children}
         {modal}
         <Toaster />
-
-        <script
-          src="http://localhost:3000/js/issues.js"
-          data-website-url="https://turboverify.vercel.app"
-          data-project-id="676f26e40a5a344fe4c9c607"
-        ></script>
       </body>
     </html>
   );
