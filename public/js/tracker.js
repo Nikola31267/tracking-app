@@ -36,6 +36,7 @@
       "Content-Type": "application/json",
     },
     body: JSON.stringify(bodyData),
+    mode: "no-cors",
   })
     .then((response) => {
       if (response.ok) {
