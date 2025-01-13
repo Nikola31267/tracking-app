@@ -39,17 +39,14 @@
   })
     .then((response) => {
       if (response.ok) {
-        return response.json(); // Parse the JSON from the response
+        return response.json();
       } else {
         throw new Error("Error logging visit");
       }
     })
     .then((data) => {
       console.log("Visit logged successfully");
-      if (sessionStorage.getItem("visitId")) {
-        sessionStorage.removeItem("visitId");
-      }
-      sessionStorage.setItem("visitId", data.visitDocument._id);
+      sessionStorage.setItem("visitId", visitId);
     })
     .catch((error) => {
       console.error("Network error logging visit:", error);
