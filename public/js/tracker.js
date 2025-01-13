@@ -30,7 +30,7 @@
     referrer: ref || "Direct",
   };
 
-  fetch("https://pixeltrackapi.startgrid.xyz/track", {
+  fetch("https://pixel-track-website-api.vercel.app/track", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,10 +39,16 @@
   })
     .then((response) => {
       if (response.ok) {
-        console.log("Visit logged successfully");
+        return response.json(); // Parse the JSON from the response
       } else {
-        console.error("Error logging visit");
+        throw new Error("Error logging visit");
       }
     })
-    .catch((error) => console.error("Network error logging visit:", error));
+    .then((data) => {
+      console.log("Visit logged successfully");
+      sessionStorage.setItem("visitId", data.visitDocument._id);
+    })
+    .catch((error) => {
+      console.error("Network error logging visit:", error);
+    });
 })();
