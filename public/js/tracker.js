@@ -47,7 +47,7 @@
     .then((data) => {
       console.log("Visit logged successfully");
       // Assuming visitDocument contains the visit ID
-      sessionStorage.setItem("visitId", data.visitDocument);
+      sessionStorage.setItem("visitId", data.visitDocument._id);
     })
     .catch((error) => {
       console.error("Network error logging visit:", error);
