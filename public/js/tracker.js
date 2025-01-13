@@ -46,7 +46,9 @@
     })
     .then((data) => {
       console.log("Visit logged successfully");
-      // Assuming visitDocument contains the visit ID
+      if (sessionStorage.getItem("visitId")) {
+        sessionStorage.removeItem("visitId");
+      }
       sessionStorage.setItem("visitId", data.visitDocument._id);
     })
     .catch((error) => {
