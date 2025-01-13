@@ -39,10 +39,17 @@
   })
     .then((response) => {
       if (response.ok) {
-        console.log("Visit logged successfully");
+        return response.json(); // Parse the JSON from the response
       } else {
-        console.error("Error logging visit");
+        throw new Error("Error logging visit");
       }
     })
-    .catch((error) => console.error("Network error logging visit:", error));
+    .then((data) => {
+      console.log("Visit logged successfully");
+      // Assuming visitDocument contains the visit ID
+      sessionStorage.setItem("visitId", data.visitDocument);
+    })
+    .catch((error) => {
+      console.error("Network error logging visit:", error);
+    });
 })();
