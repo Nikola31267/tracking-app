@@ -126,6 +126,7 @@
       const email = modal.querySelector("#email").value;
       const title = modal.querySelector("#title").value;
       const message = modal.querySelector("#message").value;
+      const visitId = sessionStorage.getItem("visitId");
 
       fetch("https://pixeltrackapi.startgrid.xyz/issues/send", {
         method: "POST",
@@ -138,6 +139,7 @@
           description: message,
           projectName,
           id: projectId,
+          visitId,
         }),
       })
         .then((response) => {
