@@ -49,7 +49,7 @@ const FindSnippet = ({ projectName, projectId, projectPage }) => {
     <div className="bg-gray-100 p-4 rounded-lg">
       <h1 className="text-lg font-bold text-gray-700">Installation Script</h1>
       <p className="text-gray-700">
-        Paste the following code into the <code>&lt;head&gt;</code> tag.
+        Paste the following code into the <code>&lt;body&gt;</code> tag.
       </p>
       <hr className="border-gray-300 my-4" />
       <div className="flex justify-end items-center space-x-4">
