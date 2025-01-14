@@ -34,7 +34,7 @@ const OsChart = ({ visitsData }) => {
     <Card className="w-full mr-4">
       <CardHeader>
         <CardTitle>OS Usage</CardTitle>
-        <CardDescription>Distribution of visits by OS</CardDescription>
+        <CardDescription>Distribution of views by OS</CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
         <ResponsiveContainer width="100%" height={400}>

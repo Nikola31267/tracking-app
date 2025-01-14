@@ -46,7 +46,7 @@ export default function Navbar() {
             width={60}
             height={60}
           />
-          <span className="text-2xl font-bold text-primary hidden md:block">
+          <span className="text-2xl font-bold hidden md:block">
             Pixel Track
           </span>
         </Link>

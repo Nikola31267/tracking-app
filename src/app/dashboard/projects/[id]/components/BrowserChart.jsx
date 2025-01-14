@@ -44,7 +44,7 @@ const BrowserChart = ({ visitsData }) => {
     <Card className="w-full mr-4">
       <CardHeader>
         <CardTitle>Browser Usage</CardTitle>
-        <CardDescription>Distribution of visits by browser</CardDescription>
+        <CardDescription>Distribution of views by browser</CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
         <ResponsiveContainer width="100%" height={400}>

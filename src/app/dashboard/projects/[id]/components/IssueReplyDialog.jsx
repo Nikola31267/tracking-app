@@ -29,11 +29,9 @@ export function IssueReplyDialog({ isOpen, onClose, onSubmit, userEmail }) {
           <DialogTitle>Reply to Issue</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                To
-              </Label>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1 justify-start">
+              <Label htmlFor="email">To</Label>
               <Input
                 id="email"
                 value={userEmail}
@@ -41,10 +39,8 @@ export function IssueReplyDialog({ isOpen, onClose, onSubmit, userEmail }) {
                 className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Title
-              </Label>
+            <div className="flex flex-col gap-1 justify-start">
+              <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 value={title}
@@ -52,10 +48,8 @@ export function IssueReplyDialog({ isOpen, onClose, onSubmit, userEmail }) {
                 className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Description
-              </Label>
+            <div className="flex flex-col gap-1 justify-start">
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 value={description}
@@ -65,7 +59,9 @@ export function IssueReplyDialog({ isOpen, onClose, onSubmit, userEmail }) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Send reply</Button>
+            <Button type="submit" variant="purple" className="btn w-full mt-4">
+              Send reply
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

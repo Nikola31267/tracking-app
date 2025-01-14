@@ -15,7 +15,7 @@ export const metadata = getSEOTags();
 
 export default function RootLayout({ children, modal }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light">
       <body
         className={`antialiased ${poppins.variable}`}
         style={{ fontFamily: "var(--font-poppins)" }}

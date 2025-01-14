@@ -17,7 +17,7 @@ const CallToAction = () => {
         <div className="flex justify-center">
           <ShinyButton
             href="/sign-in"
-            className="h-12 w-40"
+            className="btn h-12 hover:bg-purple-500"
             icon={<ArrowRight />}
           >
             Get started

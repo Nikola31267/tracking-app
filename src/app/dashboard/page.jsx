@@ -164,7 +164,7 @@ const Dashboard = () => {
             className="group relative flex flex-col rounded-2xl bg-white p-md cursor-pointer hover:shadow-md transition-shadow duration-300"
             onClick={() => router.push(`/dashboard/projects/${project._id}`)}
           >
-            <div className="flex flex-1 flex-col justify-between rounded-lg border border-primary bg-surface-200 p-6 py-5">
+            <div className="flex flex-1 flex-col justify-between rounded-lg border bg-surface-200 p-6 py-5">
               <div
                 className={`absolute inset-x-16 top-0 h-1 rounded-b-full bg-purple-500`}
               ></div>
@@ -177,7 +177,7 @@ const Dashboard = () => {
                   width={32}
                   height={32}
                 />
-                <div className="truncate text-md text-secondary">
+                <div className="truncate text-md text-black">
                   {project?.projectName.replace(/^https?:\/\//, "")}
                 </div>
               </div>

@@ -14,13 +14,19 @@ const faqData = [
   {
     question: "What data does Pixel Track track?",
     answer:
-      "Pixel Track tracks a variety of data including number of views per page, referrers, browsers, countries, os and more. You can view this data in the dashboard.",
+      "Pixel Track tracks a variety of data including number of views per page, referrers, browsers, countries, os, revenue, register users and more. You can view this data in the dashboard.",
     category: "General",
   },
   {
     question: "How does goals work?",
     answer:
-      "Really simple. Set a goal of views and we'll send you an email when you reach it. That way you stay on track.",
+      "Really simple. Set a goal of views/revenue/users registered and we'll send you an email when you reach it. That way you stay on track.",
+    category: "General",
+  },
+  {
+    question: "What are issues?",
+    answer:
+      "When a user from your website spot that something is not right they can click on the icon on the right bottom of every page which is there when you added the issue snippet and then they can report the issue which will be sent to your email and also saved in your dashboard where you can reply. That way your website is as optimized as possible.",
     category: "General",
   },
   {

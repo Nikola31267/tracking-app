@@ -111,7 +111,11 @@ export default function IssueTable({ project, setProject }) {
                   <td className="px-6 py-4 whitespace-nowrap">{issue.state}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {issue.state === "Not replied" && (
-                      <Button onClick={() => handleReplyClick(issue)}>
+                      <Button
+                        variant="purple"
+                        className="btn"
+                        onClick={() => handleReplyClick(issue)}
+                      >
                         Reply
                       </Button>
                     )}

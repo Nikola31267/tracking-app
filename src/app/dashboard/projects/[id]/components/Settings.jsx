@@ -34,7 +34,7 @@ const Settings = ({ project, setProject, id }) => {
       },
       body: JSON.stringify({
         event_type: "payment",
-        productName: "product_name"
+        productName: "product_name",
         paymentValue: 20,
         projectUrl: "${project.projectName}",
           projectId: "${project._id}",
@@ -58,6 +58,8 @@ const Settings = ({ project, setProject, id }) => {
     setIsUpdating(true);
     const formData = new FormData();
     formData.append("goal", updatedData.goal);
+    formData.append("signInGoal", updatedData.signInGoal);
+    formData.append("paymentGoal", updatedData.paymentGoal);
     if (updatedData.logo) {
       formData.append("logo", updatedData.logo);
     }
@@ -165,7 +167,7 @@ const Settings = ({ project, setProject, id }) => {
               <AlertDialogTrigger asChild>
                 <Button
                   variant="destructive"
-                  className="w-full"
+                  className="w-full btn"
                   disabled={isUpdating}
                 >
                   {isUpdating ? (
@@ -199,7 +201,7 @@ const Settings = ({ project, setProject, id }) => {
             </AlertDialog>
             <Button
               variant="destructiveOutline"
-              className="w-full text-red-500 transition-colors duration-300"
+              className="w-full btn text-red-500 transition-colors duration-300"
               onClick={removeLogo}
               disabled={isUpdating}
             >
@@ -223,18 +225,38 @@ const Settings = ({ project, setProject, id }) => {
                 const updatedData = {
                   goal: e.target.goal.value,
                   logo: project.logo,
+                  signInGoal: e.target.signInGoal.value,
+                  paymentGoal: e.target.paymentGoal.value,
                 };
                 updateProjectSettings(updatedData);
               }}
             >
               <div className="space-y-1">
                 <Label htmlFor="goal" className="text-md">
-                  Goal
+                  Visit Goal
                 </Label>
                 <Input
                   id="goal"
-                  placeholder="Enter project goal"
+                  placeholder="Enter visitors goal"
                   defaultValue={project.goal}
+                  className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
+                />
+                <Label htmlFor="signInGoal" className="text-md">
+                  Register Users Goal
+                </Label>
+                <Input
+                  id="signInGoal"
+                  placeholder="Enter registered users goal"
+                  defaultValue={project.signInGoal}
+                  className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
+                />
+                <Label htmlFor="paymentGoal" className="text-md">
+                  Revenue Goal
+                </Label>
+                <Input
+                  id="paymentGoal"
+                  placeholder="Enter revenue goal"
+                  defaultValue={project.paymentGoal}
                   className="w-full p-2 border rounded-lg focus-visible:ring-purple-500"
                 />
 
@@ -242,18 +264,20 @@ const Settings = ({ project, setProject, id }) => {
                   <CodeSnippetDialog
                     title="Add Payment"
                     code={paymentCode}
+                    toast={toast}
                     dialogTitle="Payment Tracking Code Snippet"
                   />
                   <CodeSnippetDialog
                     title="Add Sign in"
                     code={signInCode}
+                    toast={toast}
                     dialogTitle="User Registering Tracking Code Snippet"
                   />
                 </div>
               </div>
               <Button
                 variant="purpleOutline"
-                className="w-full transition duration-300 mt-4 text-purple-500 hover:bg-purple-500 hover:text-neutral-50"
+                className="btn w-full transition duration-300 mt-4 text-purple-500 hover:bg-purple-500 hover:text-neutral-50"
                 type="submit"
                 disabled={isUpdating}
               >

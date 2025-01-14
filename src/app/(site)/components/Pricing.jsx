@@ -2,11 +2,9 @@
 
 import { Check, Crown } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { ShinyButton } from "@/components/ui/shiny-button";
 
 export const plans = [
@@ -107,13 +105,12 @@ export default function Pricing({ user }) {
                 className="w-full"
               >
                 <ShinyButton
-                  className="h-11 w-full"
+                  className="h-11 w-full btn hover:bg-purple-500"
                   href={
                     currentPlan.link +
                     (user ? "?prefilled_email=" + user.email : "")
                   }
                   showIcon={true}
-                  pricing
                   disabled
                 >
                   Join Pixel Track

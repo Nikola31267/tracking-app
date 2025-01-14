@@ -56,12 +56,12 @@ const HeroSection = () => {
             <div className="flex flex-col gap-2 mt-4 sm:flex-col md:flex-col lg:flex-row">
               <ShinyButton
                 href="/dashboard"
-                className="h-9 w-full sm:h-9 md:h-10 lg:h-12"
+                className="btn h-9 sm:h-9 md:h-10 lg:h-12 hover:bg-purple-500"
               >
                 Start Tracking Now
               </ShinyButton>
               <ShinyButton
-                className="h-9 w-full sm:h-9 md:h-10 lg:h-12"
+                className="btn h-9 sm:h-9 md:h-10 lg:h-12 hover:bg-purple-500"
                 href="/#features"
                 onClick={(e) => {
                   handleSmoothScroll(e, "#features");
