@@ -18,7 +18,7 @@ export async function GET(req) {
     const html = response.data;
 
     const snippetFound = html.includes(
-      '<script src="http://localhost:3000/js/tracker.js"'
+      '<script src="https://tracking-app.vercel.app/js/tracker.js"'
     );
     return NextResponse.json({ snippetFound });
   } catch (error) {
