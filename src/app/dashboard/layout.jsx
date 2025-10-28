@@ -1,7 +1,7 @@
 import { getSEOTags } from "@/lib/seo";
 
 export const metadata = getSEOTags({
-  title: `Dashboard | Pixel Track`,
+  title: `Dashboard | Tracking App`,
   canonicalUrlRelative: "/dashboard",
 });
 

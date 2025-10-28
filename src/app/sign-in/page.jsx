@@ -28,26 +28,6 @@ export default function Login() {
     }
   }, [router]);
 
-  const handleGoogleLoginSuccess = async (credentialResponse) => {
-    const token = credentialResponse.credential;
-
-    try {
-      const response = await axiosInstance.post("/auth/google-signin", {
-        token,
-      });
-      localStorage.setItem("pixeltrack-auth", response.data.token);
-      router.push("/dashboard");
-    } catch (error) {
-      console.error(
-        "Google login failed:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-  const handleGoogleLoginFailure = () => {
-    setError("Google login failed");
-  };
-
   const handlePasswordlessLogin = async (e) => {
     e.preventDefault();
     setSendingMagicLink(true);
@@ -91,31 +71,7 @@ export default function Login() {
             height={56}
           />
 
-          <h2 className="text-xl font-semibold">PixelTrack</h2>
-        </div>
-
-        <div className="flex items-center justify-center">
-          <GoogleOAuthProvider
-            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-          >
-            <div>
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={handleGoogleLoginFailure}
-                theme="outline"
-                size="large"
-                width="350px"
-                logo_alignment="left"
-                type="standard"
-                text="continue_with"
-              />
-            </div>
-          </GoogleOAuthProvider>
-        </div>
-        <div className="flex items-center my-1 text-black">
-          <hr className="w-1/2 border-gray-300" />
-          <span className="mx-2">or</span>
-          <hr className="w-1/2 border-gray-300" />
+          <h2 className="text-xl font-semibold">Tracking App</h2>
         </div>
         <input
           type="email"

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Navigation from "./Navigation";
 import UserButton from "./UserButton";
-import Pricing from "@/app/(site)/components/Pricing";
 import { useEffect, useRef, useState } from "react";
 import Loader from "./layout/Loader";
 import { axiosInstance } from "@/lib/axios";
@@ -87,7 +86,6 @@ const NoAccessDashboard = ({}) => {
         </div>
         <UserButton />
       </div>
-      <Pricing user={user} />
     </div>
   );
 };

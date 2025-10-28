@@ -57,7 +57,6 @@ const ProjectPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("app");
   const [openDropdownId, setOpenDropdownId] = useState(null);
-  const [payments, setPayments] = useState([]);
   const dropdownRef = useRef(null);
   const tableDropdownRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,24 +71,6 @@ const ProjectPage = () => {
       if (!localStorage.getItem("pixeltrack-auth")) {
         router.push("/sign-in");
         return;
-      }
-
-      try {
-        const userResponse = await axiosInstance.get(`/auth/user`, {
-          headers: {
-            "x-auth-token": localStorage.getItem("pixeltrack-auth"),
-          },
-        });
-        setUser(userResponse.data);
-
-        if (!userResponse.data.hasAccess) {
-          router.push("/dashboard/pricing");
-        } else {
-          setLoadingAuth(false);
-        }
-      } catch (error) {
-        setError("Failed to fetch user data");
-        router.push("/sign-in");
       }
     };
 
@@ -109,7 +90,6 @@ const ProjectPage = () => {
         );
         setProject(projectResponse.data);
         setVisits(projectResponse.data.visit);
-        setPayments(projectResponse.data.payments);
       } catch (error) {
         console.error("Error fetching project or visits:", error);
         if (error.response.status === 404 || error.response.status === 403) {
@@ -376,20 +356,10 @@ const ProjectPage = () => {
           ) : (
             <NoVisitsTable />
           )}
-
-          {project.payments.length > 0 ? (
-            <PaymentsTable payments={payments} />
-          ) : (
-            <NoPaymentsTable />
-          )}
         </>
       )}
       {activeTab === "settings" && (
         <Settings project={project} setProject={setProject} id={id} />
-      )}
-
-      {activeTab === "issues" && (
-        <Issues project={project} setProject={setProject} />
       )}
 
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
